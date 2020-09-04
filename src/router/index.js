@@ -31,18 +31,18 @@ function configRoutes () {
     {
       path: '/',
       redirect: '/dashboard',
-      name: 'Home',
+      name: 'Inicio',
       component: TheContainer,
       children: [
         {
           path: 'dashboard',
-          name: 'Dashboard',
+          name: 'Escritorio',
           component: Dashboard
         },
         {
           path: 'users',
           meta: {
-            label: 'Users'
+            label: 'Usuarios'
           },
           component: {
             render(c) {
@@ -52,13 +52,13 @@ function configRoutes () {
           children: [
             {
               path: '',
-              name: 'Users',
+              name: 'Usuarios',
               component: Users
             },
             {
               path: ':id',
               meta: {
-                label: 'User Details'
+                label: 'Detalles de Usuario'
               },
               name: 'User',
               component: User

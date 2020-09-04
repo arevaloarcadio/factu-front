@@ -4,7 +4,7 @@ export default [
     _children: [
       {
         _name: 'CSidebarNavItem',
-        name: 'Dashboard',
+        name: 'Escritorio',
         to: '/dashboard',
         icon: 'cil-speedometer',
         badge: {
@@ -15,34 +15,6 @@ export default [
       {
         _name: 'CSidebarNavDivider',
         _class: 'm-2'
-      },
-      {
-        _name: 'CSidebarNavTitle',
-        _children: ['Extras']
-      },
-      {
-        _name: 'CSidebarNavDropdown',
-        name: 'Pages',
-        route: '/pages',
-        icon: 'cil-star',
-        items: [
-          {
-            name: 'Login',
-            to: '/pages/login'
-          },
-          {
-            name: 'Register',
-            to: '/pages/register'
-          },
-          {
-            name: 'Error 404',
-            to: '/pages/404'
-          },
-          {
-            name: 'Error 500',
-            to: '/pages/500'
-          }
-        ]
       },
     ]
   }
