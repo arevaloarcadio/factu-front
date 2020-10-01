@@ -13,9 +13,11 @@ const Page500 = () => import('@/views/pages/Page500')
 const Login = () => import('@/views/pages/Login')
 const Register = () => import('@/views/pages/Register')
 
-// Users
-const Users = () => import('@/views/users/Users')
-const User = () => import('@/views/users/User')
+
+//USERS
+const users = () => import('@/views/users/Index')
+const createUser = () => import('@/views/users/Create')
+const editUser = () => import('@/views/users/Edit')
 
 Vue.use(Router)
 
