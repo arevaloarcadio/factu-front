@@ -1,114 +1,75 @@
 <template>
   <div>
-    <!-- Modal Component -->
-    <form @submit.prevent="entityCreator" method="post">
-
-	        <label for="name"  class="typo__label pt-4">Nombre</label>
-	        <input type="text" name="name" v-model="object.name" class="form-control"  v-validate="'required:min:7'" placeholder="Introduzca el nombre" id="name" :class="{ 'is-invalid': submitted && errors.has('name') }" >
-	        <div v-if="errors.has('name')" class="invalid-feedback">{{ errors.first('name') }}</div>
-
-	        <label for="email"  class="typo__label pt-4">Email</label>
-	        <input type="text" name="email" v-model="object.email" class="form-control"  v-validate="'required'" placeholder="Introduzca email" id="email" :class="{ 'is-invalid': submitted && errors.has('email') }" >
-	        <div v-if="errors.has('email')" class="invalid-feedback">{{ errors.first('email') }}</div>
-
-	        <label for="email"  class="typo__label pt-4">Administrador</label>
-	        <div class="form-check">
-	          <input class="form-check-input" type="radio" name="admin" id="admin" value="1" checked v-model="object.admin">
-	          <label class="form-check-label" for="radio">
-	            Sí
-	          </label>
-	        </div>
-	        <div class="form-check">
-	          <input class="form-check-input" type="radio" name="admin" id="admin" value="0" v-model="object.admin">
-	          <label class="form-check-label" for="radio">
-	            No
-	          </label>
-	        </div>
-
-	        <label for="password"  class="typo__label pt-4">Password</label>
-	        <input type="text" name="password" v-model="object.password" class="form-control"  v-validate="'required|min:8'" placeholder="Introduzca password" id="password" :class="{ 'is-invalid': submitted && errors.has('password') }" >
-	        <div v-if="errors.has('password')" class="invalid-feedback">{{ errors.first('password') }}</div>
-
-	        <label for="password_confirmation"  class="typo__label pt-4">Confirmar Password</label>
-	        <input type="text" name="password_confirmation" v-model="object.password_confirmation" class="form-control"  v-validate="'required|min:8'" placeholder="Introduzca el nombre" id="password_confirmation" :class="{ 'is-invalid': submitted && errors.has('password_confirmation') }" >
-	        <div v-if="errors.has('password_confirmation')" class="invalid-feedback">{{ errors.first('password_confirmation') }}</div>
-	          
-
-	        <CButton color="primary" type="submit">Crear Usuario</CButton>
-    </form>
+    <formGenerator :items="itemsForm" :entity="entityForm" @update="updated()">Crear Cliente
+    </formGenerator>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import VueNotifications from "vue-notifications"
+import formGenerator from "@/views/components/formGenerator.vue"
 
 export default {
-  name: 'createUser',
+  name: 'Users',
+  components:{ formGenerator},
   data () {
     return {
+      entity: "Usuarios",
       newEntity: "Nuevo Usuario",
-      entityAdd: "register",
-      object: {
-        name: "",
-        email: "",
-        admin: "",
-        password: "",
-        password_confirmation: "",
-      },
-      items: [],
-      submitted: false,
-      tableFields: [
-        { key: 'name', label: 'Nombre' },
-        { key: 'email', label: 'Email', _classes: 'text-center' },
-        { key: 'admin', label: 'Administrador', _classes: 'text-center' },
+      itemsForm:[
+        { 
+          name: 'Identificación', 
+          campos:[
+            { name: 'firstname', title: 'Nombre', placeholder:'Introduzca Nombre', validation: "required|min:3", type: 'string', size:"col-md-4" },
+            { name: 'lastname', title: 'Apellidos', placeholder:'Introduzca Apellidos', validation: "required|min:6", type: 'string', size:"col-md-4 col-md-offset-right-4" },
+            { name: 'email', title: 'Email', placeholder:'Introduzca Email', validation: 'required|email' , type: 'string', size:"col-md-8 col-md-offset-right-4"},
+          ]
+        },
+        { 
+          name: 'Seguridad', 
+          campos:[
+            { name: 'password', title: 'Contraseña', placeholder:'Introduzca Contraseña', validation: 'required', type: 'string', size:"col-md-4" },
+            { name: 'password_confirmation', title: 'Confirmar contraseña', placeholder:'Repita su contraseña', validation: 'required', type: 'string', size:"col-md-4 col-md-offset-right-4" },
+          ]
+        },
       ],
-      previousUrl: "",
-      nextUrl: "",
+      entityForm:{
+              firstname: '',
+              lastname: '',
+              email: '',
+              password: '',
+            },
     }
   },
   created(){
-  },
-  mounted(){
     
   },
   methods:{
-    entityCreator(e) {
-      let formData = new FormData();
+    updated(){
+      self = this
+      this.$http({url: 'users' , method: 'POST',data: this.entityForm })
+          .then(response => {
+              console.log(response);
+            if(response.status == "201"){
+              self.showSuccessMsg()
+              self.$router.push({path: '/users'});
 
-      formData.append('name',this.object.name)
-      formData.append('email',this.object.email)
-      formData.append('admin',this.object.admin)
-      formData.append('password_confirmation',this.object.password_confirmation)
-      formData.append('password',this.object.password)
-      this.$validator.validateAll().then((exito) => {
-        const t = this
-        if (exito) {
-          axios({url: this.entityAdd,  method: 'POST', data: formData })
-            .then(resp => {
-              t.submitted = false
-              t.object.name = ""
-              t.object.email = ""
-              t.object.password = ""
-              t.showSuccessMsg()
-              t.$router.push({path: 'users'});
-            })
-            .catch(err => {
-              t.showErrorMsg()
-              //commit('auth_error', err)
-              //reject(err)
-            });
-        }
-        e.preventDefault()
-        this.submitted = true
-      })
-    },
+            }
+          })
+          .catch(err => {
+            console.log(err)
+            //commit('auth_error', err)
+            //self.unsetUser('token')
+            //reject(err)
+          });
+
+    }
   },
   notifications: {
     showSuccessMsg: {
       type: VueNotifications.types.success,
       title: 'Operación completada',
-      message: 'Usuario añadido con éxito!'
+      message: 'Registro añadido con éxito!'
     },
     showErrorMsg: {
       type: VueNotifications.types.error,
@@ -118,3 +79,4 @@ export default {
   }
 }
 </script>
+

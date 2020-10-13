@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <h5>{{ entity }}<router-link :to="{ path: 'user/create' }"> <CButton  class="float-right py-0 mr-1" color="success">
+        <h5>{{ entity }}<router-link :to="{ path: 'users/create' }"> <CButton  class="float-right py-0 mr-1" color="success">
           <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>{{ newEntity }}
             </CButton>  </router-link></h5>
       </CCardHeader>
@@ -38,7 +38,7 @@
 <script>
 import axios from 'axios'
 import VueNotifications from "vue-notifications"
-import formGenerator from "@/components/formGenerator.vue"
+import formGenerator from "@/views/components/formGenerator.vue"
 
 export default {
   name: 'Users',
@@ -48,19 +48,12 @@ export default {
       entity: "Usuarios",
       newEntity: "Nuevo Usuario",
       entityTable: "users",
-      entityAdd: "register",
-      object: {
-        name: "",
-        email: "",
-        admin: "",
-        password: "",
-        password_confirmation: "",
-      },
       items: [],
       submitted: false,
       itemModal: false,
       tableFields: [
-        { key: 'name', label: 'Nombre' },
+        { key: 'firstname', label: 'Nombre' },
+        { key: 'lastname', label: 'Apellidos' },
         { key: 'email', label: 'Email', _classes: 'text-center' },
         { key: 'admin', label: 'Administrador', _classes: 'text-center' },
       ],
@@ -79,7 +72,7 @@ export default {
       axios({url: this.entityTable,  method: 'GET' })
         .then(resp => {
           const t = this
-          t.items = resp.data.users
+          t.items = resp.data
           //resolve(resp)
           resolve(resp)
         })
@@ -92,14 +85,14 @@ export default {
       axios({url: url,  method: 'GET' })
         .then(resp => {
           const t = this
-          t.items = resp.data.users
-          if(resp.data.users.next_page_url){
-            t.nextUrl = resp.data.users.next_page_url
+          t.items = resp.data
+          if(resp.data.next_page_url){
+            t.nextUrl = resp.data.next_page_url
           }else{
             t.nextUrl = ""
           }
-          if(resp.data.users.prev_page_url){
-            t.previousUrl = resp.data.users.prev_page_url
+          if(resp.data.prev_page_url){
+            t.previousUrl = resp.data.prev_page_url
           }else{
             t.previousUrl = ""
           }

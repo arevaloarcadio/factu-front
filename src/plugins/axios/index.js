@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import router from './router'
-import jwtToken from '~/plugins/jwt'
-import store from '.~/plugins/store'
+import router from '@/router'
+import jwtToken from '@/plugins/jwt/jwt-token.js'
+import store from '@/plugins/store'
 import axios from 'axios'
 
 axios.defaults.baseURL = 'http://hexcrm.test/';

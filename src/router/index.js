@@ -15,9 +15,9 @@ const Register = () => import('@/views/pages/Register')
 
 
 //USERS
-const users = () => import('@/views/users/Index')
+const Users = () => import('@/views/users/Index')
 const createUser = () => import('@/views/users/Create')
-const editUser = () => import('@/views/users/Edit')
+//const editUser = () => import('@/views/users/edit')
 
 Vue.use(Router)
 
@@ -58,12 +58,12 @@ function configRoutes () {
               component: Users
             },
             {
-              path: ':id',
+              path: 'create',
               meta: {
-                label: 'Detalles de Usuario'
+                label: 'Crear Usuario'
               },
-              name: 'User',
-              component: User
+              name: 'Crear',
+              component: createUser
             }
           ]
         },
