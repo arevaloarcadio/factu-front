@@ -4,7 +4,7 @@ import jwtToken from '@/plugins/jwt/jwt-token.js'
 import store from '@/plugins/store'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://hexcrm.test/';
+axios.defaults.baseURL = 'http://hexcrm.git.test/';
 
 Vue.prototype.$http = axios;
 

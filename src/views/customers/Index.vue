@@ -39,20 +39,19 @@
 <script>
 import axios from 'axios'
 import VueNotifications from "vue-notifications"
-import formGenerator from "@/components/formGenerator.vue"
 
 export default {
   name: 'Companies',
-  components:{ formGenerator},
+  components:{ },
   data () {
     return {
       entity: "Clientes",
       newEntity: "Nuevo Cliente",
-      entityTable: "customer",
+      entityTable: "customers",
       items: [],
       tableFields: [
-        { key: 'name', label: 'Nombre' },
-        { key: 'cif', label: 'NIF/CIF', _classes: 'text-center' },
+        { key: 'firstname', label: 'Nombre' },
+        { key: 'lastname', label: 'Apellidos', _classes: 'text-center' },
         { key: 'address', label: 'Dirección', _classes: 'text-center' },
       ],
       previousUrl: "",
@@ -70,7 +69,7 @@ export default {
       axios({url: this.entityTable,  method: 'GET' })
         .then(resp => {
           const t = this
-          t.items = resp.data.customers
+          t.items = resp.data
           //resolve(resp)
           resolve(resp)
         })

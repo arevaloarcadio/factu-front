@@ -7,33 +7,32 @@
 
 <script>
 import VueNotifications from "vue-notifications"
-import formGenerator from "@/components/formGenerator.vue"
+import formGenerator from "@/views/components/formGenerator.vue"
 
 export default {
-	name: 'Companies',
+	name: 'Customer',
 	components:{ formGenerator},
 	data () {
 		return {
 			entity: "Clientes",
 			newEntity: "Nuevo Cliente",
 			itemsForm:[
-				{ 
+				{
 					name: 'Identificación', 
 					campos:[
-						{ name: 'office', title: 'Oficina', placeholder:'Introduzca Oficina', validation: "", type: 'string', size:"col-md-4" },
-						{ name: 'name', title: 'Nombre', placeholder:'Introduzca Nombre', validation: "required|min:3", type: 'string', size:"col-md-4" },
-						{ name: 'cif', title: 'NIF/CIF', placeholder:'Introduzca documento', validation: "required|min:6", type: 'string', size:"col-md-4" },
-						{ name: 'address', title: 'Dirección', placeholder:'Introduzca Dirección', validation: 'required' , type: 'string', size:"col-md-8 col-md-offset-right-4"},
-						{ name: 'city', title: 'Ciudad', validation: 'required', type: 'string', size:"col-md-4" },
-						{ name: 'pc', title: 'Código Postal', validation: 'required', type: 'string', size:"col-md-4" },
-						{ name: 'province', title: 'Provincia', validation: 'required', type: 'string', size:"col-md-4" },
+						{ name: 'firstname', title: 'Nombre', placeholder:'Introduzca Nombre', validation: "", type: 'string', size:"col-md-4" },
+						{ name: 'lastname', title: 'Apellidos', placeholder:'Introduzca Apellidos', validation: "required|min:3", type: 'string', size:"col-md-4" },
+						{ name: 'address', title: 'Dirección', placeholder:'Introduzca Dirección', validation: "string", type: 'string', size:"col-md-4" },
+						{ name: 'cif', title: 'DNI', validation: 'required', type: 'string', size:"col-md-4" },
+						{ name: 'birthdate', title: 'Fecha Nacimiento', validation: 'required', type: 'date', size:"col-md-4" },
 					]
 				},
 				{ 
 					name: 'Comunicación', 
 					campos:[
 						{ name: 'phone', title: 'Teléfono', placeholder:'Introduzca Teléfono', validation: 'required', type: 'number', size:"col-md-4" },
-						{ name: 'email', title: 'Documento', placeholder:'Introduzca Email', validation: 'required|email', type: 'string', size:"col-md-4 col-md-offset-right-4" },
+						{ name: 'cellphone', title: 'Móvil', placeholder:'Introduzca Móvil', validation: 'required' , type: 'number', size:"col-md-4 col-md-offset-right-4"},
+						{ name: 'email', title: 'Email', placeholder:'Introduzca Email', validation: 'required|email', type: 'string', size:"col-md-4 col-md-offset-right-4" },
 					]
 				},
 				{ 
@@ -45,30 +44,28 @@ export default {
 				
 			],
 			entityForm:{
-	            office: '',
-	            name: '',
-	            cif: '',
+	            firstname: '',
+	            lastname: '',
 	            address: '',
-	            city: '',
-	            pc: '',
-	            province: '',
+	            birthdate: '',
 	            phone: '',
+	            cellphone: '',
 	            email: '',
 	            description: '',
             },
 		}
 	},
-	created(){
-		
+	mounted(){
+		console.log("Va")
 	},
 	methods:{
 		updated(){
 			self = this
-			this.$http({url: 'customer' , method: 'POST',data: this.entityForm })
+			this.$http({url: 'customers' , method: 'POST',data: this.entityForm })
 	        .then(response => {
-	          if(response.status == "200"){
+	          if(response.status == "201"){
 	          	self.showSuccessMsg()
-	            self.$router.push({path: '/customer'});
+	            self.$router.push({path: '/customers'});
 
 	          }
 	        })
