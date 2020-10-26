@@ -29,6 +29,7 @@ import OrgChart from '@balkangraph/orgchart.js'
 export default {
 
 	name: 'tree',
+	props: ['org'],
 	data() {
 		return {
 			nodes: [
@@ -64,7 +65,18 @@ export default {
 	},
 
 	mounted(){
+		this.org.forEach( function(data) {
+		  data['name'] = data["user"]['firstname'] + " " + data["user"]['lastname'];
+		  data['title'] = data["parent"]['firstname'] + " " + data["parent"]['lastname'];
+		  data['pid'] = data['parent_id'];
 
+			if(data["id"] == 1){
+				console.log(data["pid"],"<---1---")
+				delete data.pid;
+				console.log(data["pid"],"<---2---")
+			}
+
+		});
 		this.editForm = function () {
             this.nodeId = null;
         };
@@ -109,8 +121,8 @@ export default {
         };
 
 
-
-		this.oc(this.$refs.tree, this.nodes)
+        console.log(this.org," <-----")
+		this.oc(this.$refs.tree, this.org)
 	}
 }
 </script>
