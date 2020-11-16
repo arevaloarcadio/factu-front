@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <h5>{{ entity }}<router-link :to="{ path: 'users/create' }"> <CButton  class="float-right py-0 mr-1" color="success">
+        <h5>{{ entity }}<router-link :to="{ path: 'create' }"> <CButton  class="float-right py-0 mr-1" color="success">
           <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>{{ newEntity }}
             </CButton>  </router-link></h5>
       </CCardHeader>

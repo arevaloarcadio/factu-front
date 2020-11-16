@@ -1,19 +1,15 @@
 <template>
 	<div>
 		<div id="editForm" style="display:none; text-align:center; position:absolute; border: 1px solid #aeaeae;width:300px;z-index:10000; background-color: #eeeeee">
-	        <div style="padding: 10px 0 10px 0; background-color:#039BE5; color: #ffffff;">Edit Form</div>
+	        <div style="padding: 10px 0 10px 0; background-color:#039BE5; color: #ffffff;">Agregar Subordinado</div>
 			    <div>
-			        <div style="padding: 10px 0 5px 0;">
-			            <label style="color:#000000; width:50px; display:inline-block;" for="name">Name</label>
-			            <input id="name" value="" />
-			        </div>
-			        <div style="padding: 5px 0 10px 0;">
-			            <label style="color:#000000; width:50px; display:inline-block;" for="title">Title</label>
-			            <input  id="title" value="" />
-			        </div>
+			    	<multiselect name="user_id" v-model="user_id" :options="users" :searchable="true" track-by="firstname" :custom-label="completeName">
+			    		<template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.firstname }}   {{ option.lastname }}</strong></template>
+			    	</multiselect>
+
 			        <div style="padding: 5px 0 15px 0;">
-			            <button style="width:108px;" id="cancel">Cancelar</button>
-			            <button style="width:108px;" id="save">Guardar</button>
+			            <button class="btn btn-danger mr-2" id="cancel">Cancelar</button>
+			            <button class="btn btn-success" id="save" @click="storeUser">Guardar</button>
 			        </div>
 			    </div>
 			</div>
@@ -25,58 +21,79 @@
 <script>
 
 import OrgChart from '@balkangraph/orgchart.js'
+import Multiselect from 'vue-multiselect'
+import axios from 'axios'
 
 export default {
 
 	name: 'tree',
-	props: ['org'],
+	props: ['unit', 'users','unit_id'],
 	data() {
 		return {
-			nodes: [
-	            { id: 1, name: "Denny Curtias", title: "CEO", img: "https://cdn.balkan.app/shared/2.jpg" },
-	            { id: 2, pid: 1, name: "Ashley Barnett", title: "Sales Manager", img: "https://cdn.balkan.app/shared/3.jpg" },
-	            { id: 3, pid: 1, name: "Caden Ellison", title: "Dev Manager", img: "https://cdn.balkan.app/shared/4.jpg" },
-	            { id: 4, pid: 2, name: "Elliot Patel", title: "Sales", img: "https://cdn.balkan.app/shared/5.jpg" },
-	            { id: 5, pid: 2, name: "Lynn Hussain", title: "Sales", img: "https://cdn.balkan.app/shared/6.jpg" },
-	            { id: 6, pid: 3, name: "Tanner May", title: "Developer", img: "https://cdn.balkan.app/shared/7.jpg" },
-	            { id: 7, pid: 3, name: "Fran Parsons", title: "Developer", img: "https://cdn.balkan.app/shared/8.jpg" }
-	        ],
 	        chart: null,
+	        org: null,
 	        editForm: null,
+	        user_id: null,
+	        user: {
+	        	parent_id: 0,
+	        	user_id: 0,
+	        	level: 0,
+	        	unit_id: 0,
+	        }
 	    }
 	},
 
 	methods: {
+		completeName ({ firstname, lastname }) {
+	    	return `${firstname} ${lastname}`
+	    },
 
 	    oc: function(domEl, x) {
 	        this.chart = new OrgChart(
 	        	domEl, {
 	                    nodes: x,
 	                    nodeBinding: {
-	                        field_0: "name", field_1: "title", img_0: "img"
+	                        field_0: "name", img_0: "img",
 	                    },
 	                    template: 'polina',
 	                    editUI: new this.editForm,
-	                    nodeMenu:{
-					    	edit: {text:"Editar"}, add: {text:"Agregar"}, remove: {text:"Borrar"}
-					    },
 	        });
-	    },                        
+	    },
+
+	    storeUser(){
+	    	var node = this.chart.get(this.chart.editUI.nodeId)
+
+	    	this.user.parent_id = node.id
+	    	this.user.user_id = this.user_id.id
+	    	this.user.level = node.level + 1
+	    	this.user.unit_id = this.unit_id
+
+
+	    	axios({url: 'organizations',  method: 'POST', data: this.user })
+                .then(resp => {
+               		this.getOrganization()
+                	
+                    resolve(resp)
+
+                })
+                .catch(err => {
+                	//commit('auth_error', err)
+                    //reject(err)
+                });
+	    },
+
+	    getOrganization(){
+	    	axios({url: 'organizations/'+this.unit_id, method: 'GET'})
+	    		.then(resp => {
+	    			this.org = resp.data
+   					this.oc(this.$refs.tree, this.organization)
+
+	    		})
+	    },       
 	},
 
 	mounted(){
-		this.org.forEach( function(data) {
-		  data['name'] = data["user"]['firstname'] + " " + data["user"]['lastname'];
-		  data['title'] = data["parent"]['firstname'] + " " + data["parent"]['lastname'];
-		  data['pid'] = data['parent_id'];
-
-			if(data["id"] == 1){
-				console.log(data["pid"],"<---1---")
-				delete data.pid;
-				console.log(data["pid"],"<---2---")
-			}
-
-		});
+		this.org = this.unit
 		this.editForm = function () {
             this.nodeId = null;
         };
@@ -84,48 +101,52 @@ export default {
         this.editForm.prototype.init = function (obj) {
             var that = this;
             this.obj = obj;
+
             this.editForm = document.getElementById("editForm");
-            this.nameInput = document.getElementById("name");
-            this.titleInput = document.getElementById("title");
-            this.cancelButton = document.getElementById("cancel");
             this.saveButton = document.getElementById("save");
+            this.cancelButton = document.getElementById("cancel");
 
             this.cancelButton.addEventListener("click", function () {
                 that.hide();
             });
 
             this.saveButton.addEventListener("click", function () {
-            		var node = chart.get(that.nodeId);
-                node.name = that.nameInput.value;
-                node.title = that.titleInput.value;
-
-                chart.updateNode(node);
                 that.hide();
             });
         };
 
         this.editForm.prototype.show = function (nodeId) {
+        	var that = this
         		this.hide();
-            this.nodeId = nodeId;
+        	that.nodeId = nodeId
 
             var left = document.body.offsetWidth / 2 - 150;
             this.editForm.style.display = "block";
             this.editForm.style.left = left + "px";
-            var node = chart.get(nodeId);
-            this.nameInput.value = node.name;
-            this.titleInput.value = node.title;
         };
 
         this.editForm.prototype.hide = function (showldUpdateTheNode) {
             this.editForm.style.display = "none";
         };
 
+		this.oc(this.$refs.tree, this.organization)
+	},
+	computed:{
+		organization: function(){
+			this.org.forEach( function(data) {
+			  data['name'] = data["user"]['firstname'] + " " + data["user"]['lastname'];
+			  data['pid'] = data['parent_id'];
+				if(data["id"] == data["pid"]){
+					delete data.pid;
+				}
 
-        console.log(this.org," <-----")
-		this.oc(this.$refs.tree, this.org)
+			});
+			return this.org
+		}
 	}
 }
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style scoped>
 </style>

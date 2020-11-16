@@ -1,6 +1,6 @@
 <template>
                         <div id="app">
-                            <OrgChart :org="organization" v-if="organization.length > 0" />
+                            <OrgChart :unit="organization" v-if="organization.length > 0 && users.length > 0" :users="users" :unit_id="unit_id" />
                         </div>
                     </template>
 
@@ -14,6 +14,7 @@
                         OrgChart,
                       },
                       mounted(){
+                        this.getUsers()
                         this.getItems()
                       },
                       data () {
@@ -21,6 +22,8 @@
                           entity: "Organización",
                           entityTable: "organizations/1",
                           organization: [],
+                          users: [],
+                          unit_id: 1,
                         }
                       },
                       methods:{
@@ -29,6 +32,18 @@
                             .then(resp => {
                               const t = this
                               t.organization = resp.data
+                              resolve(resp)
+                            })
+                            .catch(err => {
+                              //commit('auth_error', err)
+                              //reject(err)
+                            });
+                        },
+                        getUsers(){
+                          axios({url: "users",  method: 'GET' })
+                            .then(resp => {
+                              const t = this
+                              t.users = resp.data
                               resolve(resp)
                             })
                             .catch(err => {
