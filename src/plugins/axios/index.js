@@ -19,17 +19,23 @@ axios.interceptors.request.use(config => {
 });
 
 axios.interceptors.response.use(response => {
-  if(response.data.status == "Token is Expired" || response.data.status == "Token is Invalid" || response.data.status == "Authorization Token not found"){
+  if(response.data.status == "Token has Expired" || 
+              response.data.status == "Token not provided"  || 
+              response.data.status == "Token is Invalid" || 
+              response.data.status == "Authorization Token not found"){
     jwtToken.removeToken();
     router.push({path: '/pages/login'});
   }
   return response;
 }, error => {
   let errorResponseData = error.response.data;
-  const errors = ["token_invalid", "Token is Invalid", "token_expired", "token_not_provided","Expired JWT Token","JWT Token not found", "Token is Expired"];
+  const errors = ["token_invalid", 
+                  "Token not provided", 
+                  "Token has expired", 
+                  "Token is invalid", "token_expired", "token_not_provided","Expired JWT Token","JWT Token not found", 
+                  "Token is Expired"];
 
-  console.log(error)
-  if (errors.includes(errorResponseData.error)) {
+  if (errors.includes(errorResponseData.message)) {
     store.dispatch('unsetAuthUser')
       .then(() => {
         jwtToken.removeToken();

@@ -16,13 +16,19 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Usuarios',
         to: '/users',
-        icon: 'cil-users'
+        icon: 'cil-people'
       },
       {
         _name: 'CSidebarNavItem',
         name: 'Clientes',
         to: '/customers',
-        icon: 'cil-users'
+        icon: 'cil-people'
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Productos',
+        to: '/products',
+        icon: 'cil-puzzle'
       },
       {
         _name: 'CSidebarNavDivider',

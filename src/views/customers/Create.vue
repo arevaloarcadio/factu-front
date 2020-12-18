@@ -20,9 +20,9 @@ export default {
 				{
 					name: 'Identificación', 
 					campos:[
-						{ name: 'firstname', title: 'Nombre', placeholder:'Introduzca Nombre', validation: "", type: 'string', size:"col-md-4" },
+						{ name: 'firstname', title: 'Nombre', placeholder:'Introduzca Nombre', validation: "required|min:3", type: 'string', size:"col-md-4" },
 						{ name: 'lastname', title: 'Apellidos', placeholder:'Introduzca Apellidos', validation: "required|min:3", type: 'string', size:"col-md-4" },
-						{ name: 'address', title: 'Dirección', placeholder:'Introduzca Dirección', validation: "string", type: 'string', size:"col-md-4" },
+						{ name: 'address', title: 'Dirección', placeholder:'Introduzca Dirección', validation: "required|min:3", type: 'string', size:"col-md-4" },
 						{ name: 'cif', title: 'DNI', validation: 'required', type: 'string', size:"col-md-4" },
 						{ name: 'birthdate', title: 'Fecha Nacimiento', validation: 'required', type: 'date', size:"col-md-4" },
 					]
@@ -56,7 +56,7 @@ export default {
 		}
 	},
 	mounted(){
-		console.log("Va")
+
 	},
 	methods:{
 		updated(){
@@ -64,8 +64,9 @@ export default {
 			this.$http({url: 'customers' , method: 'POST',data: this.entityForm })
 	        .then(response => {
 	          if(response.status == "201"){
-	          	self.showSuccessMsg()
-	            self.$router.push({path: '/customers'});
+	          	console.log("grabado")
+	            //this.$router.push({path: '/customers'});
+	          	//self.showSuccessMsg()
 
 	          }
 	        })

@@ -11,7 +11,10 @@
       @click="$store.commit('toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <CIcon name="logo" height="48" alt="Logo"/>
+      <!-- SELECT UNIT !-->
+      <select v-if="units" class="select form-control" @change="sendUnit($event.target.value)">
+        <option v-for="unit in units" :value="unit.unit_id" :selected="getUser.unit == unit.unit_id">{{ unit.unit.name }}</option>
+      </select>
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
@@ -51,11 +54,51 @@
 
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+//import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
+
 
 export default {
   name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt
+  },
+  data () {
+    return {
+      units: [],
+    }
+  },
+  created(){
+    this.getItems();
+  },
+  mounted(){
+    //console.log(this.getUser)
+  },
+  methods:{
+    ...mapActions([
+                'setUnit'
+            ]),
+    getItems(){
+      this.$http({url: 'organizations/mine',  method: 'GET' })
+        .then(resp => {
+          const t = this
+          t.units = resp.data
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
+    sendUnit(valor){
+      this.setUnit(valor)
+      //console.log(valor,"<-----")
+    }
+  },
+  computed: {
+    ...mapGetters([
+                'getUser'
+            ]),
   }
 }
 </script>

@@ -21,6 +21,10 @@ const createUser = () => import('@/views/users/Create')
 //CUSTOMERS
 const Customers = () => import('@/views/customers/Index')
 const createCustomer = () => import('@/views/customers/Create')
+
+//CUSTOMERS
+const Products = () => import('@/views/products/Index')
+const createProduct = () => import('@/views/products/Create')
 //const editUser = () => import('@/views/users/edit')
 
 Vue.use(Router)
@@ -96,6 +100,33 @@ function configRoutes () {
               },
               name: 'Crear Cliente',
               component: createCustomer
+            }
+          ]
+        },
+        {
+          path: 'products',
+          redirect: 'products/list',
+          meta: {
+            label: 'Productos'
+          },
+          component: {
+            render(c) {
+              return c('router-view')
+            }
+          },
+          children: [
+            {
+              path: 'list',
+              name: 'Productos',
+              component: Products
+            },
+            {
+              path: 'create',
+              meta: {
+                label: 'Crear Producto'
+              },
+              name: 'Crear Producto',
+              component: createProduct
             }
           ]
         },

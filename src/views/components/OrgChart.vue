@@ -13,7 +13,7 @@
 			        </div>
 			    </div>
 			</div>
-		<div id="tree" ref="tree"></div>	
+		<div id="tree" ref="tree" :key="unit_id"></div>	
 	</div>
 	    
 </template>

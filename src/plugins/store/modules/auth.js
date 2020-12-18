@@ -6,6 +6,7 @@ import user from "@/plugins/jwt/user";
 |--------------------------------------------------------------------------
 */
 export const SET_USER = 'SET_USER';
+export const SET_UNIT = 'SET_UNIT';
 export const UNSET_USER = 'UNSET_USER';
 
 /*
@@ -21,6 +22,7 @@ const state = {
 		email: null,
 		admin: null,
 		photo: null,
+		unit: null,
 	}
 };
 
@@ -38,6 +40,9 @@ const mutations = {
 		state.user.admin = payload.user.admin;
 		state.user.photo = payload.user.photo;
 	},
+	[SET_UNIT](state, payload) {
+		state.user.unit = payload.unit;
+	},
 	[UNSET_USER](state, payload) {
 		state.user.id = null;
 		state.user.firstname = null;
@@ -45,6 +50,7 @@ const mutations = {
 		state.user.email = null;
 		state.user.admin = null;
 		state.user.photo = null;
+		state.user.unit = null;
 	},
 };
 
@@ -56,6 +62,9 @@ const mutations = {
 const actions = {
 	setAuthUser: (context, user) => {
 		context.commit(SET_USER, {user})
+	},
+	setUnit: (context, unit) => {
+		context.commit(SET_UNIT, {unit})
 	},
 	unsetAuthUser: (context) => {
 		context.commit(UNSET_USER)
@@ -73,6 +82,9 @@ const getters = {
 	},
 	getUser: (state) => {
 		return (state.user);
+	},
+	getUnit: (state) => {
+		return (state.user.unit);
 	},
 	whoami: (state) => {
 		return state.user.id;
