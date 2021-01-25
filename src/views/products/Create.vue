@@ -8,6 +8,7 @@
 <script>
 import VueNotifications from "vue-notifications"
 import formGenerator from "@/views/components/formGenerator.vue"
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'Product',
@@ -92,6 +93,9 @@ export default {
 				}
 			]	
 		},
+    ...mapGetters([
+                'getUser'
+            ]),
 	}
 }
 </script>

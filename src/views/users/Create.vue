@@ -76,6 +76,11 @@ export default {
       title: 'Operación rechazada',
       message: 'Algo salió mal'
     }
+  },
+  computed: {
+    ...mapGetters([
+                'getUser'
+            ]),
   }
 }
 </script>

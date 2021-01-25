@@ -9,8 +9,11 @@
       </CCardHeader>
       <CCardBody class="py-2"  v-if="items">
         <CDataTable class="mb-0 table-outline" hover :items="items" :fields="tableFields" head-color="light" no-sorting v-if="items" >
-          <td slot="name" slot-scope="{item}">
-            {{ item.name }}
+          <td slot="customer" slot-scope="{item}">
+            {{ item.customer.firstname }} {{ item.customer.lastname }}
+          </td>
+          <td slot="product_types" slot-scope="{item}">
+            {{ item.product_types.name }}
           </td>
           <td slot="admin" slot-scope="{item}" class="text-center">
             <CIcon name="cil-check" style="color:green;" height="25" v-show="item.admin"/>
@@ -50,8 +53,8 @@ export default {
       entityTable: "products",
       items: [],
       tableFields: [
-        { key: 'costumer_id', label: 'Cliente' },
-        { key: 'product_type_id', label: 'Tipo', _classes: 'text-center' },
+        { key: 'customer', label: 'Cliente' },
+        { key: 'product_types', label: 'Tipo', _classes: 'text-center' },
         { key: 'identifier', label: 'Identificador', _classes: 'text-center' },
       ],
       previousUrl: "",
