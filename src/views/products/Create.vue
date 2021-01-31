@@ -38,7 +38,7 @@ export default {
 			this.$http({url: 'products' , method: 'POST',data: this.entityForm })
 	        .then(response => {
 	          if(response.status == "201"){
-	            //this.$router.push({path: '/customers'});
+	            self.$router.push({path: '/products/list'});
 	          	//self.showSuccessMsg()
 
 	          }

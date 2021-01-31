@@ -12,9 +12,6 @@
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
       <!-- SELECT UNIT !-->
-      <select v-if="units" class="select form-control" @change="sendUnit($event.target.value)">
-        <option v-for="unit in units" :value="unit.unit_id" :selected="getUser.unit == unit.unit_id">{{ unit.unit.name }}</option>
-      </select>
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
@@ -27,6 +24,12 @@
           Usuarios
         </CHeaderNavLink>
       </CHeaderNavItem>
+      <CHeaderNavItem>
+        <select v-if="units.length" class="select form-control" @change="sendUnit($event.target.value)">
+          <option v-for="u in units" :value="u.unit_id" :selected="getUser.unit == u.unit_id">{{ u.unit.name }}</option>
+        </select>
+      </CHeaderNavItem>
+
     </CHeaderNav>
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
@@ -70,6 +73,7 @@ export default {
   },
   created(){
     this.getItems();
+    console.log(this.getUser)
   },
   mounted(){
     //console.log(this.getUser)

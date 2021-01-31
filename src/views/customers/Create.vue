@@ -65,7 +65,7 @@ export default {
 	        .then(response => {
 	          if(response.status == "201"){
 	          	console.log("grabado")
-	            //this.$router.push({path: '/customers'});
+	            this.$router.push({path: '/customers/list'});
 	          	//self.showSuccessMsg()
 
 	          }

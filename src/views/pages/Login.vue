@@ -104,11 +104,10 @@ export default {
       axios({url: 'organizations/mine', method: 'GET' })
         .then(response => {
           if(response.status == "200"){
-            console.log(response.data[0].unit_id)
+            console.log(response.data[0].unit_id,"-------------------")
             if(response.data[0].unit){
               self.setUnit(response.data[0].unit_id)
             }
-            console.log(response.data)
             self.$router.push({path: '/#/dashboard'});
           }
         })

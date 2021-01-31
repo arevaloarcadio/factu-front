@@ -133,6 +133,7 @@ export default {
 	},
 	computed:{
 		organization: function(){
+			
 			this.org.forEach( function(data) {
 			  data['name'] = data["user"]['firstname'] + " " + data["user"]['lastname'];
 			  data['pid'] = data['parent_id'];

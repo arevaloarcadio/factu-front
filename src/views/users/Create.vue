@@ -8,6 +8,7 @@
 <script>
 import VueNotifications from "vue-notifications"
 import formGenerator from "@/views/components/formGenerator.vue"
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Users',
@@ -51,8 +52,8 @@ export default {
           .then(response => {
               console.log(response);
             if(response.status == "201"){
-              self.showSuccessMsg()
               self.$router.push({path: '/users'});
+              self.showSuccessMsg()
 
             }
           })

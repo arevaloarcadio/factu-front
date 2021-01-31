@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <OrgChart :unit="organization" v-if="organization.length > 0 && users.length > 0" :users="users" :unit_id="getUser.unit_id" />
+    <OrgChart :unit="organization" v-if="organization.length > 0 && users.length > 0 && getUser.unit" :users="users" :unit_id="getUser.unit" />
   </div>
 </template>
 
