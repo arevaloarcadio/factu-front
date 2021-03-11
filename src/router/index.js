@@ -19,8 +19,9 @@ const Users = () => import('@/views/users/Index')
 const createUser = () => import('@/views/users/Create')
 
 //CUSTOMERS
-const Customers = () => import('@/views/customers/Index')
-const createCustomer = () => import('@/views/customers/Create')
+const CustomerPage = () => import('@/views/customers/CustomerPage')
+const CustomerCreate = () => import('@/views/customers/CustomerCreate')
+const CustomerEdit = () => import('@/views/customers/CustomerEdit')
 
 //CUSTOMERS
 const Products = () => import('@/views/products/Index')
@@ -78,28 +79,26 @@ function configRoutes () {
         },
         {
           path: 'customers',
-          redirect: 'customers/list',
-          meta: {
-            label: 'Clientes'
-          },
-          component: {
-            render(c) {
-              return c('router-view')
-            }
-          },
+          redirect: 'customers',
+          component: { render(c) { return c('router-view') } },
           children: [
             {
-              path: 'list',
-              name: 'Clientes',
-              component: Customers
+              path: '',
+              name: 'customers.index',
+              meta: { label: 'Clientes' },
+              component: CustomerPage
             },
             {
               path: 'create',
-              meta: {
-                label: 'Crear Cliente'
-              },
-              name: 'Crear Cliente',
-              component: createCustomer
+              meta: { label: 'Crear Cliente' },
+              name: 'customers.create',
+              component: CustomerCreate
+            },
+            {
+              path: ':id/edit',
+              meta: { label: 'Editar Cliente' },
+              name: 'customers.edit',
+              component: CustomerEdit
             }
           ]
         },

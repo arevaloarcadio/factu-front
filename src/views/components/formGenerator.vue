@@ -8,7 +8,7 @@
           </div>
           <div card="card-body">
             <div class="container-fluid">
-              <div class="row pt-4"  v-for="item in items">
+              <div class="row pt-4"  v-for="(item, key) in items" :key="key">
                 <div class="col-md-12">
                   <div class="container-fluid">
                     <div class="row">
@@ -17,7 +17,15 @@
                       </div>
                     </div>
                     <div class="row">
-                        <div v-for="campo in item.campos"  :class="campo.size" class="mb-3">
+                        <div :class="campo.size" class="mb-3" v-for="(campo, key) in item.campos" :key="key">
+                          <template v-if="campo.type == 'hidden'" >
+                           <input 
+                            type="hidden"
+                            :name="campo.name"
+                            :id="campo.name"
+                            v-model="entity[campo.name]">
+                          </template>
+
                           <template v-if="campo.type == 'string'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
@@ -25,6 +33,7 @@
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+
                           <template v-if="campo.type == 'date'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
@@ -32,29 +41,55 @@
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+
                           <template v-if="campo.type == 'number'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                              <input type="number" :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
+                              <input 
+                                type="number" 
+                                class="form-control" 
+                                :name="campo.name" 
+                                :id="campo.name"
+                                :class="campo.clase" 
+                                v-model="entity[campo.name]"
+                                @keyup.enter="onEnter($event, campo.name)">
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+
+                          <template v-if="campo.type == 'tel'" >
+                            <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
+                            <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
+                              <input type="tel" :name="campo.name" class="form-control" :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
+                              <span class="small text-danger">{{ errors[0] }}</span>
+                            </ValidationProvider>
+                          </template>
+
                           <template v-if="campo.type == 'decimal'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                              <input type="number"  step="2"  :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
+                              <input type="number" step="2"  :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+
                           <template v-if="campo.type == 'select'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                              <select :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name" v-if="campo.opciones">
-                                <option v-for="opcion in campo.opciones" :value="opcion.id">{{ opcion.name }}</option>
+                              <select 
+                                class="form-control" 
+                                :name="campo.name" 
+                                :id="campo.name" 
+                                :class="campo.clase" 
+                                v-if="campo.opciones"
+                                v-model="entity[campo.name]"
+                                @change="onChange($event, campo.name)">
+                                <option v-for="(opcion, key) in campo.opciones" :value="opcion.id" :key="key">{{ opcion.name }}</option>
                               </select>
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+
                           <template v-if="campo.type == 'file'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
@@ -62,6 +97,7 @@
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
+                          
                           <template v-if="campo.type == 'text'" >
                             <label :for="campo.name"  class="typo__label">{{ campo.title }}</label>
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
@@ -86,23 +122,36 @@
 </template>
 
 <script>
-
 export default {
-  name: 'formGenerator',
-        props:['items','entity'],
-        mounted() {
-          console.log(this.items,"-----------<<")
-        },
-        data () {
-          return {
-            
-          }
-        },
-        methods:{
-          send(e){
-            this.$emit('update',true)
-            e.preventDefault()
-          },
-        }
-}
+  name: "formGenerator",
+  props: ["items", "entity"],
+  mounted() {
+    // console.log(this.entity,"-----------<<")
+  },
+  data() {
+    return {
+      tu: "ruru"
+    };
+  },
+  // watch: {
+  //   entity: function (newEntity, oldEntity) {
+  //     console.log(newEntity, oldEntity);
+  //   }
+  // },
+  methods: {
+    send(e) {
+      this.$emit("update", true);
+      e.preventDefault();
+    },
+
+    onChange($event, name) {
+      this.$emit("change", { value: $event.target.value, name });
+    },
+
+    onEnter($event, name) {
+      this.$emit("enter", { value: $event.target.value, name });
+    }
+  },
+};
 </script>
+

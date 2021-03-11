@@ -73,7 +73,7 @@ export default {
   },
   created(){
     this.getItems();
-    console.log(this.getUser)
+    // console.log(this.getUser)
   },
   mounted(){
     //console.log(this.getUser)
