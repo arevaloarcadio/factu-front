@@ -101,7 +101,6 @@ export default {
         .get("products")
         .then(resp => {
           this.items = resp.data;
-          console.log(resp);
         })
         .catch(err => console.log(err));
     },

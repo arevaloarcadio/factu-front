@@ -92,7 +92,6 @@ export default {
         .get('v1/customers')
         .then((resp) => {
           this.items = resp.data;
-          console.log(this.items);
         })
         .catch(err => console.log);
     },
