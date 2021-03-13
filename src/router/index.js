@@ -24,8 +24,8 @@ const CustomerCreate = () => import('@/views/customers/CustomerCreate')
 const CustomerEdit = () => import('@/views/customers/CustomerEdit')
 
 //CUSTOMERS
-const Products = () => import('@/views/products/Index')
-const createProduct = () => import('@/views/products/Create')
+const ProductsPage = () => import('@/views/products/ProductPage')
+const ProductCreate = () => import('@/views/products/ProductCreate')
 //const editUser = () => import('@/views/users/edit')
 
 Vue.use(Router)
@@ -99,34 +99,32 @@ function configRoutes () {
               meta: { label: 'Editar Cliente' },
               name: 'customers.edit',
               component: CustomerEdit
+            },
+            {
+              path: ':id/products/create',
+              meta: { label: 'Crear Producto' },
+              name: 'products.create',
+              component: ProductCreate
             }
           ]
         },
         {
           path: 'products',
-          redirect: 'products/list',
-          meta: {
-            label: 'Productos'
-          },
-          component: {
-            render(c) {
-              return c('router-view')
-            }
-          },
+          redirect: 'products',
+          component: { render(c) { return c('router-view') } },
           children: [
             {
-              path: 'list',
-              name: 'Productos',
-              component: Products
+              path: '',
+              name: 'products.index',
+              meta: { label: 'Productos' },
+              component: ProductsPage
             },
-            {
-              path: 'create',
-              meta: {
-                label: 'Crear Producto'
-              },
-              name: 'Crear Producto',
-              component: createProduct
-            }
+            // {
+            //   path: 'create',
+            //   name: 'products.create',
+            //   meta: { label: 'Crear Producto' },
+            //   component: ProductCreate
+            // }
           ]
         },
       ]

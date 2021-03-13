@@ -15,6 +15,43 @@
       @enter="enter($event)">
       Direcciones
     </formGenerator>
+
+    <CCard>
+      <CCardHeader>
+        <h5>
+          Productos
+          <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+          <CButton class="float-right py-0 mr-1" color="success">
+            <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+            Nuevo Producto
+          </CButton>
+          </router-link>
+        </h5>
+      </CCardHeader>
+
+      <CCardBody class="py-2">
+        
+        <ProductTable :items="products"></ProductTable>
+      </CCardBody>
+      <!-- <CCardFooter v-if="products">
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a
+                class="page-link"
+                @click="page(previousUrl)"
+                v-show="previousUrl"
+                tabindex="-1">
+                Anterior
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
+            </li>
+          </ul>
+        </nav>
+      </CCardFooter> -->
+    </CCard>
   </div>
 </template>
 
@@ -22,6 +59,7 @@
 import axios from "axios";
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
+import ProductTable from "@/views/products/components/ProductTable.vue";
 import items from "./customer-edit-items";
 
 
@@ -30,13 +68,18 @@ const HTTP_CREATED = 201;
 
 export default {
   name: "CustomerEdit",
-  components: { formGenerator },
+  components: { 
+    formGenerator,
+    ProductTable
+  },
   data() {
     return {
       entity: "Clientes",
       newEntity: "Nuevo Cliente",
       itemsInformation: items.information,
       itemsAddresses: items.addresses,
+      customerId: null,
+      products: [],
       entityForm: {
         firstname: "",
         lastname: "",
@@ -60,7 +103,10 @@ export default {
   },
   created() {
 
+    this.customerId = this.$route.params.id;
+
     this.getCustomerById();
+    this.getProducts();
 
     Promise.all([
       this.addressesByCustomerId(),
@@ -117,7 +163,6 @@ export default {
         address:    this.entityFormAddress.address,
       };
 
-      console.log(address);
       axios
         .post(`v1/addresses`, address)
         .then(res => {
@@ -135,29 +180,20 @@ export default {
       return new Promise((resolve, reject) => {
         axios.get(`v1/customers/${customerId}/addresses`)
           .then(res => {
-            console.log(res.data);
             this.setAddressInformation(res.data)
             resolve(true);
           }).catch(err => reject(err));
       });
     },
-    setAddressInformation(addresses) {
-
-      this.entityFormAddressArr = addresses;
-
-      this.entityFormAddress = {
-        id:       addresses[0].id,
-        country:  addresses[0].country_id,
-        province: addresses[0].province_id,
-        city:     addresses[0].city_id,
-        zipCode:  addresses[0].postal_code_id,
-        address:  addresses[0].line_one
-      }
-
-      this.entityFormAddress = { ...this.entityFormAddress };
-      this.provinces(this.entityFormAddress.country);
-      this.cities(this.entityFormAddress.province);
-      this.postalCodes(this.entityFormAddress.city);
+    getProducts() {
+      
+      axios
+        .get(`v1/customers/${this.customerId}/products`)
+        .then(resp => {
+          this.products = resp.data;
+          // console.log(resp);
+        })
+        .catch(err => console.log(err));
     },
 
     // events
@@ -212,12 +248,29 @@ export default {
     },
     postalCodes(cityId) {
       axios.get(`v1/cities/${cityId}/postal-codes`).then((resp) => {
-        console.log(resp.data);
         this.setPostalCodes(resp.data);
       });
     },
 
     // setters
+    setAddressInformation(addresses) {
+
+      this.entityFormAddressArr = addresses;
+
+      this.entityFormAddress = {
+        id:       addresses[0].id,
+        country:  addresses[0].country_id,
+        province: addresses[0].province_id,
+        city:     addresses[0].city_id,
+        zipCode:  addresses[0].postal_code_id,
+        address:  addresses[0].line_one
+      }
+
+      this.entityFormAddress = { ...this.entityFormAddress };
+      this.provinces(this.entityFormAddress.country);
+      this.cities(this.entityFormAddress.province);
+      this.postalCodes(this.entityFormAddress.city);
+    },
     setCountries(countries) {
       this.itemsAddresses[0].campos[1].opciones = countries;
       this.itemsAddresses = { ...this.itemsAddresses };

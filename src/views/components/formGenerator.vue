@@ -126,7 +126,7 @@ export default {
   name: "formGenerator",
   props: ["items", "entity"],
   mounted() {
-    // console.log(this.entity,"-----------<<")
+    // console.log(this.items,"-----------<<")
   },
   data() {
     return {
