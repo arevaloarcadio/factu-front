@@ -15,8 +15,9 @@ const Register = () => import('@/views/pages/Register')
 
 
 //USERS
-const Users = () => import('@/views/users/Index')
-const createUser = () => import('@/views/users/Create')
+const UserPage = () => import('@/views/users/UserPage')
+const UserCreate = () => import('@/views/users/UserCreate')
+const UserEdit = () => import('@/views/users/UserEdit')
 
 //CUSTOMERS
 const CustomerPage = () => import('@/views/customers/CustomerPage')
@@ -51,29 +52,27 @@ function configRoutes () {
         },
         {
           path: 'users',
-          redirect: 'users/list',
-          meta: {
-            label: 'Usuarios'
-          },
-          component: {
-            render(c) {
-              return c('router-view')
-            }
-          },
+          meta: { label: 'Usuarios List' },
+          component: { render(c) { return c('router-view') } },
           children: [
             {
-              path: 'list',
-              name: 'Usuarios',
-              component: Users
+              path: '',
+              name: 'users.index',
+              meta: { label: 'Usuarios' },
+              component: UserPage
             },
             {
               path: 'create',
-              meta: {
-                label: 'Crear Usuario'
-              },
-              name: 'Crear',
-              component: createUser
-            }
+              name: 'users.create',
+              meta: { label: 'Crear Usuario' },
+              component: UserCreate
+            },
+            {
+              path: ':id/edit',
+              meta: { label: 'Editar Usuario' },
+              name: 'users.edit',
+              component: UserEdit
+            },
           ]
         },
         {
