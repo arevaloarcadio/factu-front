@@ -16,18 +16,9 @@
       <td slot="product_types" slot-scope="{ item }">
         {{ item.product_types.name }}
       </td>
-      <td slot="admin" slot-scope="{ item }" class="text-center">
-        <CIcon
-          name="cil-check"
-          style="color: green"
-          height="25"
-          v-show="item.admin"/>
-      </td>
       <td slot="actions" slot-scope="{ item }">
-        <router-link
-          :to="'/' + entityTable + '/' + item.id"
-          :disabled="true">
-          Editar
+        <router-link :to="{ name: 'products.edit', params: getParams(item), query: getQuery(item) }">
+          <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
         </router-link>
       </td>
     </CDataTable>
@@ -46,8 +37,27 @@ export default {
         { key: "customer",      label: "Cliente" },
         { key: "product_types", label: "Tipo",          _classes: "text-center" },
         { key: "identifier",    label: "Identificador", _classes: "text-center" },
+        {
+          key: 'actions',
+          label: 'Acciones',
+          _style: { width: '1%' },
+          sorter: false,
+          filter: false
+        },
       ],
     };
+  },
+  methods: {
+    getParams(item) {
+      return { customerId: item.customer_id, productId: item.id };
+    },
+    getQuery(item) {
+      return { identifier: item.identifier, product_type: item.product_type_id };
+    }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.btn--link { color: #FFF }
+</style>

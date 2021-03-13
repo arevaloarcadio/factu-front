@@ -23,10 +23,9 @@ const CustomerPage = () => import('@/views/customers/CustomerPage')
 const CustomerCreate = () => import('@/views/customers/CustomerCreate')
 const CustomerEdit = () => import('@/views/customers/CustomerEdit')
 
-//CUSTOMERS
 const ProductsPage = () => import('@/views/products/ProductPage')
 const ProductCreate = () => import('@/views/products/ProductCreate')
-//const editUser = () => import('@/views/users/edit')
+const ProductEdit = () => import('@/views/products/ProductEdit')
 
 Vue.use(Router)
 
@@ -105,6 +104,12 @@ function configRoutes () {
               meta: { label: 'Crear Producto' },
               name: 'products.create',
               component: ProductCreate
+            },
+            {
+              path: ':customerId/products/:productId/edit',
+              meta: { label: 'Editar Producto' },
+              name: 'products.edit',
+              component: ProductEdit
             }
           ]
         },

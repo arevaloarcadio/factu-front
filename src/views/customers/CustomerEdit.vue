@@ -111,7 +111,7 @@ export default {
     Promise.all([
       this.addressesByCustomerId(),
       this.countries(),
-    ]).catch(err => console.log(err)); 
+    ]).catch(err => console.log(err));
   },
   methods: {
     getCustomerById() {

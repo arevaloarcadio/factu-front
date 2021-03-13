@@ -54,7 +54,6 @@ export default {
 			.post("products", data)
 			.then(res => {
 				if (res.status == HTTP_CREATED) {
-					console.log(res.data);
 					// this.showSuccessMsg();
 					this.$router.go(-1)
 				}
@@ -77,7 +76,6 @@ export default {
         .get("product_types")
         .then(res => {
 					this.product_types = res.data;
-					console.log(res.data);
 					this.setProductTypes(this.product_types);
         })
         .catch((err) => console.log(err));
