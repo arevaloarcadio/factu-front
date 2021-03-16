@@ -19,6 +19,8 @@ const UserPage = () => import('@/views/users/UserPage')
 const UserCreate = () => import('@/views/users/UserCreate')
 const UserEdit = () => import('@/views/users/UserEdit')
 
+const InteractionCreate = () => import('@/views/interactions/InteractionCreate.vue')
+
 //CUSTOMERS
 const CustomerPage = () => import('@/views/customers/CustomerPage')
 const CustomerCreate = () => import('@/views/customers/CustomerCreate')
@@ -73,6 +75,12 @@ function configRoutes () {
               name: 'users.edit',
               component: UserEdit
             },
+            {
+              path: ':userId/interactions/create',
+              meta: { label: 'Crear Interacción' },
+              name: 'interactions.create',
+              component: InteractionCreate
+            }
           ]
         },
         {

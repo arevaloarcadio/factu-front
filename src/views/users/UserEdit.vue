@@ -13,6 +13,43 @@
       @update="updatePassword()">
       Seguridad
     </formGenerator>
+
+    <CCard>
+      <CCardHeader>
+        <h5>
+          Interacciones
+          <router-link :to="{ name: 'interactions.create', params: { userId } }">
+          <CButton class="float-right py-0 mr-1" color="success">
+            <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+            Nueva Interacción
+          </CButton>
+          </router-link>
+        </h5>
+      </CCardHeader>
+
+      <CCardBody class="py-2">
+        
+        <InteractionTable :items="interactions"></InteractionTable>
+      </CCardBody>
+      <!-- <CCardFooter v-if="products">
+        <nav>
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a
+                class="page-link"
+                @click="page(previousUrl)"
+                v-show="previousUrl"
+                tabindex="-1">
+                Anterior
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
+            </li>
+          </ul>
+        </nav>
+      </CCardFooter> -->
+    </CCard>
   </div>
 </template>
 
@@ -20,13 +57,19 @@
 import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
+import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
 import items from './user-edit-items';
 
 export default {
   name: "UserEdit",
-  components: { formGenerator },
+  components: { 
+    formGenerator,
+    InteractionTable
+  },
   data() {
     return {
+      userId: null,
+      interactions: [],
       itemsForm: items.information,
       itemsSecurity: items.security,
       entityForm: {
@@ -41,16 +84,30 @@ export default {
     };
   },
   created() {
+
+    this.userId = this.$route.params.id;
+
     this.getUser();
+    this.getInteractions();
   },
   methods: {
     getUser() {
       const userId = this.$route.params.id;
       
       axios
-        .get(`v1/users/${userId}`, this.entityForm)
+        .get(`v1/users/${userId}`)
         .then(res => {
           this.setUserInformation(res.data);
+        })
+        .catch(err => console.log(err));
+    },
+    getInteractions() {
+      const userId = this.$route.params.id;
+      
+      axios
+        .get(`v1/users/${userId}/interactions`)
+        .then(res => {
+          this.interactions = res.data;
         })
         .catch(err => console.log(err));
     },
