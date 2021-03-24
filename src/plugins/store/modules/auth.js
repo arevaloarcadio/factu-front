@@ -86,6 +86,9 @@ const getters = {
 	getUnit: (state) => {
 		return (state.user.unit);
 	},
+	getUnitId: (state) => {
+		return (state.user.unit);
+	},
 	whoami: (state) => {
 		return state.user.id;
 	},

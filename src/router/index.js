@@ -54,7 +54,7 @@ function configRoutes () {
         },
         {
           path: 'users',
-          meta: { label: 'Usuarios List' },
+          meta: { label: 'Usuarios' },
           component: { render(c) { return c('router-view') } },
           children: [
             {

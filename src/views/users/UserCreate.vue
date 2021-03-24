@@ -3,7 +3,7 @@
     <formGenerator
       :items="itemsForm" 
       :entity="entityForm" 
-      @update="updated()">
+      @update="createUser()">
       Crear Usuario
     </formGenerator>
   </div>
@@ -14,6 +14,7 @@ import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './user-create-items';
+import { mapGetters } from "vuex";
 
 export default {
   name: "UserCreate",
@@ -29,21 +30,30 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapGetters(["getUnitId"])
+  },
   methods: {
-    updated() {
+    createUser() {
       const HTTP_CREATED = 201;
-      
-      axios
-        .post("v1/users", this.entityForm)
-        .then(res => {
-          console.log(res.data);
 
-          if (res.status == HTTP_CREATED) {
-            // this.showSuccessMsg();
-            this.$router.go(-1);
-          }
-        })
-        .catch(err => console.log(err));
+      const data = {
+        unitId: this.getUnitId,
+        ...this.entityForm
+      };
+      console.log(data);
+
+      // axios
+      //   .post("v1/users", this.entityForm)
+      //   .then(res => {
+      //     console.log(res.data);
+
+      //     if (res.status == HTTP_CREATED) {
+      //       // this.showSuccessMsg();
+      //       this.$router.go(-1);
+      //     }
+      //   })
+      //   .catch(err => console.log(err));
     },
   },
   notifications: {

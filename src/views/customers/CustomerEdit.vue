@@ -138,17 +138,17 @@ export default {
     },
     updated() {
       const customerId   = this.$route.params.id;
-      
-      axios
-        .put(`v1/customers/${customerId}`, this.entityForm)
-        .then(res => {
+      console.log(this.entityForm);
+      // axios
+      //   .put(`v1/customers/${customerId}`, this.entityForm)
+      //   .then(res => {
 
-          if (res.status == HTTP_OK) {
-            this.$router.go(0);
-            this.showSuccessMsg();
-          }
-        })
-        .catch(err => console.log);
+      //     if (res.status == HTTP_OK) {
+      //       this.$router.go(0);
+      //       this.showSuccessMsg();
+      //     }
+      //   })
+      //   .catch(err => console.log);
     },
     createOrUpdateAddress() {
       const customerId   = this.$route.params.id;

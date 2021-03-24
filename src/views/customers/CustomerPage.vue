@@ -90,8 +90,8 @@ export default {
 
       axios
         .get('v1/customers')
-        .then((resp) => {
-          this.items = resp.data;
+        .then(res => {
+          this.items = res.data;
         })
         .catch(err => console.log);
     },
