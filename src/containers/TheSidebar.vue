@@ -38,10 +38,10 @@ export default {
   nav,
   computed: {
     show () {
-      return this.$store.state.sidebarShow 
+      return this.$store.state.menu.sidebarShow 
     },
     minimize () {
-      return this.$store.state.sidebarMinimize 
+      return this.$store.state.menu.sidebarMinimize 
     }
   }
 }

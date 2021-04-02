@@ -21,6 +21,7 @@
 import TheSidebar from './TheSidebar'
 import TheHeader from './TheHeader'
 import TheFooter from './TheFooter'
+import axios from 'axios'
 
 export default {
   name: 'TheContainer',
