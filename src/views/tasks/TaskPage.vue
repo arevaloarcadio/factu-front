@@ -66,13 +66,21 @@ export default {
   data() {
     return {
       entity: "Tareas",
+      current_endpoint: 'v1/tasks',
       newEntity: "Nueva Tarea",
       entityTable: "tasks",
       items: [],
-      tableFields: [
-        { key: "customer",      label: "Cliente" },
-        { key: "product_types", label: "Tipo",          _classes: "text-center" },
-        { key: "identifier",    label: "Identificador", _classes: "text-center" },
+      fields: [
+        { key: "name",      label: "Nombre" },
+        { key: "subject", label: "Tema",          _classes: "text-center" },
+        { key: "date",    label: "Fecha", _classes: "text-center" },
+        {
+          key: 'actions',
+          label: 'Acciones',
+          _style: { width: '1%' },
+          sorter: false,
+          filter: false
+        }
       ],
       previousUrl: "",
       nextUrl: "",
@@ -86,7 +94,7 @@ export default {
     getProducts() {
       
       axios
-        .get("products")
+        .get(this.current_endpoint)
         .then(resp => {
           this.items = resp.data;
         })
@@ -132,3 +140,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.btn--link { color: #FFF }
+</style>

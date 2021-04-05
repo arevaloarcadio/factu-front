@@ -3,8 +3,8 @@
     <formGenerator
       :items="itemsForm"
       :entity="entityForm"
-      @update="editProduct()">
-      Editar Producto
+      @update="editTask()">
+      Editar Tarea
     </formGenerator>
   </div>
 </template>
@@ -13,36 +13,64 @@
 import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
-import items from './product-edit-items';
+import items from './task-edit-items';
 
 export default {
-  name: "ProductEdit",
+  name: "TaskEdit",
   components: { formGenerator },
   data() {
     return {
 			itemsForm: items,
+      current_endpoint: 'v1/tasks',
+      taskId: null,
       entityForm: {
-        customer_id: 0,
-        product_type_id: 0,
-        identifier: "",
+        name: '',
+        subject:  '',
+        description:  '',
+        date: '',
       },
     };
   },
-  created() {
-    this.getProductTypes();
-    this.setSelectedProduct();
+
+  created()
+  {
+    this.taskId = this.$route.params.id;
+    this.getTaskById();
+    // this.getProductTypes();
+    // this.setSelectedProduct();
 	},
+
   methods: {
-    editProduct() {
+
+    getTaskById()
+    {
+      axios.get(`${this.current_endpoint}/${this.taskId}`).then(res => {
+        this.setTaskInformation(res.data);
+      }).catch(err => console.log(err));
+    },
+
+    setTaskInformation(data)
+    {
+      let date = new Date(data.date)
+
+      console.log([date.toDateString(), date])
+
+      this.entityForm = {
+        name:         data.name,
+        subject:      data.subject,
+        description:  data.description,
+        date:         data.date,
+      };
+
+      this.entityForm = { ...this.entityForm };
+    },
+
+    editTask()
+    {
       const HTTP_OK = 200;
 
-      const data = {
-        productId:     this.$route.params.productId,
-        productTypeId: this.entityForm.product_type_id,
-        identifier:    this.entityForm.identifier
-      };
 			axios
-        .put(`v1/products/${data.productId}`, data)
+        .put(`${this.current_endpoint}/${this.taskId}`, this.entityForm)
         .then(res => {
           if (res.status == HTTP_OK) {
             console.log(res.data);
@@ -52,28 +80,29 @@ export default {
         })
         .catch(err => console.log(err));
     },
-		getProductTypes() {
-			
-			axios
-        .get("product_types")
-        .then(res => {
-					this.setProductTypes(res.data);
-        })
-        .catch((err) => console.log(err));
-    },
-    setSelectedProduct() {
-      this.entityForm.product_type_id = this.$route.query.product_type;
-      this.entityForm.identifier = this.$route.query.identifier;
 
-      this.entityForm = { ...this.entityForm };
-    },
+		// getProductTypes() {
+			
+		// 	axios
+    //     .get("product_types")
+    //     .then(res => {
+		// 			this.setProductTypes(res.data);
+    //     })
+    //     .catch((err) => console.log(err));
+    // },
+
+    // setSelectedProduct() {
+    //   this.entityForm.product_type_id = this.$route.query.product_type;
+    //   this.entityForm.identifier = this.$route.query.identifier;
+    //   this.entityForm = { ...this.entityForm };
+    // },
 		
 		
 		// setters
-    setProductTypes(productTypes) {
-			this.itemsForm[0].campos[0].opciones = productTypes;
-			this.itemsForm = { ...this.itemsForm };
-    }
+    // setProductTypes(productTypes) {
+		// 	this.itemsForm[0].campos[0].opciones = productTypes;
+		// 	this.itemsForm = { ...this.itemsForm };
+    // }
   },
   notifications: {
     showSuccessMsg: {

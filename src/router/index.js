@@ -32,7 +32,7 @@ const ProductEdit = () => import('@/views/products/ProductEdit')
 
 const TaskPage = () => import('@/views/tasks/TaskPage')
 const TaskCreate = () => import('@/views/tasks/TaskCreate')
-// const TaskEdit = () => import('@/views/tasks/TaskEdit')
+const TaskEdit = () => import('@/views/tasks/TaskEdit')
 
 Vue.use(Router)
 
@@ -160,12 +160,12 @@ function configRoutes () {
               meta: { label: 'Crear Tarea' },
               component: TaskCreate
             },
-            // {
-            //   path: ':id/edit',
-            //   meta: { label: 'Editar Cliente' },
-            //   name: 'customers.edit',
-            //   component: CustomerEdit
-            // },
+            {
+              path: ':id/edit',
+              meta: { label: 'Editar Tarea' },
+              name: 'tasks.edit',
+              component: TaskEdit
+            },
             // {
             //   path: ':id/tasks/create',
             //   meta: { label: 'Crear Producto' },

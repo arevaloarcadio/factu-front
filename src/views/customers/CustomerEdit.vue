@@ -114,6 +114,7 @@ export default {
     ]).catch(err => console.log(err));
   },
   methods: {
+    
     getCustomerById() {
       const customerId = this.$route.params.id;
 
@@ -122,6 +123,7 @@ export default {
       }).catch(err => console.log(err));
 
     },
+
     setCustomerInformation(data) {
       this.entityForm = {
         firstname:   data.firstname,
