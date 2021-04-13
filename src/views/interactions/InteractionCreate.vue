@@ -21,8 +21,8 @@ export default {
   data() {
     return {
       itemsForm: items,
+      customerId: 0,
       entityForm: {
-        customer: "",
         type: "",
         description: "",
       },
@@ -30,6 +30,7 @@ export default {
   },
   created() {
     this.getCustomers();
+    this.customerId = this.$route.params.customerId;
   },
   methods: {
     getCustomers() {
@@ -42,16 +43,14 @@ export default {
     createInteraction() {
       const HTTP_CREATED = 201;
       
-      const userId = parseInt(this.$route.params.userId);
       const interaction = {
-        userId,
-        customerId:  parseInt(this.entityForm.customer),
+        customerId:  parseInt(this.customerId),
         type:        this.entityForm.type,
         description: this.entityForm.description
       };
       
       axios
-        .post(`v1/users/${userId}/interactions`, interaction)
+        .post(`v1/customers/${this.customerId}/interactions`, interaction)
         .then(res => {
           console.log(res.data);
 

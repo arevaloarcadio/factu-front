@@ -28,7 +28,6 @@ export default {
     return {
       entityTable: "products",
       tableFields: [
-        { key: "customer",    label: "Cliente" },
         { key: "type",        label: "Tipo",        _classes: "text-center" },
         { key: "description", label: "Descripción", _classes: "text-center" },
         // {

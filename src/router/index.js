@@ -78,12 +78,6 @@ function configRoutes () {
               meta: { label: 'Editar Usuario' },
               name: 'users.edit',
               component: UserEdit
-            },
-            {
-              path: ':userId/interactions/create',
-              meta: { label: 'Crear Interacción' },
-              name: 'interactions.create',
-              component: InteractionCreate
             }
           ]
         },
@@ -121,6 +115,12 @@ function configRoutes () {
               meta: { label: 'Editar Producto' },
               name: 'products.edit',
               component: ProductEdit
+            },
+            {
+              path: ':customerId/interactions/create',
+              meta: { label: 'Crear Interacción' },
+              name: 'interactions.create',
+              component: InteractionCreate
             }
           ]
         },

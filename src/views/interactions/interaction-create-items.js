@@ -3,15 +3,6 @@ const items = [
     name: "Interacciones",
     campos: [
       {
-        name: "customer",
-        title: "Clientes",
-        placeholder: "Seleccione un cliente",
-        validation: "required",
-        type: "select",
-        size: "col-md-4",
-        opciones: [],
-      },
-      {
         name: "type",
         title: "Tipo de interacción",
         placeholder: "Presencial",

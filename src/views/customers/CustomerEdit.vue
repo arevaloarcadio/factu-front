@@ -15,43 +15,80 @@
       @enter="enter($event)">
       Direcciones
     </formGenerator>
+    <CRow>
+      <CCard class="col-sm-12 col-md-6">
+        <CCardHeader>
+          <h5>
+            Productos
+            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+            <CButton class="float-right py-0 mr-1" color="success">
+              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+              Nuevo Producto
+            </CButton>
+            </router-link>
+          </h5>
+        </CCardHeader>
 
-    <CCard>
-      <CCardHeader>
-        <h5>
-          Productos
-          <router-link :to="{ name: 'products.create', params: { id: customerId } }">
-          <CButton class="float-right py-0 mr-1" color="success">
-            <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
-            Nuevo Producto
-          </CButton>
-          </router-link>
-        </h5>
-      </CCardHeader>
+        <CCardBody class="py-2">
+          
+          <ProductTable :items="products"></ProductTable>
+        </CCardBody>
+        <!-- <CCardFooter v-if="products">
+          <nav>
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  @click="page(previousUrl)"
+                  v-show="previousUrl"
+                  tabindex="-1">
+                  Anterior
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
+              </li>
+            </ul>
+          </nav>
+        </CCardFooter> -->
+      </CCard>
+      <CCard class="col-sm-12 col-md-6">
+        <CCardHeader>
+          <h5>
+            Interacciones
+            <router-link :to="{ name: 'interactions.create', params: { customerId } }">
+            <CButton class="float-right py-0 mr-1" color="success">
+              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+              Nueva Interacción
+            </CButton>
+            </router-link>
+          </h5>
+        </CCardHeader>
 
-      <CCardBody class="py-2">
-        
-        <ProductTable :items="products"></ProductTable>
-      </CCardBody>
-      <!-- <CCardFooter v-if="products">
-        <nav>
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a
-                class="page-link"
-                @click="page(previousUrl)"
-                v-show="previousUrl"
-                tabindex="-1">
-                Anterior
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
-            </li>
-          </ul>
-        </nav>
-      </CCardFooter> -->
-    </CCard>
+        <CCardBody class="py-2">
+          
+          <InteractionTable :items="interactions"></InteractionTable>
+        </CCardBody>
+        <!-- <CCardFooter v-if="products">
+          <nav>
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  @click="page(previousUrl)"
+                  v-show="previousUrl"
+                  tabindex="-1">
+                  Anterior
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
+              </li>
+            </ul>
+          </nav>
+        </CCardFooter> -->
+      </CCard>
+    </CRow>
   </div>
 </template>
 
@@ -61,6 +98,7 @@ import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import ProductTable from "@/views/products/components/ProductTable.vue";
 import items from "./customer-edit-items";
+import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
 
 
 const HTTP_OK = 200;
@@ -70,7 +108,8 @@ export default {
   name: "CustomerEdit",
   components: { 
     formGenerator,
-    ProductTable
+    ProductTable,
+    InteractionTable
   },
   data() {
     return {
@@ -78,7 +117,8 @@ export default {
       newEntity: "Nuevo Cliente",
       itemsInformation: items.information,
       itemsAddresses: items.addresses,
-      customerId: null,
+      customerId: 0,
+      interactions: [],
       products: [],
       entityForm: {
         firstname: "",
@@ -107,6 +147,7 @@ export default {
 
     this.getCustomerById();
     this.getProducts();
+    this.getInteractions();
 
     Promise.all([
       this.addressesByCustomerId(),
@@ -116,12 +157,19 @@ export default {
   methods: {
     
     getCustomerById() {
-      const customerId = this.$route.params.id;
-
-      axios.get(`v1/customers/${customerId}`).then(res => {
+      axios.get(`v1/customers/${this.customerId}`).then(res => {
         this.setCustomerInformation(res.data);
       }).catch(err => console.log(err));
 
+    },
+
+    getInteractions() {      
+      axios
+        .get(`v1/customers/${this.customerId}/interactions`)
+        .then(res => {
+          this.interactions = res.data;
+        })
+        .catch(err => console.log(err));
     },
 
     setCustomerInformation(data) {
@@ -139,7 +187,6 @@ export default {
       this.entityForm = { ...this.entityForm };
     },
     updated() {
-      const customerId   = this.$route.params.id;
       console.log(this.entityForm);
       // axios
       //   .put(`v1/customers/${customerId}`, this.entityForm)
@@ -153,8 +200,6 @@ export default {
       //   .catch(err => console.log);
     },
     createOrUpdateAddress() {
-      const customerId   = this.$route.params.id;
-
       const address = {
         id:         this.entityFormAddress.id,
         customerId,
@@ -177,10 +222,8 @@ export default {
         .catch(err => console.log);
     },
     addressesByCustomerId() {
-      const customerId = this.$route.params.id;
-
       return new Promise((resolve, reject) => {
-        axios.get(`v1/customers/${customerId}/addresses`)
+        axios.get(`v1/customers/${this.customerId}/addresses`)
           .then(res => {
             this.setAddressInformation(res.data)
             resolve(true);

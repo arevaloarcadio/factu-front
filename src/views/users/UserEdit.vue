@@ -1,19 +1,22 @@
 <template>
   <div>
-    <formGenerator
-      :items="itemsForm" 
-      :entity="entityForm" 
-      @update="updateUser()">
-      Editar Usuario
-    </formGenerator>
+    <CRow>
+      <formGenerator
+        class="col-sm-12 col-md-6"
+        :items="itemsForm" 
+        :entity="entityForm" 
+        @update="updateUser()">
+        Editar Usuario
+      </formGenerator>
 
-    <formGenerator
-      :items="itemsSecurity" 
-      :entity="entityFormPassword" 
-      @update="updatePassword()">
-      Seguridad
-    </formGenerator>
-
+      <formGenerator
+        class="col-sm-12 col-md-6"
+        :items="itemsSecurity" 
+        :entity="entityFormPassword" 
+        @update="updatePassword()">
+        Seguridad
+      </formGenerator>
+    </CRow>
     <CCard>
       <CCardHeader>
         <h5>
