@@ -71,8 +71,8 @@ export default {
       entityTable: "tasks",
       items: [],
       fields: [
-        { key: "name",      label: "Nombre" },
         { key: "subject", label: "Tema",          _classes: "text-center" },
+        { key: "description", label: "Descripción",          _classes: "text-center" },
         { key: "date",    label: "Fecha", _classes: "text-center" },
         {
           key: 'actions',

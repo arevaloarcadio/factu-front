@@ -1,11 +1,47 @@
 <template>
   <div>
-    <formGenerator
-      :items="itemsForm"
-      :entity="entityForm"
-      @update="editTask()">
-      Editar Tarea
-    </formGenerator>
+    <CRow>
+      <CCol class="col-md-4 col-xs-12">
+        <formGenerator
+          :items="itemsForm"
+          :entity="entityForm"
+          @update="editTask()">
+          Editar Tarea
+        </formGenerator>
+      </CCol>
+      <CCol class="col-md-8 col-xs-12">
+        <CRow>
+          <label for="user">Usuarios:</label>
+          <multiselect v-model="selectedUsers" placeholder="Introduzca Nombre"  :options="users.map(type => type.id)"
+            :custom-label="opt => users.find(x => x.id == opt).firstname + ' '+ users.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
+            id="user" name="user" :multiple="true" :hide-selected="true">
+          </multiselect>
+          <button @click="sendUsers">Añadir</button>
+          <div v-for="user in users">
+            
+          </div>
+        </CRow>
+        <CRow>
+          <CCard class="col-sm-12">
+            <CCardHeader class="py-1">
+              <h5>
+                Notas
+                <router-link :to="{ name: 'notes.create', params: { id: taskId } }">
+                <CButton class="float-right py-0 mr-1" color="success">
+                  <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+                  Nueva Tarea
+                </CButton>
+                </router-link>
+              </h5>
+            </CCardHeader>
+            <CCardBody class="py-2">
+              <NoteTable :items="notes"></NoteTable>
+            </CCardBody>
+          </CCard>
+        </CRow>
+      </CCol>
+    </CRow>
+
   </div>
 </template>
 
@@ -14,17 +50,20 @@ import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './task-edit-items';
+import NoteTable from "@/views/tasks/notes/components/NoteTable.vue";
 
 export default {
   name: "TaskEdit",
-  components: { formGenerator },
+  components: { formGenerator, NoteTable },
   data() {
     return {
 			itemsForm: items,
       current_endpoint: 'v1/tasks',
       taskId: null,
+      selectedUsers: [],
+      users: [],
+      notes: [],
       entityForm: {
-        name: '',
         subject:  '',
         description:  '',
         date: '',
@@ -36,11 +75,16 @@ export default {
   {
     this.taskId = this.$route.params.id;
     this.getTaskById();
+    this.getNotes();
+    this.getUsers();
     // this.getProductTypes();
     // this.setSelectedProduct();
 	},
 
   methods: {
+    customLabel ({ firstname, lastname }) {
+      return `${firstname} ${lastname}`
+    },
 
     getTaskById()
     {
@@ -56,7 +100,6 @@ export default {
       console.log([date.toDateString(), date])
 
       this.entityForm = {
-        name:         data.name,
         subject:      data.subject,
         description:  data.description,
         date:         data.date,
@@ -81,28 +124,41 @@ export default {
         .catch(err => console.log(err));
     },
 
-		// getProductTypes() {
-			
-		// 	axios
-    //     .get("product_types")
-    //     .then(res => {
-		// 			this.setProductTypes(res.data);
-    //     })
-    //     .catch((err) => console.log(err));
-    // },
+    getNotes() {      
+      axios
+        .get(`v1/tasks/${this.taskId}/notes`)
+        .then(res => {
+          this.notes = res.data;
+        })
+        .catch(err => console.log(err));
+    },
 
-    // setSelectedProduct() {
-    //   this.entityForm.product_type_id = this.$route.query.product_type;
-    //   this.entityForm.identifier = this.$route.query.identifier;
-    //   this.entityForm = { ...this.entityForm };
-    // },
-		
-		
-		// setters
-    // setProductTypes(productTypes) {
-		// 	this.itemsForm[0].campos[0].opciones = productTypes;
-		// 	this.itemsForm = { ...this.itemsForm };
-    // }
+    getUsers() {      
+      axios
+        .get(`users`)
+        .then(res => {
+          this.users = res.data;
+        })
+        .catch(err => console.log(err));
+    },
+    sendUsers() {
+      const HTTP_CREATED = 201;
+      
+      const users = {
+        users:  this.selectedUsers
+      };
+      
+      axios
+        .post(`v1/tasks/${this.taskId}/users`, users)
+        .then(res => {
+          console.log(res.data);
+
+          if (res.status == HTTP_CREATED) {
+            // this.showSuccessMsg();
+          }
+        })
+        .catch(err => console.log(err));
+    },
   },
   notifications: {
     showSuccessMsg: {
@@ -115,6 +171,18 @@ export default {
       title: "Operación rechazada",
       message: "Algo salió mal",
     },
+  },
+  computed: {
+    groups: {
+      get () { 
+        return this.selectedUsers.map(value => this.users.find(option => option.key === value))
+      },
+      set (v) {
+        this.selectedUsers = v.map(value => value.key)
+      }
+    }
   }
 };
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+

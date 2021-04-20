@@ -202,7 +202,7 @@ export default {
     createOrUpdateAddress() {
       const address = {
         id:         this.entityFormAddress.id,
-        customerId,
+        customerId: this.customerId,
         countryId:  this.entityFormAddress.country,
         provinceId: this.entityFormAddress.province,
         cityId:     this.entityFormAddress.city,
@@ -301,7 +301,9 @@ export default {
     setAddressInformation(addresses) {
 
       this.entityFormAddressArr = addresses;
-
+      if(addresses[0] == null){
+        return
+      }
       this.entityFormAddress = {
         id:       addresses[0].id,
         country:  addresses[0].country_id,

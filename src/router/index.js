@@ -34,6 +34,8 @@ const TaskPage = () => import('@/views/tasks/TaskPage')
 const TaskCreate = () => import('@/views/tasks/TaskCreate')
 const TaskEdit = () => import('@/views/tasks/TaskEdit')
 
+const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
+
 Vue.use(Router)
 
 export default new Router({
@@ -166,6 +168,12 @@ function configRoutes () {
               name: 'tasks.edit',
               component: TaskEdit
             },
+            {
+              path: ':taskId/notes/create',
+              meta: { label: 'Crear Nota' },
+              name: 'notes.create',
+              component: NoteCreate
+            }
             // {
             //   path: ':id/tasks/create',
             //   meta: { label: 'Crear Producto' },

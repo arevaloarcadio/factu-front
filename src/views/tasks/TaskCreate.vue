@@ -32,7 +32,6 @@ export default {
       identifier: "",
 			itemsForm: items,
       entityForm: {
-        name: '',
         subject:  '',
         description:  '',
         date: '',
