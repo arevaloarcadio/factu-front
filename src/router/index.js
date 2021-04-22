@@ -169,7 +169,7 @@ function configRoutes () {
               component: TaskEdit
             },
             {
-              path: ':taskId/notes/create',
+              path: ':id/notes/create',
               meta: { label: 'Crear Nota' },
               name: 'notes.create',
               component: NoteCreate

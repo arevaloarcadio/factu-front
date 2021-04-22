@@ -43,17 +43,17 @@ export default {
       };
       console.log(data);
 
-      // axios
-      //   .post("v1/users", this.entityForm)
-      //   .then(res => {
-      //     console.log(res.data);
+      axios
+        .post("v1/users", this.entityForm)
+        .then(res => {
+          console.log(res.data);
 
-      //     if (res.status == HTTP_CREATED) {
-      //       // this.showSuccessMsg();
-      //       this.$router.go(-1);
-      //     }
-      //   })
-      //   .catch(err => console.log(err));
+          if (res.status == HTTP_CREATED) {
+            this.showSuccessMsg();
+            this.$router.go(-1);
+          }
+        })
+        .catch(err => console.log(err));
     },
   },
   notifications: {

@@ -88,6 +88,37 @@
           </nav>
         </CCardFooter> -->
       </CCard>
+      <CCard class="col-md-12">
+          <CCardHeader class="text-success py-1">
+            <strong>Equipo</strong>
+          </CCardHeader>
+          <CCardBody>
+            <CRow>
+              <div v-for="user in attachedUsers" class="mr-2 text-success text-center">
+                <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
+                <small>
+                  <strong>{{ user.firstname + ' ' + user.lastname }}</strong>
+                </small>
+              </div>
+            </CRow>
+          </CCardBody>
+          <CCardFooter>
+            <CRow>
+              <CCol class="col-md-3">
+                <label for="user" class="strong"><strong>Usuarios:</strong></label>
+              </CCol>
+              <CCol class="col-md-6">
+                <multiselect v-model="selectedUsers"placeholder="Introduzca Nombre"  :options="users.map(type => type.id)"
+                    :custom-label="opt => users.find(x => x.id == opt).firstname + ' '+ users.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
+                    id="user" name="user" :multiple="true" :hide-selected="true">
+                </multiselect>
+              </CCol>
+              <CCol class="col-md-3">
+                  <button @click="attachUsers" class="btn btn-primary float-left">Añadir</button>
+              </CCol>
+            </CRow>
+          </CCardFooter>
+        </CCard>
     </CRow>
   </div>
 </template>
@@ -114,6 +145,9 @@ export default {
   data() {
     return {
       entity: "Clientes",
+      selectedUsers: [],
+      attachedUsers: [],
+      users: [],
       newEntity: "Nuevo Cliente",
       itemsInformation: items.information,
       itemsAddresses: items.addresses,
@@ -144,10 +178,11 @@ export default {
   created() {
 
     this.customerId = this.$route.params.id;
-
+    this.getUsers();
     this.getCustomerById();
     this.getProducts();
     this.getInteractions();
+    this.getAttachedUsers();
 
     Promise.all([
       this.addressesByCustomerId(),
@@ -170,6 +205,44 @@ export default {
           this.interactions = res.data;
         })
         .catch(err => console.log(err));
+    },
+
+    getUsers() {      
+      axios
+        .get(`users`)
+        .then(res => {
+          this.users = res.data;
+        })
+        .catch(err => console.log(err));
+    },
+
+    getAttachedUsers() {
+      axios
+        .get(`v1/customers/${this.customerId}/users`)
+        .then(res => {
+          console.log(res.data);
+          this.attachedUsers = res.data
+        })
+        .catch(err => console.log(err));
+    },
+    attachUsers() {
+      const HTTP_CREATED = 201;
+      
+      const users = {
+        users:  this.selectedUsers
+      };
+      
+      axios
+        .post(`v1/customers/${this.customerId}/users`, users)
+        .then(res => {
+          console.log(res.data);
+
+          if (res.status == HTTP_CREATED) {
+            // this.showSuccessMsg();
+          }
+        })
+        .catch(err => console.log(err));
+      this.getAttachedUsers()
     },
 
     setCustomerInformation(data) {
@@ -349,3 +422,4 @@ export default {
   },
 };
 </script>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

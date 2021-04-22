@@ -3,11 +3,11 @@ const items = [
     name: "Notas",
     campos: [
       {
-        name: "description",
-        title: "Descripción",
+        name: "note",
+        title: "Nota",
         placeholder: "Fui a su oficina y le ofrecí...",
-        type: "string",
-        size: "col-md-4",
+        type: "text",
+        size: "col-md-12",
       },
     ],
   }

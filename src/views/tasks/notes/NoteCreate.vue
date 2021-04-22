@@ -21,35 +21,28 @@ export default {
   data() {
     return {
       itemsForm: items,
-      taskNoteId: 0,
+      taskId: 0,
       entityForm: {
         user_id: "",
-        description: "",
+        note: "",
       },
     };
   },
   created() {
-    this.getTaskNotes();
-    this.taskNoteId = this.$route.params.taskNoteId;
+    this.taskId = this.$route.params.id;
+    console.log(this.taskId)
   },
   methods: {
-    getTaskNotes() {
-
-      axios
-        .get(`v1/task/${this.taskId}/notes`)
-        .then(res => this.setTaskNotes(res.data))
-        .catch(err => console.log);
-    },
     createNote() {
       const HTTP_CREATED = 201;
       
-      const interaction = {
+      const note = {
         taskId:  parseInt(this.taskId),
-        description: this.entityForm.description
+        note: this.entityForm.note
       };
       
       axios
-        .post(`v1/task/${this.taskId}/notes`, note)
+        .post(`v1/tasks/${this.taskId}/notes`, note)
         .then(res => {
           console.log(res.data);
 

@@ -10,11 +10,12 @@
       no-sorting
       v-if="items">
 
-      <!-- <td slot="actions" slot-scope="{ item }">
-        <router-link :to="{ name: 'products.edit', params: getParams(item), query: getQuery(item) }">
-          <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
-        </router-link>
-      </td> -->
+      <td slot="user" slot-scope="{ item }">
+        <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
+        <small>
+          <strong>{{ item.firstname + ' ' + item.lastname }}</strong>
+        </small>
+      </td>
     </CDataTable>
   </div>
 </template>
@@ -26,11 +27,15 @@ export default {
   props: ["items"],
   data() {
     return {
-      entityTable: "products",
+      entityTable: "notes",
       tableFields: [
-        { key: "description", label: "Descripción", _classes: "text-center" }
-        ]
+        { key: "user", label: "", _classes: "text-center" },
+        { key: "note", label: "Nota", _classes: "text-center" }
+      ]
     }
+  },
+  created(){
+    console.log(this.items,"<-----")
   },
   methods: {
     getParams(item) {

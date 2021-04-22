@@ -8,29 +8,48 @@
           @update="editTask()">
           Editar Tarea
         </formGenerator>
+        <CCard class="col-md-12">
+          <CCardHeader class="text-success py-1">
+            <strong>Equipo</strong>
+          </CCardHeader>
+          <CCardBody>
+            <CRow>
+              <div v-for="user in attachedUsers" class="mr-2 text-success text-center">
+                <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
+                <small>
+                  <strong>{{ user.firstname + ' ' + user.lastname }}</strong>
+                </small>
+              </div>
+            </CRow>
+          </CCardBody>
+          <CCardFooter>
+            <CRow>
+              <CCol class="col-md-3">
+                <label for="user" class="strong"><strong>Usuarios:</strong></label>
+              </CCol>
+              <CCol class="col-md-6">
+                <multiselect v-model="selectedUsers"placeholder="Introduzca Nombre"  :options="users.map(type => type.id)"
+                    :custom-label="opt => users.find(x => x.id == opt).firstname + ' '+ users.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
+                    id="user" name="user" :multiple="true" :hide-selected="true">
+                </multiselect>
+              </CCol>
+              <CCol class="col-md-3">
+                  <button @click="attachUsers" class="btn btn-primary float-left">Añadir</button>
+              </CCol>
+            </CRow>
+          </CCardFooter>
+        </CCard>
       </CCol>
       <CCol class="col-md-8 col-xs-12">
-        <CRow>
-          <label for="user">Usuarios:</label>
-          <multiselect v-model="selectedUsers" placeholder="Introduzca Nombre"  :options="users.map(type => type.id)"
-            :custom-label="opt => users.find(x => x.id == opt).firstname + ' '+ users.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
-            id="user" name="user" :multiple="true" :hide-selected="true">
-          </multiselect>
-          <button @click="sendUsers">Añadir</button>
-          <div v-for="user in users">
-            
-          </div>
-        </CRow>
         <CRow>
           <CCard class="col-sm-12">
             <CCardHeader class="py-1">
               <h5>
                 Notas
                 <router-link :to="{ name: 'notes.create', params: { id: taskId } }">
-                <CButton class="float-right py-0 mr-1" color="success">
-                  <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
-                  Nueva Tarea
-                </CButton>
+                  <CButton class="float-right py-0 mr-1" color="success">
+                    <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>Nueva Tarea
+                  </CButton>
                 </router-link>
               </h5>
             </CCardHeader>
@@ -61,6 +80,7 @@ export default {
       current_endpoint: 'v1/tasks',
       taskId: null,
       selectedUsers: [],
+      attachedUsers: [],
       users: [],
       notes: [],
       entityForm: {
@@ -77,6 +97,7 @@ export default {
     this.getTaskById();
     this.getNotes();
     this.getUsers();
+    this.getAttachedUsers();
     // this.getProductTypes();
     // this.setSelectedProduct();
 	},
@@ -129,6 +150,7 @@ export default {
         .get(`v1/tasks/${this.taskId}/notes`)
         .then(res => {
           this.notes = res.data;
+          console.log(this.notes,"<-------??")
         })
         .catch(err => console.log(err));
     },
@@ -141,7 +163,17 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    sendUsers() {
+
+    getAttachedUsers() {
+      axios
+        .get(`v1/tasks/${this.taskId}/users`)
+        .then(res => {
+          console.log(res.data);
+          this.attachedUsers = res.data
+        })
+        .catch(err => console.log(err));
+    },
+    attachUsers() {
       const HTTP_CREATED = 201;
       
       const users = {
@@ -158,6 +190,7 @@ export default {
           }
         })
         .catch(err => console.log(err));
+      this.getAttachedUsers()
     },
   },
   notifications: {
