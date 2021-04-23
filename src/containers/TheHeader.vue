@@ -11,24 +11,25 @@
       @click="$store.commit('toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <CIcon name="logo" height="48" alt="Logo"/>
+      <!-- SELECT UNIT !-->
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
         <CHeaderNavLink to="/dashboard">
-          Dashboard
+          Escritorio
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
         <CHeaderNavLink to="/users" exact>
-          Users
+          Usuarios
         </CHeaderNavLink>
       </CHeaderNavItem>
-      <CHeaderNavItem class="px-3">
-        <CHeaderNavLink>
-          Settings
-        </CHeaderNavLink>
+      <CHeaderNavItem>
+        <select v-if="units.length" class="select form-control" @change="sendUnit($event.target.value)">
+          <option v-for="u in units" :value="u.unit_id" :selected="getUser.unit == u.unit_id">{{ u.unit.name }}</option>
+        </select>
       </CHeaderNavItem>
+
     </CHeaderNav>
     <CHeaderNav class="mr-4">
       <CHeaderNavItem class="d-md-down-none mx-2">
@@ -56,11 +57,52 @@
 
 <script>
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
+//import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
+
 
 export default {
   name: 'TheHeader',
   components: {
     TheHeaderDropdownAccnt
+  },
+  data () {
+    return {
+      units: [],
+    }
+  },
+  created(){
+    this.getItems();
+    // console.log(this.getUser)
+  },
+  mounted(){
+    //console.log(this.getUser)
+  },
+  methods:{
+    ...mapActions([
+                'setUnit'
+            ]),
+    getItems(){
+      this.$http({url: 'organizations/mine',  method: 'GET' })
+        .then(resp => {
+          const t = this
+          t.units = resp.data
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
+    sendUnit(valor){
+      this.setUnit(valor)
+      //console.log(valor,"<-----")
+    }
+  },
+  computed: {
+    ...mapGetters([
+                'getUser'
+            ]),
   }
 }
 </script>
