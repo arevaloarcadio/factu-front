@@ -94,6 +94,7 @@ export default {
           }
         })
         .catch(err => {
+          console.log(err);
           //commit('auth_error', err)
           localStorage.removeItem('token')
           //reject(err)

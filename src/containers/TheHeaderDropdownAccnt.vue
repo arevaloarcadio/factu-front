@@ -9,7 +9,7 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            src="img/avatars/6.jpg"
+            :src="'img/profiles/'+user.image"
             class="c-avatar-img "
           />
         </div>
@@ -44,12 +44,21 @@
 </template>
 
 <script>
+
+import user from '../plugins/jwt/user'  
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return { 
-      itemsCount: 42
+      itemsCount: 42,
+      user : JSON.parse(user.getUser())
     }
+  },
+  computed: {
+    ...mapGetters([
+                'getUser'
+            ]),
   }
 }
 </script>

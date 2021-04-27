@@ -4,9 +4,10 @@ import jwtToken from '@/plugins/jwt/jwt-token.js'
 import store from '@/plugins/store'
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://hexcrm.test/';
+//axios.defaults.baseURL = 'http://hexcrm.test/';
 //axios.defaults.baseURL = 'https://api.jurisleg.com/';
 //axios.defaults.baseURL = 'http://localhost:8000/';
+axios.defaults.baseURL = 'http://localhost/hexcrm/public/index.php';
 
 Vue.prototype.$http = axios;
 
