@@ -34,6 +34,7 @@
     "@coreui/vue": "^3.0.6",
     "@coreui/vue-chartjs": "^1.0.5",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "jquery": "^3.6.0",
     "mini-toastr": "^0.8.1",
     "vee-validate": "^3.4.0",

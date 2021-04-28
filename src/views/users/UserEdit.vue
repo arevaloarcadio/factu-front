@@ -262,7 +262,7 @@ export default {
       var formData = new FormData();
 
       formData.append('image',this.upload_profile.picture.recut_picture);
-    console.log(formData.get('image'));
+
       const HTTP_OK = 200;
       const userId  = this.$route.params.id;
       

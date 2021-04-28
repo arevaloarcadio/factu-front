@@ -133,8 +133,8 @@ export default {
   // },
   methods: {
     send(e) {
-      this.$emit("update", true);
-      e.preventDefault();
+        e.preventDefault();
+        this.$emit("update", true);
     },
 
     onChange($event, name) {

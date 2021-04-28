@@ -109,7 +109,8 @@ export default {
 
     getTaskById()
     {
-      axios.get(`${this.current_endpoint}/${this.taskId}`).then(res => {
+      axios.get(`${this.current_endpoint}/${this.taskId}`)
+      .then(res => {
         this.setTaskInformation(res.data);
       }).catch(err => console.log(err));
     },
@@ -118,7 +119,6 @@ export default {
     {
       let date = new Date(data.date)
 
-      console.log([date.toDateString(), date])
 
       this.entityForm = {
         subject:      data.subject,
@@ -150,7 +150,7 @@ export default {
         .get(`v1/tasks/${this.taskId}/notes`)
         .then(res => {
           this.notes = res.data;
-          console.log(this.notes,"<-------??")
+   
         })
         .catch(err => console.log(err));
     },

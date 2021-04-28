@@ -6,7 +6,9 @@
       @update="createNote()">
       Crear Nota
     </formGenerator>
+      <NoteAttachedFile v-bind:taskId="taskId" ref="NoteAttachedFile"></NoteAttachedFile>
   </div>
+
 </template>
 
 <script>
@@ -14,10 +16,11 @@ import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './note-create-items';
+import NoteAttachedFile from "./components/NoteAttachedFile.vue";
 
 export default {
   name: "NoteCreate",
-  components: { formGenerator },
+  components: { formGenerator,NoteAttachedFile },
   data() {
     return {
       itemsForm: items,
@@ -30,19 +33,23 @@ export default {
   },
   created() {
     this.taskId = this.$route.params.id;
-    console.log(this.taskId)
   },
   methods: {
     createNote() {
+      
+      var formData = new FormData();
+
+      formData.append('taskId',this.taskId);
+      formData.append('note',this.entityForm.note);
+      
+      for(var i = 0; i < this.$refs.NoteAttachedFile.upload_files.length; i++ ){
+         formData.append('file_'+i,this.$refs.NoteAttachedFile.upload_files[i])
+      }
+      
       const HTTP_CREATED = 201;
-      
-      const note = {
-        taskId:  parseInt(this.taskId),
-        note: this.entityForm.note
-      };
-      
+
       axios
-        .post(`v1/tasks/${this.taskId}/notes`, note)
+        .post(`v1/tasks/${this.taskId}/notes`, formData,{ 'Content-Type': 'multipart/form-data' })
         .then(res => {
           console.log(res.data);
 
@@ -52,6 +59,7 @@ export default {
           }
         })
         .catch(err => console.log(err));
+
     },
     setTaskNotes(taskNotes) {
       const newTaskNotes = taskNotes.map(c => {
