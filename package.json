@@ -34,8 +34,6 @@
     "@coreui/vue": "^3.0.6",
     "@coreui/vue-chartjs": "^1.0.5",
     "axios": "^0.21.1",
-    "bootstrap": "^4.6.0",
-    "jquery": "^3.6.0",
     "mini-toastr": "^0.8.1",
     "vee-validate": "^3.4.0",
     "vue": "~2.6.11",
@@ -62,7 +60,11 @@
     "node-sass": "~4.13.1",
     "npm-run-all": "~4.1.5",
     "sass-loader": "~8.0.2",
-    "vue-template-compiler": "~2.6.11"
+    "vue-template-compiler": "~2.6.11",
+    "croppr" : "2.3.1",
+    "levenary" : "1.1.1",
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0"
   },
   "browserslist": [
     "> 1%",
