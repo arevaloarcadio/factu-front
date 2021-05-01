@@ -236,8 +236,9 @@ export default {
         .post(`v1/customers/${this.customerId}/users`, users)
         .then(res => {
           console.log(res.data);
-
+          this.$router.go(0);
           if (res.status == HTTP_CREATED) {
+             
             // this.showSuccessMsg();
           }
         })
