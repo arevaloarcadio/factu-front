@@ -38,15 +38,17 @@
     </CDropdownItem>
     <CDropdownDivider/>
     <CDropdownItem>
-      <CIcon name="cil-lock-locked" /> Cerrar Sesión
+      <CIcon name="cil-lock-locked"  />
+        <a class="nav-link"  @click.prevent="logout">Cerrar Sesión</a>
     </CDropdownItem>
   </CDropdown>
 </template>
 
 <script>
+import {mapGetters,mapState} from 'vuex';
+import jwtToken from '../plugins/jwt/jwt-token';
+import user from '../plugins/jwt/user' ; 
 
-import user from '../plugins/jwt/user'  
-import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
@@ -54,6 +56,16 @@ export default {
       itemsCount: 42,
       user : JSON.parse(user.getUser())
     }
+  },
+  methods: {
+    logout() {
+      jwtToken.removeToken();
+      this.$store.dispatch('unsetAuthUser')
+      .then(() => {
+        this.$router.push({name: '/pages/login'});
+      });
+    },
+    
   },
   computed: {
     ...mapGetters([
