@@ -14,7 +14,38 @@
       </CCardHeader>
 
       <CCardBody class="py-2" v-if="items">
-        <CDataTable
+        <table class="table table-responsive-sm table-striped">
+           <thead >
+            <tr>
+              <th v-for="field in fields" :class="{true : field._classes !== undefined }">{{field.label}}</th>
+            </tr>
+          </thead>
+          <paginate name="items" :list="items" :per="10" tag="tbody">
+             <tr v-if="items.length == 0">
+                <td :colspan="fields.length">
+                  <center>
+                    <h4 style="margin: 0;">
+                      Sin  registros
+                    </h4>
+                  </center>
+                </td>
+              </tr>
+            <tr v-for="item in paginated('items')">
+              <td>{{item.firstname}}</td> 
+              <td>{{item.lastname}}</td> 
+              <td>{{item.email}}</td> 
+              <td slot="actions">
+                <router-link :to="{ name: 'customers.edit', params: { id: item.id } }">
+                  <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
+                </router-link>
+              </td>    
+            </tr>
+          </paginate>
+        </table>
+         
+         <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+              
+        <!--<CDataTable
           class="mb-0 table-outline"
           hover
           :items="items"
@@ -27,10 +58,10 @@
               <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
             </router-link>
           </td>
-        </CDataTable>
+        </CDataTable>-->
       </CCardBody>
 
-      <CCardFooter v-if="items">
+      <!--<CCardFooter v-if="items">
         <nav>
           <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -49,7 +80,7 @@
             </li>
           </ul>
         </nav>
-      </CCardFooter>
+      </CCardFooter>-->
     </CCard>
   </div>
 </template>
@@ -57,6 +88,7 @@
 <script>
 import axios from "axios";
 import VueNotifications from "vue-notifications";
+import VuePaginate from 'vue-paginate'
 
 export default {
   name: "CustomerPage",
@@ -66,6 +98,7 @@ export default {
       newEntity: "Nuevo Cliente",
       entityTable: "customers",
       items: [],
+      paginate : ['items'],
       fields: [
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
@@ -91,7 +124,7 @@ export default {
       axios
         .get('v1/customers')
         .then(res => {
-          this.items = res.data;
+          this.items = res.data;;
         })
         .catch(err => console.log);
     },

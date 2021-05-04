@@ -17,7 +17,7 @@ const items = [
         placeholder: "Introduzca tema de la tarea",
         validation: "required",
         type: "string",
-        size: "col-md-8  col-md-offset-right-4",
+        size: "col-md-12  col-md-offset-right-4",
       },
       {
         name: "date",
@@ -25,7 +25,7 @@ const items = [
         placeholder: "",
         validation: "required",
         type: "date",
-        size: "col-md-6  col-md-offset-right-6",
+        size: "col-md-12  col-md-offset-right-6",
       },
       {
         name: "description",

@@ -147,3 +147,15 @@ export default {
   }
 };
 </script>
+
+<style type="text/css">
+  #subject{
+    margin: 1%;
+  }
+  #description{
+     margin: 1%;
+  }
+  #date{
+    margin-top: 2%;
+  }
+</style>

@@ -24,7 +24,7 @@ const items = [
         placeholder: "Introduzca Email",
         validation: "required|email",
         type: "string",
-        size: "col-md-8 col-md-offset-right-4",
+        size: "col-md-4 col-md-offset-right-4",
       },
     ],
   },

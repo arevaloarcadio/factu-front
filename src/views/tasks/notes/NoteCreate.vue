@@ -87,3 +87,9 @@ export default {
   }
 };
 </script>
+
+<style type="text/css">
+  #note{
+    margin: 1%;
+  }
+</style>

@@ -14,7 +14,48 @@
       </CCardHeader>
 
       <CCardBody class="py-2" v-if="items">
-        <CDataTable
+
+        <table class="table table-responsive-sm table-striped">
+           <thead >
+            <tr>
+              <th v-for="field in tableFields" :class="{true : field._classes !== undefined }">{{field.label}}</th>
+            </tr>
+          </thead>
+          <paginate name="items" :list="items" :per="10" tag="tbody">
+            <tr v-if="items.length == 0">
+                <td :colspan="tableFields.length">
+                  <center>
+                    <h4 style="margin: 0;">
+                      Sin  registros
+                    </h4>
+                  </center>
+                </td>
+              </tr>
+            <tr v-for="item in paginated('items')">
+              <td>{{item.firstname}}</td> 
+              <td>{{item.lastname}}</td> 
+              <td>{{item.email}}</td> 
+              <td v-if="item.admin" class="text-center">
+                <CIcon
+                  name="cil-check"
+                  style="color:green;"
+                  height="25"
+                  v-show="item.admin"/>
+              </td>
+              <td v-else class="text-center">
+              </td>
+              <td slot="actions">
+                <router-link :to="{ name: 'users.edit', params: { id: item.id } }">
+                  <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
+                </router-link>
+              </td>    
+            </tr>
+          </paginate>
+        </table>
+         
+         <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+
+        <!--<CDataTable
           class="mb-0 table-outline"
           hover
           :items="items"
@@ -38,9 +79,9 @@
               <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
             </router-link>
           </td>
-        </CDataTable>
+        </CDataTable>-->
       </CCardBody>
-      <CCardFooter v-if="items">
+      <!--<CCardFooter v-if="items">
         <nav>
           <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -60,7 +101,7 @@
             </li>
           </ul>
         </nav>
-      </CCardFooter>
+      </CCardFooter>-->
     </CCard>
   </div>
 </template>
@@ -69,6 +110,7 @@
 import axios from "axios";
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
+import VuePaginate from 'vue-paginate'
 
 export default {
   name: "UserPage",
@@ -76,6 +118,7 @@ export default {
   data() {
     return {
       items: [],
+      paginate : ['items'],
       submitted: false,
       itemModal: false,
       tableFields: [

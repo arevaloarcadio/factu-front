@@ -14,7 +14,48 @@
         </h5>
       </CCardHeader>
       <CCardBody class="py-2" v-if="items">
-        <CDataTable
+         <table class="table table-responsive-sm table-striped">
+           <thead >
+            <tr>
+              <th v-for="field in tableFields" :class="{true : field._classes !== undefined }">{{field.label}}</th>
+            </tr>
+          </thead>
+          <paginate name="items" :list="items" :per="10" tag="tbody">
+            
+            <tr v-if="items.length == 0">
+              <td :colspan="tableFields.length">
+                <center>
+                  <h4 style="margin: 0;">
+                    Sin  registros
+                  </h4>
+                </center>
+              </td>
+            </tr>
+            <tr v-for="item in paginated('items')">
+              <td>{{item.customer.firstname }} {{ item.customer.lastname }}</td> 
+              <td>{{item.product_types.name }}</td> 
+              <td>{{item.identifier}}</td> 
+              <td slot="admin" slot-scope="{ item }" class="text-center">
+                <CIcon
+                  name="cil-check"
+                  style="color: green"
+                  height="25"
+                  v-show="item.admin"
+                />
+              </td>
+              <td slot="actions" slot-scope="{ item }">
+                <router-link
+                  :to="'/' + entityTable + '/' + item.id"
+                  :disabled="true"
+                  >Editar
+                </router-link>
+              </td> 
+            </tr>
+          </paginate>
+        </table>
+         
+         <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+        <!--<CDataTable
           class="mb-0 table-outline"
           hover
           :items="items"
@@ -44,9 +85,9 @@
               >Editar</router-link
             >
           </td>
-        </CDataTable>
+        </CDataTable>-->
       </CCardBody>
-      <CCardFooter v-if="items">
+      <!--<CCardFooter v-if="items">
         <nav>
           <ul class="pagination justify-content-center">
             <li class="page-item">
@@ -63,7 +104,7 @@
             </li>
           </ul>
         </nav>
-      </CCardFooter>
+      </CCardFooter>-->
     </CCard>
   </div>
 </template>
@@ -82,6 +123,7 @@ export default {
       newEntity: "Nuevo Producto",
       entityTable: "products",
       items: [],
+      paginate : ['items'],
       tableFields: [
         { key: "customer",      label: "Cliente" },
         { key: "product_types", label: "Tipo",          _classes: "text-center" },
