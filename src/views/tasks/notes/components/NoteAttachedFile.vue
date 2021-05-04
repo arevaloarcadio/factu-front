@@ -97,7 +97,7 @@
             </a>
             <center v-if="files.length == 0">
               <h2>
-                <label for="note" class="typo__label mb-0 text-dark">No ha cargado ningun archivo</label>
+                <label for="note" class="typo__label mb-0 text-dark">No se ha cargado ningún archivo</label>
               </h2>
             </center>
           </div>

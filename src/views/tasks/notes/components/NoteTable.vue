@@ -13,8 +13,11 @@
       <td slot="user" slot-scope="{ item }">
         <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
         <small>
-          <strong>{{ item.firstname + ' ' + item.lastname }}</strong>
+          <strong>{{ item.user.firstname + ' ' + item.user.lastname }}</strong>
         </small>
+      </td>
+      <td slot="actions" slot-scope="{ item }">
+        <CButton class="m-2 btn--link" size="sm" color="success" @click="getFiles(item.files)" :class="{'hidden': item.files.length == 0}" >Descargar Archivo</CButton>
       </td>
     </CDataTable>
   </div>
@@ -22,16 +25,30 @@
 
 <script>
 
+import $ from 'jquery'
+import bootstrap from 'bootstrap'
+import axios from 'axios'
+
 export default {
   name: "NoteTable",
   props: ["items"],
   data() {
     return {
+      style : {
+        'display':'none'
+      },
       entityTable: "notes",
       tableFields: [
         { key: "user", label: "", _classes: "text-center" },
-        { key: "note", label: "Nota", _classes: "text-center" }
-      ]
+        { key: "note", label: "Nota", _classes: "text-center" },
+        {
+          key: 'actions',
+          label: 'Acciones',
+          _style: { width: '1%' },
+          sorter: false,
+          filter: false
+        }
+      ],
     }
   },
   created(){
@@ -43,6 +60,13 @@ export default {
     },
     getQuery(item) {
       return { identifier: item.identifier, product_type: item.product_type_id };
+    },
+    getFiles(files){
+      console.log(files)
+      for (var i = 0; i < files.length; i++) {
+         location.href = axios.defaults.baseURL+'/v1/tasks/download/'+files[i].id
+      }
+       
     }
   }
 };
@@ -50,4 +74,11 @@ export default {
 
 <style lang="scss" scoped>
 .btn--link { color: #FFF }
+
+</style>
+
+<style type="text/css">
+.hidden{
+  display:none;
+}
 </style>

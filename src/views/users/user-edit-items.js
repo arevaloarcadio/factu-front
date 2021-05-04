@@ -9,7 +9,7 @@ const items = {
           placeholder: "Introduzca Nombre",
           validation: "required|min:3",
           type: "string",
-          size: "col-md-4",
+          size: "col-md-6",
         },
         {
           name: "lastname",
@@ -17,7 +17,7 @@ const items = {
           placeholder: "Introduzca Apellidos",
           validation: "required|min:3",
           type: "string",
-          size: "col-md-4 col-md-offset-right-4",
+          size: "col-md-6 col-md-offset-right-4",
         },
         {
           name: "email",
@@ -25,7 +25,7 @@ const items = {
           placeholder: "Introduzca Email",
           validation: "required|email",
           type: "string",
-          size: "col-md-8 col-md-offset-right-4",
+          size: "col-md-12 col-md-offset-right-4",
         },
       ],
     }
@@ -39,14 +39,14 @@ const items = {
           title: "Nueva contraseña",
           placeholder: "Introduzca Contraseña",
           type: "string",
-          size: "col-md-4",
+          size: "col-md-6",
         },
         {
           name: "password_confirmation",
           title: "Confirmar nueva contraseña",
           placeholder: "Repita su contraseña",
           type: "string",
-          size: "col-md-4 col-md-offset-right-4",
+          size: "col-md-6 col-md-offset-right-4",
         },
       ],
     }

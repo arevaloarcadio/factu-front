@@ -236,8 +236,9 @@ export default {
         .post(`v1/customers/${this.customerId}/users`, users)
         .then(res => {
           console.log(res.data);
-
+          this.$router.go(0);
           if (res.status == HTTP_CREATED) {
+             
             // this.showSuccessMsg();
           }
         })
@@ -424,3 +425,8 @@ export default {
 
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style type="text/css">
+  #zipCode{
+    margin-top: 6%;
+  }
+</style>

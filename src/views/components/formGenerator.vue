@@ -148,3 +148,14 @@ export default {
 };
 </script>
 
+<style type="text/css">
+  .form-control{
+    padding: 0.400rem 0.90rem !important;
+    margin: 3%;
+  }
+  .btn-sm{
+    padding: 0.45rem 0.5rem;
+  }
+</style>
+
+

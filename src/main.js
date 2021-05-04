@@ -17,6 +17,10 @@ import es from 'vee-validate/dist/locale/es.json'
 // NOTIFICACIONES TOSTR
 import VueNotifications from 'vue-notifications';
 import miniToastr from 'mini-toastr';
+//Paginacion con vue
+import VuePaginate from 'vue-paginate'
+Vue.use(VuePaginate)
+
 const toastTypes = {
     success: 'success',
     error: 'error',
