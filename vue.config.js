@@ -1,5 +1,6 @@
 module.exports = {
   devServer: {
+        disableHostCheck: true,
         proxy: 'https://hex-crm-cbmbw.ondigitalocean.app/',
     },
   lintOnSave: false,
