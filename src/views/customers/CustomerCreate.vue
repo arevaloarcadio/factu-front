@@ -47,7 +47,7 @@ export default {
   methods: {
     create() {
       const HTTP_CREATED = 201;
-
+      
       const data = {
         unitId: this.getUnitId,
         userId: this.getUser.id,
@@ -55,18 +55,18 @@ export default {
       };
       console.log(data);
       
-      // axios
-      //   .post("v1/customers", this.entityForm)
-      //   .then((response) => {
+       axios
+         .post("v1/customers", data)
+         .then((response) => {
 
-      //     if (response.status == HTTP_CREATED) {
-      //       const customerId = response.data.data.id;
-      //       console.log(customerId);
-      //       this.$router.push({ name: "customers.edit",  params: { id: customerId } });
-      //       //self.showSuccessMsg()
-      //     }
-      //   })
-      //   .catch((err) => console.log(err));
+           if (response.status == HTTP_CREATED) {
+             const customerId = response.data.data.id;
+             console.log(customerId);
+             this.$router.push({ name: "customers.edit",  params: { id: customerId } });
+             //self.showSuccessMsg()
+           }
+         })
+         .catch((err) => console.log(err));
     }
   },
 

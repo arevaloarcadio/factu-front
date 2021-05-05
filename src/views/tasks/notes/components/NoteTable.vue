@@ -1,7 +1,41 @@
 
 <template>
   <div>
-    <CDataTable
+
+ <table class="table table-responsive-sm table-striped">
+     <thead>
+      <tr>
+        <th v-for="field in tableFields" :class="{true : field._classes }">{{field.label}}</th>
+      </tr>
+    </thead>
+    <paginate name="items" :list="items" :per="3" tag="tbody">
+      <tr v-if="items.length == 0">
+        <td :colspan="tableFields.length">
+          <center>
+            <h4 style="margin: 0;">
+              Sin  registros
+            </h4>
+          </center>
+        </td>
+      </tr>
+      <tr v-for="item in paginated('items')">
+         <td slot="user">
+           <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
+            <small>
+              <strong>{{ item.user.firstname + ' ' + item.user.lastname }}</strong>
+            </small>
+          </td>
+        <td>{{item.note}}</td> 
+        <td>
+         <CButton class="m-2 btn--link" size="sm" color="success" @click="getFiles(item.files)" :class="{'hidden': item.files.length == 0}" >Descargar Archivo</CButton>
+        </td>
+      </tr>
+    </paginate>
+  </table>
+  <paginate-links for="items" :limit="3" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+  
+
+    <!--<CDataTable
       class="mb-0 table-outline"
       hover
       :items="items"
@@ -11,6 +45,7 @@
       v-if="items">
 
       <td slot="user" slot-scope="{ item }">
+        <img width="70px" :src="'img/profiles/'+item.image"><br>
         <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
         <small>
           <strong>{{ item.user.firstname + ' ' + item.user.lastname }}</strong>
@@ -19,7 +54,7 @@
       <td slot="actions" slot-scope="{ item }">
         <CButton class="m-2 btn--link" size="sm" color="success" @click="getFiles(item.files)" :class="{'hidden': item.files.length == 0}" >Descargar Archivo</CButton>
       </td>
-    </CDataTable>
+    </CDataTable>-->
   </div>
 </template>
 
@@ -34,9 +69,7 @@ export default {
   props: ["items"],
   data() {
     return {
-      style : {
-        'display':'none'
-      },
+      paginate : ['items'],
       entityTable: "notes",
       tableFields: [
         { key: "user", label: "", _classes: "text-center" },
@@ -52,7 +85,7 @@ export default {
     }
   },
   created(){
-    console.log(this.items,"<-----")
+    console.log(this.items)
   },
   methods: {
     getParams(item) {

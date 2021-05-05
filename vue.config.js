@@ -1,4 +1,7 @@
 module.exports = {
+  devServer: {
+        proxy: 'https://hex-crm-cbmbw.ondigitalocean.app/',
+    },
   lintOnSave: false,
   runtimeCompiler: true,
   configureWebpack: {

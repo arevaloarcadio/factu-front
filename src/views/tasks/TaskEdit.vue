@@ -183,14 +183,11 @@ export default {
       axios
         .post(`v1/tasks/${this.taskId}/users`, users)
         .then(res => {
-          console.log(res.data);
-
-          if (res.status == HTTP_CREATED) {
-            // this.showSuccessMsg();
-          }
+          this.selectedUsers = null
+           this.getAttachedUsers();
         })
         .catch(err => console.log(err));
-      this.getAttachedUsers()
+     
     },
   },
   notifications: {

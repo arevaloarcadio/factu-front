@@ -39,7 +39,7 @@
     <CDropdownDivider/>
     <CDropdownItem>
       <CIcon name="cil-lock-locked"  />
-        <a class="nav-link"  @click.prevent="logout">Cerrar Sesión</a>
+        <a class="nav-link"  @click="logout">Cerrar Sesión</a>
     </CDropdownItem>
   </CDropdown>
 </template>
@@ -48,6 +48,7 @@
 import {mapGetters,mapState} from 'vuex';
 import jwtToken from '../plugins/jwt/jwt-token';
 import user from '../plugins/jwt/user' ; 
+import router from '@/router'
 
 export default {
   name: 'TheHeaderDropdownAccnt',
@@ -62,7 +63,7 @@ export default {
       jwtToken.removeToken();
       this.$store.dispatch('unsetAuthUser')
       .then(() => {
-        this.$router.push({name: '/pages/login'});
+        router.push({path: '/pages/login'});
       });
     },
     
