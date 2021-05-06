@@ -235,15 +235,11 @@ export default {
       axios
         .post(`v1/customers/${this.customerId}/users`, users)
         .then(res => {
-          console.log(res.data);
-          this.$router.go(0);
-          if (res.status == HTTP_CREATED) {
-             
-            // this.showSuccessMsg();
-          }
+          this.getAttachedUsers();
+          this.selectedUsers = null;
         })
         .catch(err => console.log(err));
-      this.getAttachedUsers()
+
     },
 
     setCustomerInformation(data) {
@@ -262,16 +258,16 @@ export default {
     },
     updated() {
       console.log(this.entityForm);
-      // axios
-      //   .put(`v1/customers/${customerId}`, this.entityForm)
-      //   .then(res => {
+       axios
+         .put(`v1/customers/${this.customerId}`, this.entityForm)
+         .then(res => {
 
-      //     if (res.status == HTTP_OK) {
-      //       this.$router.go(0);
-      //       this.showSuccessMsg();
-      //     }
-      //   })
-      //   .catch(err => console.log);
+           if (res.status == HTTP_OK) {
+             this.$router.go(0);
+            // this.showSuccessMsg();
+           }
+         })
+         .catch(err => console.log);
     },
     createOrUpdateAddress() {
       const address = {

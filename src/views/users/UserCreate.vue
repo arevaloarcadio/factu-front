@@ -49,7 +49,7 @@ export default {
           console.log(res.data);
 
           if (res.status == HTTP_CREATED) {
-            this.showSuccessMsg();
+            //this.showSuccessMsg();
             this.$router.go(-1);
           }
         })
