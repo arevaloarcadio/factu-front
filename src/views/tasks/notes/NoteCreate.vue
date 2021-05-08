@@ -43,7 +43,7 @@ export default {
       formData.append('note',this.entityForm.note);
       
       for(var i = 0; i < this.$refs.NoteAttachedFile.upload_files.length; i++ ){
-         formData.append('file_'+i,this.$refs.NoteAttachedFile.upload_files[i])
+         formData.append('files[]',this.$refs.NoteAttachedFile.upload_files[i])
       }
       
       const HTTP_CREATED = 201;

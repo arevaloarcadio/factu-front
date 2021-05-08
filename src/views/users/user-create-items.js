@@ -49,6 +49,19 @@ const items = [
       },
     ],
   },
+  {
+    name: "Asignar Unidad",
+    campos: [
+       {
+          "name": "unit_id",
+          "title": "Unidad",
+          "placeholder": "Ingrese la unidad",
+          "type": "select",
+          "size": "col-md-4",
+          "opciones": []
+        }
+    ],
+  }
 ]
 
 export default items;

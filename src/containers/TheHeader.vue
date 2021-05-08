@@ -96,7 +96,7 @@ export default {
     },
     sendUnit(valor){
       this.setUnit(valor)
-      //console.log(valor,"<-----")
+      this.$router.go(0)
     }
   },
   computed: {

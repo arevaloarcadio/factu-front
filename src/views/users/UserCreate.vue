@@ -3,6 +3,7 @@
     <formGenerator
       :items="itemsForm" 
       :entity="entityForm" 
+      @change="getSelecteUnit($event)"
       @update="createUser()">
       Crear Usuario
     </formGenerator>
@@ -27,8 +28,12 @@ export default {
         lastname: "",
         email: "",
         password: "",
+        unit_id : ""
       },
     };
+  },
+  mounted(){
+     this.getUnit();
   },
   computed: {
     ...mapGetters(["getUnitId"])
@@ -41,7 +46,6 @@ export default {
         unitId: this.getUnitId,
         ...this.entityForm
       };
-      console.log(data);
 
       axios
         .post("v1/users", this.entityForm)
@@ -55,6 +59,27 @@ export default {
         })
         .catch(err => console.log(err));
     },
+    getUnit() {
+        axios
+        .get("organizations/mine")
+        .then(resp => {
+          this.entityForm.units = [];
+
+          var data = resp.data;
+          for (var i = 0; i < data.length; i++) {
+            this.itemsForm[2].campos[0].opciones.push({...data[i].unit}) 
+            this.entityForm.unit_id = 1
+          }
+         resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)r
+        });
+    },
+    getSelecteUnit($event){
+      console.log($event)
+    }
   },
   notifications: {
     showSuccessMsg: {

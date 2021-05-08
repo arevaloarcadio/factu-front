@@ -4,7 +4,7 @@
       :items="itemsForm"
       :entity="entityForm"
       @update="createTask()">
-      Crear Producto
+      Crear Tarea
     </formGenerator>
   </div>
 </template>

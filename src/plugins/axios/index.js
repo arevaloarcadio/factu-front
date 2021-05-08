@@ -1,19 +1,20 @@
 import Vue from 'vue'
 import router from '@/router'
 import jwtToken from '@/plugins/jwt/jwt-token.js'
+import user from '@/plugins/jwt/user.js'
 import store from '@/plugins/store'
 import axios from 'axios'
 
 
-//axios.defaults.baseURL = 'http://localhost/hexcrm/public/index.php/';
-axios.defaults.baseURL = 'https://hex-crm-cbmbw.ondigitalocean.app/';
+axios.defaults.baseURL = 'http://localhost/hexcrm/public/index.php/';
+//axios.defaults.baseURL = 'https://hex-crm-cbmbw.ondigitalocean.app/';
 
 Vue.prototype.$http = axios;
-
 axios.interceptors.request.use(config => {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
   if (jwtToken.getToken()) {
     config.headers['Authorization'] = 'Bearer ' + jwtToken.getToken();
+    config.headers['UnitId'] = store.getters.getUnit;
   }
   return config;
 }, error => {
