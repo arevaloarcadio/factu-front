@@ -3,10 +3,31 @@
     <formGenerator
       :items="itemsForm" 
       :entity="entityForm" 
-      @change="getSelecteUnit($event)"
       @update="createUser()">
       Crear Usuario
     </formGenerator>
+    
+    <CCard class="col-md-12">
+      <CCardHeader class="text-success py-1">
+        <strong>Asignación de Unidades</strong>
+      </CCardHeader>
+      <CCardFooter>
+        <CRow>
+          <CCol class="col-md-3">
+            <label for="user" class="strong"><strong>Unidades:</strong></label>
+          </CCol>
+          <CCol class="col-md-6">
+            <multiselect v-model="selectedUnits" placeholder="Introduzca las Unidades"  :options="units.map(type => type.id)"
+                :custom-label="opt => units.find(x => x.id == opt).name" :show-labels="false" :option-height="30" 
+                id="user" name="user" :multiple="true" :hide-selected="true">
+            </multiselect>
+          </CCol>
+          <!--<CCol class="col-md-3">
+              <button @click="getSelecteUnit" class="btn btn-primary float-left">Añadir</button>
+          </CCol>-->
+        </CRow>
+      </CCardFooter>
+    </CCard>
   </div>
 </template>
 
@@ -28,8 +49,10 @@ export default {
         lastname: "",
         email: "",
         password: "",
-        unit_id : ""
+        unit_ids :  []
       },
+      units : [],
+      selectedUnits : []
     };
   },
   mounted(){
@@ -41,11 +64,8 @@ export default {
   methods: {
     createUser() {
       const HTTP_CREATED = 201;
-
-      const data = {
-        unitId: this.getUnitId,
-        ...this.entityForm
-      };
+      var selected_units =  this.selectedUnits
+      this.entityForm.unit_ids = selected_units;
 
       axios
         .post("v1/users", this.entityForm)
@@ -61,16 +81,11 @@ export default {
     },
     getUnit() {
         axios
-        .get("organizations/mine")
+        .get("units")
         .then(resp => {
-          this.entityForm.units = [];
-
-          var data = resp.data;
-          for (var i = 0; i < data.length; i++) {
-            this.itemsForm[2].campos[0].opciones.push({...data[i].unit}) 
-            this.entityForm.unit_id = 1
-          }
-         resolve(resp)
+          console.log(resp.data)
+          this.units = resp.data;
+           resolve(resp)
         })
         .catch(err => {
           //commit('auth_error', err)
@@ -79,6 +94,16 @@ export default {
     },
     getSelecteUnit($event){
       console.log($event)
+    }
+  },
+  computed: {
+    groups: {
+      get () { 
+        return this.selectedUnits.map(value => this.units.find(option => option.key === value))
+      },
+      set (v) {
+        this.selectedUnits = v.map(value => value.key)
+      }
     }
   },
   notifications: {
@@ -95,3 +120,6 @@ export default {
   }
 };
 </script>
+
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

@@ -48,19 +48,6 @@ const items = [
         size: "col-md-4 col-md-offset-right-4",
       },
     ],
-  },
-  {
-    name: "Asignar Unidad",
-    campos: [
-       {
-          "name": "unit_id",
-          "title": "Unidad",
-          "placeholder": "Ingrese la unidad",
-          "type": "select",
-          "size": "col-md-4",
-          "opciones": []
-        }
-    ],
   }
 ]
 
