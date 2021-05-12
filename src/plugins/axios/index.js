@@ -6,8 +6,8 @@ import store from '@/plugins/store'
 import axios from 'axios'
 
 
-axios.defaults.baseURL = 'http://localhost/Hexcrm/public/index.php'
-//axios.defaults.baseURL = 'https://hex-crm-cbmbw.ondigitalocean.app/';
+//axios.defaults.baseURL = 'http://localhost/Hexcrm/public/index.php'
+axios.defaults.baseURL = 'https://hex-crm-cbmbw.ondigitalocean.app/';
 
 Vue.prototype.$http = axios;
 axios.interceptors.request.use(config => {
