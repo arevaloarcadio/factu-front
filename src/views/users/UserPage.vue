@@ -136,20 +136,40 @@ export default {
       ],
       previousUrl: "",
       nextUrl: "",
+      unit_ids : []
     };
   },
   created() {
-    this.getUsers();
+    this.getOrganizations();
+    //this.getUsers();
+
   },
   methods: {
     getUsers() {
 
       axios
-        .get("users")
+        .post("users",{unit_ids : this.unit_ids})
         .then(res => {
           this.items = res.data;
         })
         .catch(err => console.log(err));
+    },
+    getOrganizations(){
+       axios.get('organizations/mine')
+        .then(resp => {
+
+          let organizations = resp.data
+          for (var i = 0; i < organizations.length; i++) {
+            this.unit_ids.push(organizations[i].unit_id)
+          }
+
+          this.getUsers(); 
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
     },
     updated() {
       console.log(this.entityForm, "<----");

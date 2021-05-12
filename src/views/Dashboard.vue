@@ -17,7 +17,6 @@ export default {
                           OrgChart,
                         },
                         mounted(){
-                          this.getUsers()
                           this.getItems()
                         },
                         data () {
@@ -25,6 +24,7 @@ export default {
                             entity: "Organización",
                             organization: [],
                             users: [],
+                            unit_ids :[]
                           }
                         },
                         methods:{
@@ -33,6 +33,8 @@ export default {
                               .then(resp => {
                                 const t = this
                                 t.organization = resp.data
+                                this.unit_ids.push(this.getUser.unit)
+                                this.getUsers()
                                 resolve(resp)
                               })
                               .catch(err => {
@@ -41,7 +43,7 @@ export default {
                               });
                           },
                           getUsers(){
-                            axios({url: "users",  method: 'GET' })
+                            axios.post("users",{ unit_ids : this.unit_ids })
                               .then(resp => {
                                 const t = this
                                 t.users = resp.data

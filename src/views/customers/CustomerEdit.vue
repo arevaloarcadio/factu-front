@@ -178,11 +178,9 @@ export default {
   created() {
 
     this.customerId = this.$route.params.id;
-    this.getUsers();
+    
     this.getCustomerById();
-    this.getProducts();
-    this.getInteractions();
-    this.getAttachedUsers();
+
 
     Promise.all([
       this.addressesByCustomerId(),
@@ -194,7 +192,14 @@ export default {
     getCustomerById() {
       axios.get(`v1/customers/${this.customerId}`).then(res => {
         this.setCustomerInformation(res.data);
-      }).catch(err => console.log(err));
+        this.getUsers();
+        this.getProducts();
+        this.getInteractions();
+        this.getAttachedUsers();
+      }).catch(err => {
+        console.log(err)
+        this.$router.go(-1)
+      });
 
     },
 
