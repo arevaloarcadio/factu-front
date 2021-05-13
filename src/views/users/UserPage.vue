@@ -148,7 +148,7 @@ export default {
     getUsers() {
 
       axios
-        .post("users",{unit_ids : this.unit_ids})
+         .get(`users`)
         .then(res => {
           this.items = res.data;
         })

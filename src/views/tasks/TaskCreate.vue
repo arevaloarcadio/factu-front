@@ -6,6 +6,29 @@
       @update="createTask()">
       Crear Tarea
     </formGenerator>
+ 
+
+   <CCard class="col-md-12">
+      <CCardHeader class="text-success py-1">
+        <strong>Agregar Cliente</strong> <small>(Opcional)</small>
+      </CCardHeader>
+      <CCardFooter>
+        <CRow>
+          <CCol class="col-md-3">
+            <label for="user" class="strong"><strong>Clientes:</strong></label>
+          </CCol>
+          <CCol class="col-md-6">
+            <multiselect v-model="customer"  placeholder="Introduzca el cliente"  :options="customers.map(type => type.id)"
+                :custom-label="opt => customers.find(x => x.id == opt).firstname+' '+customers.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
+                id="customer" name="customer" :multiple="false" :hide-selected="true">
+            </multiselect>
+          </CCol>
+          <!--<CCol class="col-md-3">
+              <button @click="getSelecteUnit" class="btn btn-primary float-left">Añadir</button>
+          </CCol>-->
+        </CRow>
+      </CCardFooter>
+    </CCard>
   </div>
 </template>
 
@@ -29,6 +52,7 @@ export default {
       newEntity: "Nueva Tarea",
       product_types: [],
       customers: [],
+      customer : null,
       identifier: "",
 			itemsForm: items,
       entityForm: {
@@ -41,10 +65,9 @@ export default {
   created() {
     // this.getItems("v1/customers");
 		// this.getItems("product_types");
-		// this.getCustomers();
+		 this.getCustomers();
 		// this.getProductTypes();
-    console.log([this.entityForm.date, 'entity'])
-	},
+  },
   computed: {
     ...mapGetters(["getUser"]),
   },
@@ -78,14 +101,16 @@ export default {
 
   methods: {
 
+    getCustomer($event){
+      console.log($event)
+    },
     createTask()
     {
 			const HTTP_CREATED = 201;
 			
-			// this.entityForm.customer_id = this.$route.params.id;
-			const data = { ...this.entityForm }
-
-			axios
+			const data = { ...this.entityForm, customer_id : this.customer == null ? null :  this.customer[0]  }
+    
+    	axios
 			.post(this.current_endpoint, data)
 			.then(res => {
 				if (res.status == HTTP_CREATED) {
@@ -159,3 +184,5 @@ export default {
     margin-top: 2%;
   }
 </style>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

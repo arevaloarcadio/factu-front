@@ -81,12 +81,15 @@ export default {
       taskId: null,
       selectedUsers: [],
       attachedUsers: [],
+      unit_ids : [],
+      customers : [{id:null,name:'Seleccione'}],
       users: [],
       notes: [],
       entityForm: {
         subject:  '',
         description:  '',
         date: '',
+        customer_id : ''
       },
     };
   },
@@ -96,8 +99,9 @@ export default {
     this.taskId = this.$route.params.id;
     this.getTaskById();
     this.getNotes();
-    this.getUsers();
+    this.getOrganizations()
     this.getAttachedUsers();
+    this.getCustomers()
     // this.getProductTypes();
     // this.setSelectedProduct();
 	},
@@ -114,6 +118,43 @@ export default {
         this.setTaskInformation(res.data);
       }).catch(err => console.log(err));
     },
+    getCustomers() {
+      
+      axios
+        .get("v1/customers")
+        .then(res => {
+          let customers = res.data;
+          for (var i = 0; i < customers.length; i++) {
+            this.customers.push({
+              id : parseInt(customers[i].id),
+              name: customers[i].firstname +' '+customers[i].lastname
+            });
+          }
+          this.setCustomer();
+        })
+        .catch((err) => console.log(err));
+    },
+    setCustomer() {
+      this.itemsForm[0].campos[3].opciones = this.customers;
+      this.itemsForm = { ...this.itemsForm };
+    },
+      getOrganizations(){
+       axios.get('organizations/mine')
+        .then(resp => {
+
+          let organizations = resp.data
+          for (var i = 0; i < organizations.length; i++) {
+            this.unit_ids.push(organizations[i].unit_id)
+          }
+
+          this.getUsers(); 
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
 
     setTaskInformation(data)
     {
@@ -124,6 +165,7 @@ export default {
         subject:      data.subject,
         description:  data.description,
         date:         data.date,
+        customer_id:  data.customer,
       };
 
       this.entityForm = { ...this.entityForm };
@@ -157,7 +199,7 @@ export default {
 
     getUsers() {      
       axios
-        .get(`users`)
+         .get(`users`)
         .then(res => {
           this.users = res.data;
         })

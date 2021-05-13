@@ -12,15 +12,20 @@
           </router-link>
         </h5>
       </CCardHeader>
-
+      <div class="controls">
+        <CCol class="col-md-3">
+         <input class="form-control"  size="50" placeholder="Buscar Cliente" v-model="filter" type="text"><span class="input-group-append"></span>
+        </CCol>
+      </div>
       <CCardBody class="py-2" v-if="items">
+       
         <table class="table table-responsive-sm table-striped">
            <thead >
             <tr>
               <th v-for="field in fields" :class="{true : field._classes !== undefined }">{{field.label}}</th>
             </tr>
           </thead>
-          <paginate name="items" :list="items" :per="10" tag="tbody">
+          <paginate name="items" :list="filterTableItems" :per="10" tag="tbody">
              <tr v-if="items.length == 0">
                 <td :colspan="fields.length">
                   <center>
@@ -99,6 +104,7 @@ export default {
       entityTable: "customers",
       items: [],
       paginate : ['items'],
+      filter : "",
       fields: [
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
@@ -115,10 +121,34 @@ export default {
       nextUrl: "",
     };
   },
-  created() {
+  computed:{
+    filterTableItems: function(){
+      return this.items.filter(item  => {
+        return this.searchInObject(item, this.filter);
+      });
+    }
+  },
+  mounted() {
     this.getCustomers();
   },
   methods: {
+    reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
+    },
+     searchInObject : function(object, input_text){
+      for (let key in object){
+        if(object[key] != null){
+          if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {
+            return true;
+          }else{
+            this.reset_page(this.paginate);
+          }
+        }
+      }
+      return false;
+    },
     getCustomers() {
 
       axios

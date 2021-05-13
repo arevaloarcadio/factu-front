@@ -21,6 +21,7 @@
             <tr v-for="item in paginated('items')">
               <td>{{item.type}}</td> 
               <td>{{item.description }}</td> 
+              <td>{{new Date(item.created_at).toLocaleString()  }}</td> 
             </tr>
           </paginate>
         </table>
@@ -55,6 +56,7 @@ export default {
       tableFields: [
         { key: "type",        label: "Tipo",        _classes: "text-center" },
         { key: "description", label: "Descripción", _classes: "text-center" },
+        { key: "description", label: "Fecha", _classes: "text-center" },
         // {
         //   key: 'actions',
         //   label: 'Acciones',

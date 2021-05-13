@@ -35,6 +35,15 @@ const items = [
         type: "text",
         size: "col-md-12",
       },
+      {
+        name: "customer_id",
+        title: "Cliente",
+        placeholder: "Introduzca el cliente",
+        validation: "nullable",
+        type: "select",
+        size: "col-md-12",
+        opciones: [],
+      },
     ],
   }
 ]

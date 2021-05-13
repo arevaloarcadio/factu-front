@@ -43,7 +43,7 @@ export default {
                               });
                           },
                           getUsers(){
-                            axios.post("users",{ unit_ids : this.unit_ids })
+                            axios.get("users")
                               .then(resp => {
                                 const t = this
                                 t.users = resp.data

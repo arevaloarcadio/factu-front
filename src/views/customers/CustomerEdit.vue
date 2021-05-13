@@ -16,43 +16,8 @@
       Direcciones
     </formGenerator>
     <CRow>
-      <CCard class="col-sm-12 col-md-6">
-        <CCardHeader>
-          <h5>
-            Productos
-            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
-            <CButton class="float-right py-0 mr-1" color="success">
-              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
-              Nuevo Producto
-            </CButton>
-            </router-link>
-          </h5>
-        </CCardHeader>
 
-        <CCardBody class="py-2">
-          
-          <ProductTable :items="products"></ProductTable>
-        </CCardBody>
-        <!-- <CCardFooter v-if="products">
-          <nav>
-            <ul class="pagination justify-content-center">
-              <li class="page-item">
-                <a
-                  class="page-link"
-                  @click="page(previousUrl)"
-                  v-show="previousUrl"
-                  tabindex="-1">
-                  Anterior
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
-              </li>
-            </ul>
-          </nav>
-        </CCardFooter> -->
-      </CCard>
-      <CCard class="col-sm-12 col-md-6">
+         <CCard class="col-sm-12 col-md-12">
         <CCardHeader>
           <h5>
             Interacciones
@@ -88,7 +53,46 @@
           </nav>
         </CCardFooter> -->
       </CCard>
-      <CCard class="col-md-12">
+      
+      <CCard class="col-sm-12 col-md-6">
+        <CCardHeader>
+          <h5>
+            Productos
+            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+            <CButton class="float-right py-0 mr-1" color="success">
+              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+              Nuevo Producto
+            </CButton>
+            </router-link>
+          </h5>
+        </CCardHeader>
+
+        <CCardBody class="py-2">
+          
+          <ProductTable :items="products"></ProductTable>
+        </CCardBody>
+
+
+        <!-- <CCardFooter v-if="products">
+          <nav>
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a
+                  class="page-link"
+                  @click="page(previousUrl)"
+                  v-show="previousUrl"
+                  tabindex="-1">
+                  Anterior
+                </a>
+              </li>
+              <li class="page-item">
+                <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">Siguiente</a>
+              </li>
+            </ul>
+          </nav>
+        </CCardFooter> -->
+      </CCard>
+       <CCard class="col-md-6">
           <CCardHeader class="text-success py-1">
             <strong>Equipo</strong>
           </CCardHeader>
@@ -119,6 +123,8 @@
             </CRow>
           </CCardFooter>
         </CCard>
+   
+     
     </CRow>
   </div>
 </template>
@@ -154,6 +160,7 @@ export default {
       customerId: 0,
       interactions: [],
       products: [],
+      unit_ids : [],
       entityForm: {
         firstname: "",
         lastname: "",
@@ -192,7 +199,7 @@ export default {
     getCustomerById() {
       axios.get(`v1/customers/${this.customerId}`).then(res => {
         this.setCustomerInformation(res.data);
-        this.getUsers();
+        this.getOrganizations()
         this.getProducts();
         this.getInteractions();
         this.getAttachedUsers();
@@ -212,6 +219,24 @@ export default {
         .catch(err => console.log(err));
     },
 
+    getOrganizations(){
+       axios.get('organizations/mine')
+        .then(resp => {
+
+          let organizations = resp.data
+          for (var i = 0; i < organizations.length; i++) {
+            this.unit_ids.push(organizations[i].unit_id)
+          }
+
+          this.getUsers(); 
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
+    
     getUsers() {      
       axios
         .get(`users`)

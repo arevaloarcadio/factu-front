@@ -34,7 +34,8 @@
             </tr>
             <tr v-for="item in paginated('items')">
               <td>{{item.subject}}</td> 
-              <td>{{item.description }}</td> 
+              <td>{{item.description }}</td>
+              <td v-html="has_customer(item.customer)"></td>  
               <td>{{item.date}}</td> 
               <td>
                 <router-link :to="{ name: 'tasks.edit', params: { id: item.id } }">
@@ -104,6 +105,7 @@ export default {
       fields: [
         { key: "subject", label: "Tema",          _classes: "text-center" },
         { key: "description", label: "Descripción",          _classes: "text-center" },
+        { key: "customer", label: "Cliente",          _classes: "text-center" },
         { key: "date",    label: "Fecha", _classes: "text-center" },
         {
           key: 'actions',
@@ -122,6 +124,13 @@ export default {
   },
   mounted() {},
   methods: {
+    has_customer  : function (customer) {
+        if(customer == null){
+          return '<span class="badge badge-warning">No tiene cliente actualmente</span>';
+        }else{
+          return customer.firstname+' '+customer.lastname;
+        }
+    },
     getProducts() {
       
       axios
