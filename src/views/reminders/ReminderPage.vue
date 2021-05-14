@@ -5,7 +5,7 @@
       <CCardHeader>
         <h5>
           {{ entity }}
-          <router-link :to="{ name: 'tasks.create' }">
+          <router-link :to="{ name: 'reminders.create' }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               {{ newEntity }}
@@ -33,12 +33,16 @@
               </td>
             </tr>
             <tr v-for="item in paginated('items')">
-              <td>{{item.subject}}</td> 
-              <td>{{item.description }}</td>
+              <td>{{item.description}}</td> 
               <td v-html="has_customer(item.customer)"></td>  
-              <td>{{item.date}}</td> 
+              <td v-if ="item.status == 'Pendiente'">
+                <span class="badge badge-danger">{{item.status}}</span>
+              </td> 
+              <td v-else>
+                <span class="badge badge-success">{{item.status}}</span>
+              </td> 
               <td>
-                <router-link :to="{ name: 'tasks.edit', params: { id: item.id } }">
+                <router-link :to="{ name: 'reminders.edit', params: { id: item.id } }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
                 </router-link>
               </td>
@@ -92,21 +96,19 @@ import axios from "axios";
 import VueNotifications from "vue-notifications";
 
 export default {
-  name: "TaskPage",
+  name: "ReminderPage",
   components: {},
   data() {
     return {
-      entity: "Tareas",
-      current_endpoint: 'v1/tasks',
-      newEntity: "Nueva Tarea",
-      entityTable: "tasks",
+      entity: "Recordatorio",
+      newEntity: "Nuevo Recordatorio",
+      entityTable: "reminders",
       items: [],
       paginate : ['items'],
       fields: [
-        { key: "subject", label: "Tema",          _classes: "text-center" },
         { key: "description", label: "Descripción",          _classes: "text-center" },
         { key: "customer", label: "Cliente",          _classes: "text-center" },
-        { key: "date",    label: "Fecha", _classes: "text-center" },
+        { key: "status", label: "Estatus",          _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',
@@ -120,7 +122,7 @@ export default {
     };
   },
   created() {
-    this.getProducts();
+    this.getReminders();
   },
   mounted() {},
   methods: {
@@ -131,10 +133,10 @@ export default {
           return customer.firstname+' '+customer.lastname;
         }
     },
-    getProducts() {
+    getReminders() {
       
       axios
-        .get(this.current_endpoint)
+        .get('reminders')
         .then(resp => {
           this.items = resp.data;
         })

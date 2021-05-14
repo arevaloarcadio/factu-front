@@ -203,6 +203,29 @@ const items = {
       ]
     },
   ],
+  informationCollapse: [
+    {
+      "name": "Identificación",
+      "campos": [
+        {
+          "name": "firstnameCollapse",
+          "title": "Nombre",
+          "placeholder": "Introduzca Nombre",
+          "validation": "required|min:3",
+          "type": "string",
+          "size": "col-md-6"
+        },
+        {
+          "name": "lastnameCollapse",
+          "title": "Apellidos",
+          "placeholder": "Introduzca Apellidos",
+          "validation": "required|min:3",
+          "type": "string",
+          "size": "col-md-6"
+        }
+      ]
+    },
+  ],
   addresses: [
     {
       "name": "Dirección",

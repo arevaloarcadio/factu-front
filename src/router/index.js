@@ -34,6 +34,10 @@ const TaskPage = () => import('@/views/tasks/TaskPage')
 const TaskCreate = () => import('@/views/tasks/TaskCreate')
 const TaskEdit = () => import('@/views/tasks/TaskEdit')
 
+const ReminderPage = () => import('@/views/reminders/ReminderPage')
+const ReminderCreate = () => import('@/views/reminders/ReminderCreate')
+const ReminderEdit = () => import('@/views/reminders/ReminderEdit')
+
 const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
 
 Vue.use(Router)
@@ -163,6 +167,12 @@ function configRoutes () {
               component: TaskCreate
             },
             {
+              path: ':customerId/create',
+              name: 'tasks.create.customer',
+              meta: { label: 'Crear Tarea' },
+              component: TaskCreate
+            },
+            {
               path: ':id/edit',
               meta: { label: 'Editar Tarea' },
               name: 'tasks.edit',
@@ -186,6 +196,31 @@ function configRoutes () {
             //   name: 'tasks.edit',
             //   component: ProductEdit
             // }
+          ]
+        },
+        {
+          path: 'reminders',
+          redirect: 'reminders',
+          component: { render(c) { return c('router-view') } },
+          children: [
+            {
+              path: '',
+              name: 'reminders.index',
+              meta: { label: 'Recordatorios' },
+              component: ReminderPage
+            },
+            {
+              path: 'create',
+              name: 'reminders.create',
+              meta: { label: 'Crear Recordatorio' },
+              component: ReminderCreate
+            },
+            {
+              path: ':id/edit',
+              meta: { label: 'Editar Recordatorio' },
+              name: 'reminders.edit',
+              component: ReminderEdit
+            },
           ]
         },
       ]

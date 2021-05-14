@@ -35,7 +35,7 @@ const items = [
         type: "text",
         size: "col-md-12",
       },
-      {
+      /*{
         name: "customer_id",
         title: "Cliente",
         placeholder: "Introduzca el cliente",
@@ -43,7 +43,7 @@ const items = [
         type: "select",
         size: "col-md-12",
         opciones: [],
-      },
+      },*/
     ],
   }
 ]

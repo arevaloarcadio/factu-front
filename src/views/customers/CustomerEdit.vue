@@ -1,22 +1,52 @@
 <template>
   <div>
-    <formGenerator
-      :items="itemsInformation"
-      :entity="entityForm"
-      @update="updated()">
-      Editar Cliente
-    </formGenerator>
+     <CButton 
+      @click="collapseInformation =! collapseInformation" 
+      color="primary"
+      class="mb-2"
+    >
+     {{collapseInformation == true ? 'Mostrar Menos' : 'Mostrar Mas'}}
+    </CButton>
 
-    <formGenerator
-      :items="itemsAddresses"
-      :entity="entityFormAddress"
-      @update="createOrUpdateAddress()"
-      @change="change($event)"
-      @enter="enter($event)">
-      Direcciones
-    </formGenerator>
-    <CRow>
+    <CCollapse :show="!collapseInformation">
+      <formGenerator
+        :items="itemsInformationCollapse"
+        :entity="entityFormCollapse"
+        :buttonHidden="true">
+        Cliente
+      </formGenerator>
+    </CCollapse>
 
+    <CCollapse :show="collapseInformation">
+      <formGenerator
+        :items="itemsInformation"
+        :entity="entityForm"
+        @update="updated()">
+        Editar Cliente
+      </formGenerator>
+    </CCollapse>
+
+
+     <CButton 
+      @click="collapseAddress =! collapseAddress" 
+      color="primary"
+      class="mb-2"
+    >
+     {{collapseAddress == true ? 'Recoger Direcciones' : 'Expandir Direcciones'}}
+    </CButton>
+    <CCollapse :show="collapseAddress">
+      <formGenerator
+        :items="itemsAddresses"
+        :entity="entityFormAddress"
+        @update="createOrUpdateAddress()"
+        @change="change($event)"
+        @enter="enter($event)">
+        Direcciones
+      </formGenerator>
+     </CCollapse>
+    
+     <CRow>
+ 
          <CCard class="col-sm-12 col-md-12">
         <CCardHeader>
           <h5>
@@ -73,6 +103,7 @@
         </CCardBody>
 
 
+
         <!-- <CCardFooter v-if="products">
           <nav>
             <ul class="pagination justify-content-center">
@@ -92,6 +123,11 @@
           </nav>
         </CCardFooter> -->
       </CCard>
+
+      <div class="col-sm-12 col-md-6">
+        <TaskTable v-bind:customer_id="customerId"></TaskTable>
+
+      </div>
        <CCard class="col-md-6">
           <CCardHeader class="text-success py-1">
             <strong>Equipo</strong>
@@ -136,6 +172,7 @@ import formGenerator from "@/views/components/formGenerator.vue";
 import ProductTable from "@/views/products/components/ProductTable.vue";
 import items from "./customer-edit-items";
 import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
+import TaskTable from "@/views/tasks/components/TaskTable.vue";
 
 
 const HTTP_OK = 200;
@@ -146,21 +183,29 @@ export default {
   components: { 
     formGenerator,
     ProductTable,
-    InteractionTable
+    InteractionTable,
+    TaskTable
   },
   data() {
     return {
       entity: "Clientes",
+      collapseAddress : false,
+      collapseInformation : true,
       selectedUsers: [],
       attachedUsers: [],
       users: [],
       newEntity: "Nuevo Cliente",
+      itemsInformationCollapse: items.informationCollapse,
       itemsInformation: items.information,
       itemsAddresses: items.addresses,
       customerId: 0,
       interactions: [],
       products: [],
       unit_ids : [],
+      entityFormCollapse: {
+        firstnameCollapse: "",
+        lastnameCollapse: "",
+      },
       entityForm: {
         firstname: "",
         lastname: "",
@@ -282,6 +327,11 @@ export default {
         cellphone:   data.cellphone,
         email:       data.email,
         description: data.description,
+      };
+
+      this.entityFormCollapse = {
+        firstnameCollapse:   data.firstname,
+        lastnameCollapse:    data.lastname,
       };
 
       this.entityForm = { ...this.entityForm };

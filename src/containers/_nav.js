@@ -37,6 +37,12 @@ export default [
         icon: 'cil-puzzle'
       },
       {
+        _name: 'CSidebarNavItem',
+        name: 'Recordatorio',
+        to: '/reminders',
+        icon: 'cil-puzzle'
+      },
+      {
         _name: 'CSidebarNavDivider',
         _class: 'm-2'
       },

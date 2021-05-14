@@ -105,8 +105,8 @@
               </div>  
             </div>
           </div>
-          <div class="card-footer py-1">
-            <button class="btn btn-primary  btn-sm float-right" :disabled="invalid" >Guardar</button>
+          <div v-if="buttonHidden === undefined" class="card-footer py-1">
+            <button class="btn btn-primary btn-sm float-right"  :disabled="invalid" >Guardar</button>
           </div>
         </div>
       </form>
@@ -117,7 +117,7 @@
 <script>
 export default {
   name: "formGenerator",
-  props: ["items", "entity"],
+  props: ["items", "entity","buttonHidden"],
   mounted() {
     // console.log(this.items,"-----------<<")
   },
