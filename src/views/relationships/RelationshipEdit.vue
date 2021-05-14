@@ -25,7 +25,7 @@
       :items="itemsForm"
       :entity="entityForm"
       @update="updateRelationship()">
-      Crear Parentezco
+      Crear Parentesco
     </formGenerator>
  </div>
 </template>
@@ -41,8 +41,8 @@ export default {
   components: { formGenerator },
   data() {
     return {
-		   entity: "Parentezco",
-      newEntity: "Nuevo Parentezco",
+		   entity: "Parentesco",
+      newEntity: "Nuevo Parentesco",
       customer_id : null,
       customers: [],
       customer : null,

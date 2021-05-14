@@ -61,9 +61,9 @@ export default {
   components: {},
   data() {
     return {
-      entity: "Parentezco",
+      entity: "Parentesco",
       current_endpoint: 'v1/tasks',
-      newEntity: "Nuevo Parentezco",
+      newEntity: "Nuevo Parentesco",
       entityTable: "relationships",
       items: [],
       paginate : ['items'],
@@ -71,7 +71,7 @@ export default {
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
         { key: "email",     label: "Correo electrónico", _classes: "text-center" },
-        { key: "relationships",  label: "Parentezco", _classes: "text-center" },
+        { key: "relationships",  label: "Parentesco", _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',
