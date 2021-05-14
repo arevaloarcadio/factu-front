@@ -38,6 +38,9 @@ const ReminderPage = () => import('@/views/reminders/ReminderPage')
 const ReminderCreate = () => import('@/views/reminders/ReminderCreate')
 const ReminderEdit = () => import('@/views/reminders/ReminderEdit')
 
+const RelationshipCreate = () => import('@/views/relationships/RelationshipCreate')
+const RelationshipEdit = () => import('@/views/relationships/RelationshipEdit')
+
 const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
 
 Vue.use(Router)
@@ -127,6 +130,18 @@ function configRoutes () {
               meta: { label: 'Crear Interacción' },
               name: 'interactions.create',
               component: InteractionCreate
+            },
+            {
+              path: ':customerId/relationships/:relationshipId/edit',
+              meta: { label: 'Editar Parentezco' },
+              name: 'customers.edit.relationships',
+              component: RelationshipEdit
+            },
+            {
+              path: ':customerId/relationships/create',
+              meta: { label: 'Crear Parentezco' },
+              name: 'customers.create.relationships',
+              component: RelationshipCreate
             }
           ]
         },

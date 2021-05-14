@@ -159,8 +159,10 @@
             </CRow>
           </CCardFooter>
         </CCard>
-   
-     
+        <div class="col-sm-6 col-md-6">
+          <RelationshipsTable v-bind:customer_id="customerId"></RelationshipsTable>
+        </div>
+
     </CRow>
   </div>
 </template>
@@ -173,6 +175,7 @@ import ProductTable from "@/views/products/components/ProductTable.vue";
 import items from "./customer-edit-items";
 import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
 import TaskTable from "@/views/tasks/components/TaskTable.vue";
+import RelationshipsTable from "@/views/relationships/components/RelationshipsTable.vue";
 
 
 const HTTP_OK = 200;
@@ -184,7 +187,8 @@ export default {
     formGenerator,
     ProductTable,
     InteractionTable,
-    TaskTable
+    TaskTable,
+    RelationshipsTable
   },
   data() {
     return {
