@@ -133,13 +133,13 @@ function configRoutes () {
             },
             {
               path: ':customerId/relationships/:relationshipId/edit',
-              meta: { label: 'Editar Parentezco' },
+              meta: { label: 'Editar Relación' },
               name: 'customers.edit.relationships',
               component: RelationshipEdit
             },
             {
               path: ':customerId/relationships/create',
-              meta: { label: 'Crear Parentezco' },
+              meta: { label: 'Crear Relación' },
               name: 'customers.create.relationships',
               component: RelationshipCreate
             }
