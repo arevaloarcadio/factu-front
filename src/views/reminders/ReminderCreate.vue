@@ -6,6 +6,23 @@
       @update="createReminder()">
       Crear Recordatorio
     </formGenerator>
+
+    <CCard class="col-md-12" id="periodicity" >
+      <CCardHeader class="text-success py-1">
+        <strong>Definir Periodicidad</strong>
+      </CCardHeader>
+      <CCardFooter>
+        <CRow v-if="entityForm.date_when !== '' && entityForm.date_reminder !== ''">
+          <CCardHeader class="text-primary py-1">
+            <strong  v-html="see_periodicity()"></strong>
+          </CCardHeader>
+        </CRow >
+        <CRow  v-if="entityForm.date_when === '' || entityForm.date_reminder === ''">
+          
+        </CRow >
+      </CCardFooter>
+    </CCard>
+
    <CCard class="col-md-12">
       <CCardHeader class="text-success py-1">
         <strong>Agregar Cliente</strong> <small>(Opcional)</small>
@@ -33,6 +50,7 @@ import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import { mapGetters } from "vuex";
 import items from './reminder-create-items';
+
 let tomorrow = new Date();
 tomorrow.setDate(new Date().getDate()+1)
 
@@ -52,16 +70,35 @@ export default {
 			itemsForm: items,
       entityForm: {
         description:  '',
+        periodicity : '',
+        date_when : '',
+        date_reminder : ''
       },
     };
   },
   created() {
     this.getCustomers();
+    this.entityForm.periodicity = 'Anual'
   },
   computed: {
     ...mapGetters(["getUser"]),
   },
   methods: {
+    see_periodicity(){
+      console.log(this.entityForm.periodicity)
+      let day = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[0]) + 1;
+      let month = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[1]);
+
+       if ( this.entityForm.periodicity == 'Anual') {
+          return 'Se le notificará el día '+ day +' del mes '+ month +' este recordatorio cada año';
+       }
+       if ( this.entityForm.periodicity == 'Mensual') {
+          return 'Se le notificará el día '+ day +' este recordatorio cada mes';
+       }
+       if ( this.entityForm.periodicity == 'Sin Periodicidad') {
+          return 'Se le notificará la fecha '+this.entityForm.date_reminder+' este recordatorio';
+       }
+    },
     createReminder()
     {
 			const HTTP_CREATED = 201;
@@ -94,9 +131,6 @@ export default {
 			const options = this.customers.map(c => {
 				return { id: c.id, name: `${c.firstname} ${c.lastname}` };
 			});
-
-      this.itemsForm[0].campos[0].opciones = options;
-			this.itemsForm = { ...this.itemsForm };
     },
   },
   notifications: {

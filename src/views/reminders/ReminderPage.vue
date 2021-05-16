@@ -34,6 +34,7 @@
             </tr>
             <tr v-for="item in paginated('items')">
               <td>{{item.description}}</td> 
+              <td>{{new Date(item.date_when).toLocaleDateString()}}</td> 
               <td v-html="has_customer(item.customer)"></td>  
               <td v-if ="item.status == 'Pendiente'">
                 <span class="badge badge-danger">{{item.status}}</span>
@@ -107,6 +108,7 @@ export default {
       paginate : ['items'],
       fields: [
         { key: "description", label: "Descripción",          _classes: "text-center" },
+        { key: "date_when", label: "Fecha Cuando",          _classes: "text-center" },
         { key: "customer", label: "Cliente",          _classes: "text-center" },
         { key: "status", label: "Estatus",          _classes: "text-center" },
         {

@@ -9,6 +9,22 @@
           Editar Recordatorio
         </formGenerator>
 
+    <CCard class="col-md-12" id="periodicity" >
+      <CCardHeader class="text-success py-1">
+        <strong>Definir Periodicidad</strong>
+      </CCardHeader>
+      <CCardFooter>
+        <CRow v-if="entityForm.date_when !== '' && entityForm.date_reminder !== ''">
+          <CCardHeader class="text-primary py-1">
+            <strong  v-html="see_periodicity()"></strong>
+          </CCardHeader>
+        </CRow >
+        <CRow  v-if="entityForm.date_when === '' || entityForm.date_reminder === ''">
+          
+        </CRow >
+      </CCardFooter>
+    </CCard>
+
           <CCard class="col-md-12">
             <CCardHeader class="text-success py-1">
               <strong>Agregar Cliente</strong> <small>(Opcional)</small>
@@ -56,6 +72,9 @@ export default {
       entityForm: {
         description:  '',
         status:  '',
+        periodicity : '',
+        date_reminder : '',
+        date_when : ''
       },
     };
   },
@@ -68,6 +87,21 @@ export default {
   },
 
   methods: {
+     see_periodicity(){
+      console.log(this.entityForm.periodicity)
+      let day = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[0]) + 1;
+      let month = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[1]);
+
+       if ( this.entityForm.periodicity == 'Anual') {
+          return 'Se le notificará el día '+ day +' del mes '+ month +' este recordatorio cada año';
+       }
+       if ( this.entityForm.periodicity == 'Mensual') {
+          return 'Se le notificará el día '+ day +' este recordatorio cada mes';
+       }
+       if ( this.entityForm.periodicity == 'Sin Periodicidad') {
+          return 'Se le notificará la fecha '+this.entityForm.date_reminder+' este recordatorio';
+       }
+    },
     customLabel ({ firstname, lastname }) {
       return `${firstname} ${lastname}`
     },
@@ -92,7 +126,10 @@ export default {
     {
       this.entityForm = {
         description: data.description,
-        status : data.status
+        status : data.status,
+        periodicity : data.periodicity,
+        date_reminder : new Date(data.date_reminder).toISOString().substr(0, 10),
+        date_when : new Date(data.date_when).toISOString().substr(0, 10)
       };
       this.customer = data.customer_id;
       this.entityForm = { ...this.entityForm };
