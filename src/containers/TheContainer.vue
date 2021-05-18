@@ -1,5 +1,6 @@
 <template>
   <div class="c-app">
+    <TheReminder></TheReminder>
     <TheSidebar/>
     <CWrapper>
       <TheHeader/>
@@ -21,6 +22,7 @@
 import TheSidebar from './TheSidebar'
 import TheHeader from './TheHeader'
 import TheFooter from './TheFooter'
+import TheReminder from './TheReminder'
 import axios from 'axios'
 
 export default {
@@ -28,7 +30,8 @@ export default {
   components: {
     TheSidebar,
     TheHeader,
-    TheFooter
+    TheFooter,
+    TheReminder
   }
 }
 </script>

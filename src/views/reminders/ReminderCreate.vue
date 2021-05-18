@@ -3,7 +3,9 @@
     <formGenerator
       :items="itemsForm"
       :entity="entityForm"
-      @update="createReminder()">
+      @blur="blur($event)"
+      @update="createReminder()"
+      >
       Crear Recordatorio
     </formGenerator>
 
@@ -85,7 +87,6 @@ export default {
   },
   methods: {
     see_periodicity(){
-      console.log(this.entityForm.periodicity)
       let day = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[0]) + 1;
       let month = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[1]);
 
@@ -132,7 +133,13 @@ export default {
 				return { id: c.id, name: `${c.firstname} ${c.lastname}` };
 			});
     },
+    blur($event){
+      if (this.date_when == null) {
+        this.entityForm.date_when = $event.value;
+      }
+    }
   },
+  
   notifications: {
     showSuccessMsg: {
       type: VueNotifications.types.success,

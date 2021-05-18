@@ -394,8 +394,6 @@ export default {
         })
         .catch(err => console.log(err));
     },
-
-    // events
     change($event) {
       const COUNTRY  = "country";
       const PROVINCE = "province";

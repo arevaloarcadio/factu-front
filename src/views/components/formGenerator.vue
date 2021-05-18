@@ -36,7 +36,7 @@
 
                           <template v-if="campo.type == 'date'" >
                             <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                              <input type="date" :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
+                              <input type="date" @blur="onBlur($event, campo.name)" :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
                               <span class="small text-danger">{{ errors[0] }}</span>
                             </ValidationProvider>
                           </template>
@@ -136,14 +136,16 @@ export default {
         e.preventDefault();
         this.$emit("update", true);
     },
-
+    onBlur($event, name) {
+      this.$emit("blur", { value: $event.target.value, name });
+    },
     onChange($event, name) {
       this.$emit("change", { value: $event.target.value, name });
     },
 
     onEnter($event, name) {
       this.$emit("enter", { value: $event.target.value, name });
-    }
+    },
   },
 };
 </script>
