@@ -35,6 +35,19 @@ import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './relationship-edit-items';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "RelationshipEdit",
@@ -72,6 +85,10 @@ export default {
       .put('v1/customers/'+this.customer_id+'/relationships', data)
       .then(res => {
         if (res.status == HTTP_OK) {
+          Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
           // this.showSuccessMsg();
           this.$router.go(-1)
         }

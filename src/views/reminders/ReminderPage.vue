@@ -108,7 +108,7 @@ export default {
       paginate : ['items'],
       fields: [
         { key: "description", label: "Descripción",          _classes: "text-center" },
-        { key: "date_when", label: "Fecha Cuando",          _classes: "text-center" },
+        { key: "date_when", label: "Fecha de aviso",          _classes: "text-center" },
         { key: "customer", label: "Cliente",          _classes: "text-center" },
         { key: "status", label: "Estatus",          _classes: "text-center" },
         {

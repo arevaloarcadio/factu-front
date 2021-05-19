@@ -1,49 +1,38 @@
 <template>
   <div>
-     <CButton 
-      @click="collapseInformation =! collapseInformation" 
-      color="primary"
-      class="mb-2"
-    >
-     {{collapseInformation == true ? 'Mostrar Menos' : 'Mostrar Mas'}}
-    </CButton>
-
-    <CCollapse :show="!collapseInformation">
-      <formGenerator
-        :items="itemsInformationCollapse"
-        :entity="entityFormCollapse"
-        :buttonHidden="true">
-        Cliente
-      </formGenerator>
-    </CCollapse>
-
-    <CCollapse :show="collapseInformation">
-      <formGenerator
-        :items="itemsInformation"
-        :entity="entityForm"
-        @update="updated()">
-        Editar Cliente
-      </formGenerator>
-    </CCollapse>
-
-
-     <CButton 
-      @click="collapseAddress =! collapseAddress" 
-      color="primary"
-      class="mb-2"
-    >
-     {{collapseAddress == true ? 'Recoger Direcciones' : 'Expandir Direcciones'}}
-    </CButton>
-    <CCollapse :show="collapseAddress">
+    
+      <CCollapse :show="collapseInformation">
+        <formGenerator
+          :items="itemsInformationCollapse"
+          :entity="entityFormCollapse"
+          :buttonHidden="!collapseInformation">
+          <span @click="collapse()"> Cliente<CIcon :content="$options.ArrowRigth"/></span> 
+          
+        </formGenerator>
+      </CCollapse>
+     
+      <CCollapse :show="!collapseInformation">
+        <formGenerator
+          :items="itemsInformation"
+          :entity="entityForm"
+          @update="updated()">
+          <span @click="collapse()">Editar Cliente<CIcon :content="$options.ArrowBottom "/></span>
+        </formGenerator>
+      </CCollapse>
+      
       <formGenerator
         :items="itemsAddresses"
         :entity="entityFormAddress"
+        :hasCollapse="false"
         @update="createOrUpdateAddress()"
         @change="change($event)"
-        @enter="enter($event)">
-        Direcciones
+        @enter="enter($event)"
+        ref="addresses">
+        <span @click="arrow()">Direcciones
+         <CIcon v-if="content_address" :content="$options.ArrowBottom"></CIcon>
+         <CIcon v-else :content="$options.ArrowRigth"></CIcon>
+        </span>
       </formGenerator>
-     </CCollapse>
     
      <CRow>
  
@@ -134,11 +123,13 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <div v-for="user in attachedUsers" class="mr-2 text-success text-center">
+              <div v-for="user in attachedUsers" class="mr-2 text-success text-center" data-title="Seleccionar como responsable"   @click="setUserResponsable(user.id)">
                 <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
                 <small>
                   <strong>{{ user.firstname + ' ' + user.lastname }}</strong>
                 </small>
+                <br>
+                 <span v-if="user.pivot.is_responsable" class="badge badge-primary">Responsable</span>
               </div>
             </CRow>
           </CCardBody>
@@ -176,12 +167,27 @@ import items from "./customer-edit-items";
 import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
 import TaskTable from "@/views/tasks/components/TaskTable.vue";
 import RelationshipsTable from "@/views/relationships/components/RelationshipsTable.vue";
+import { cilArrowRight,cilArrowBottom } from '@coreui/icons'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 
 export default {
+  ArrowRigth: cilArrowRight,
+  ArrowBottom: cilArrowBottom,
   name: "CustomerEdit",
   components: { 
     formGenerator,
@@ -193,7 +199,8 @@ export default {
   data() {
     return {
       entity: "Clientes",
-      collapseAddress : false,
+      collapseAddress : true,
+      content_address : false,
       collapseInformation : true,
       selectedUsers: [],
       attachedUsers: [],
@@ -237,14 +244,19 @@ export default {
     
     this.getCustomerById();
 
-
+ 
     Promise.all([
       this.addressesByCustomerId(),
       this.countries(),
     ]).catch(err => console.log(err));
   },
   methods: {
-    
+    arrow(){
+      this.content_address =! this.content_address;
+    },
+    collapse(){
+      this.collapseInformation =! this.collapseInformation;
+    },
     getCustomerById() {
       axios.get(`v1/customers/${this.customerId}`).then(res => {
         this.setCustomerInformation(res.data);
@@ -315,6 +327,10 @@ export default {
         .post(`v1/customers/${this.customerId}/users`, users)
         .then(res => {
           this.getAttachedUsers();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
           this.selectedUsers = null;
         })
         .catch(err => console.log(err));
@@ -347,6 +363,10 @@ export default {
          .then(res => {
 
            if (res.status == HTTP_OK) {
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
              this.$router.go(0);
             // this.showSuccessMsg();
            }
@@ -370,7 +390,10 @@ export default {
 
           if (res.status == HTTP_OK) {
             this.$router.go(0);
-            this.showSuccessMsg();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
           }
         })
         .catch(err => console.log);
@@ -383,6 +406,24 @@ export default {
             resolve(true);
           }).catch(err => reject(err));
       });
+    },
+    setUserResponsable(user_id)
+    {
+      const HTTP_OK = 200;
+
+      axios
+        .put(`v1/customers/${this.customerId}/responsable/${user_id}`)
+        .then(res => {
+          if (res.status == HTTP_OK) {
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
+            this.getAttachedUsers()
+            //this.$router.go(-1)
+          }
+        })
+        .catch(err => console.log(err));
     },
     getProducts() {
       
@@ -507,4 +548,33 @@ export default {
   #zipCode{
     margin-top: 6%;
   }
+
+
+  [data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #3c4b64;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    position: absolute;
+    padding: 3px 20px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+    border-radius: 6px;
+    
+}
+[data-title] {
+    position: relative;
+}
 </style>

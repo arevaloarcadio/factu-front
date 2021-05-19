@@ -40,7 +40,7 @@ const items = [
      
       {
         name: "date_reminder",
-        title: "Fecha del Recordatorio",
+        title: "Fecha del aviso",
         placeholder: "",
         validation: "required",
         type: "date",
@@ -48,7 +48,7 @@ const items = [
       },
        {
         name: "date_when",
-        title: "Fecha Cuando",
+        title: "Fecha del Recordatorio",
         placeholder: "",
         validation: "required",
         type: "date",

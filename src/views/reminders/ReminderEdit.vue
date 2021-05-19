@@ -54,6 +54,19 @@ import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './reminder-edit-items';
 import NoteTable from "@/views/tasks/notes/components/NoteTable.vue";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "ReminderEdit",
@@ -146,7 +159,10 @@ export default {
         .then(res => {
           if (res.status == HTTP_OK) {
             console.log(res.data);
-            // this.showSuccessMsg();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             this.$router.go(-1)
           }
         })

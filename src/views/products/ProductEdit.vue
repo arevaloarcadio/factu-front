@@ -14,6 +14,19 @@ import axios from 'axios';
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './product-edit-items';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "ProductEdit",
@@ -46,6 +59,10 @@ export default {
         .then(res => {
           if (res.status == HTTP_OK) {
             console.log(res.data);
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             // this.showSuccessMsg();
             this.$router.go(-1)
           }

@@ -95,6 +95,19 @@ import InteractionTable from "@/views/interactions/components/InteractionTable.v
 import items from './user-edit-items';
 import Croppr from 'croppr';
 import $ from 'jquery';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "UserEdit",
@@ -164,7 +177,10 @@ export default {
           console.log(res.data);
 
           if (res.status == HTTP_OK) {
-            // this.showSuccessMsg();
+             Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             this.$router.go(-1);
           }
         })
@@ -272,7 +288,10 @@ export default {
           console.log(res.data);
 
           if (res.status == HTTP_OK) {
-            // this.showSuccessMsg();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             this.$router.go(-1);
           }
         })
@@ -289,7 +308,10 @@ export default {
           console.log(res.data);
 
           if (res.status == HTTP_OK) {
-            // this.showSuccessMsg();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             this.$router.go(-1);
           }
         })

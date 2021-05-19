@@ -33,6 +33,7 @@ import {
 } from '@coreui/icons'
 import {
   cilArrowRight,
+  cilArrowBottom,
   cilBan,
   cilBasket,
   cilBell,

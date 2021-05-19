@@ -62,6 +62,19 @@ import jwtToken from "@/plugins/jwt/jwt-token";
 import {mapActions} from "vuex";
 import user from "@/plugins/jwt/user";
 import VueNotifications from "vue-notifications"
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: 'Login',
@@ -86,6 +99,11 @@ export default {
       axios({url: 'auth/login', data: this.user, method: 'POST' })
         .then(response => {
           if(response.status == "200"){
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Acceso concedido',
+            })
             //self.showSuccessMsg()
             user.setUser(response.data.user)
             jwtToken.setToken(response.data.access_token);
@@ -95,6 +113,12 @@ export default {
         })
         .catch(err => {
           console.log(err);
+           
+           Toast.fire({
+              icon: 'error',
+              title: 'Acceso denegado',
+            })
+
           //commit('auth_error', err)
           localStorage.removeItem('token')
           //reject(err)
@@ -105,7 +129,7 @@ export default {
       axios({url: 'organizations/mine', method: 'GET' })
         .then(response => {
           if(response.status == "200"){
-            console.log(response.data[0].unit_id,"-------------------")
+             
             if(response.data[0].unit){
               self.setUnit(response.data[0].unit_id)
             }

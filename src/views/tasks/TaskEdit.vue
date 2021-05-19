@@ -14,11 +14,13 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <div v-for="user in attachedUsers" class="mr-2 text-success text-center">
-                <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
+              <div v-for="user in attachedUsers" class="mr-2 text-success text-center" data-title="Seleccionar como responsable" @click="setUserResponsable(user.id)">
+                <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU" ><br>
                 <small>
                   <strong>{{ user.firstname + ' ' + user.lastname }}</strong>
                 </small>
+                <br>
+                <span v-if="user.pivot.is_responsable" class="badge badge-primary">Responsable</span>
               </div>
             </CRow>
           </CCardBody>
@@ -70,6 +72,19 @@ import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import items from './task-edit-items';
 import NoteTable from "@/views/tasks/notes/components/NoteTable.vue";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "TaskEdit",
@@ -180,13 +195,33 @@ export default {
         .then(res => {
           if (res.status == HTTP_OK) {
             console.log(res.data);
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
             // this.showSuccessMsg();
             this.$router.go(-1)
           }
         })
         .catch(err => console.log(err));
     },
+    setUserResponsable(user_id)
+    {
+      const HTTP_OK = 200;
 
+      axios
+        .put(`${this.current_endpoint}/${this.taskId}/responsable/${user_id}`)
+        .then(res => {
+          if (res.status == HTTP_OK) {
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
+            this.$router.go(-1)
+          }
+        })
+        .catch(err => console.log(err));
+    },
     getNotes() {      
       axios
         .get(`v1/tasks/${this.taskId}/notes`)
@@ -227,6 +262,10 @@ export default {
         .then(res => {
           this.selectedUsers = null
            this.getAttachedUsers();
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
         })
         .catch(err => console.log(err));
      
@@ -257,4 +296,34 @@ export default {
 };
 </script>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
+<style type="text/css">
+  [data-title]:hover:after {
+    opacity: 1;
+    transition: all 0.1s ease 0.5s;
+    visibility: visible;
+}
+
+[data-title]:after {
+    content: attr(data-title);
+    background-color: #3c4b64;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    position: absolute;
+    padding: 3px 20px;
+    bottom: -1.6em;
+    left: 100%;
+    white-space: nowrap;
+    box-shadow: 1px 1px 3px #222222;
+    opacity: 0;
+    border: 1px solid #111111;
+    z-index: 99999;
+    visibility: hidden;
+    border-radius: 6px;
+    
+}
+[data-title] {
+    position: relative;
+}
+</style>
 

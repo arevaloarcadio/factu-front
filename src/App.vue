@@ -11,4 +11,5 @@ export default {
 <style lang="scss">
   // Import Main styles for this application
   @import 'assets/scss/style';
+  @import 'sweetalert2/src/sweetalert2.scss';
 </style>

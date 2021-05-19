@@ -17,6 +17,7 @@ import es from 'vee-validate/dist/locale/es.json'
 // NOTIFICACIONES TOSTR
 import VueNotifications from 'vue-notifications';
 import miniToastr from 'mini-toastr';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 //Paginacion con vue
 import VuePaginate from 'vue-paginate'
 
