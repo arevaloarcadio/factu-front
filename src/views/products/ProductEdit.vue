@@ -38,6 +38,7 @@ export default {
         customer_id: 0,
         product_type_id: 0,
         identifier: "",
+        status: "",
       },
     };
   },
@@ -52,7 +53,9 @@ export default {
       const data = {
         productId:     this.$route.params.productId,
         productTypeId: this.entityForm.product_type_id,
-        identifier:    this.entityForm.identifier
+        identifier:    this.entityForm.identifier,
+        status:        this.entityForm.status,
+        customerId:    this.$route.params.customerId 
       };
 			axios
         .put(`v1/products/${data.productId}`, data)
@@ -81,7 +84,7 @@ export default {
     setSelectedProduct() {
       this.entityForm.product_type_id = this.$route.query.product_type;
       this.entityForm.identifier = this.$route.query.identifier;
-
+      this.entityForm.status = this.$route.query.status;
       this.entityForm = { ...this.entityForm };
     },
 		

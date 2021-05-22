@@ -43,6 +43,8 @@ const RelationshipEdit = () => import('@/views/relationships/RelationshipEdit')
 
 const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
 
+const TimelinePage = () => import('@/views/timelines/TimelinePage')
+
 Vue.use(Router)
 
 export default new Router({
@@ -64,6 +66,11 @@ function configRoutes () {
           path: 'dashboard',
           name: 'Escritorio',
           component: Dashboard
+        },
+        {
+          path: 'timeline',
+          name: 'Timeline',
+          component: TimelinePage
         },
         {
           path: 'users',

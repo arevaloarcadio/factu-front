@@ -78,10 +78,10 @@ export default {
   },
   methods: {
     getParams(item) {
-      return { customerId: item.customer_id, productId: item.id };
+      return { customerId: item.customer_id, productId: item.id ,status : item.status};
     },
     getQuery(item) {
-      return { identifier: item.identifier, product_type: item.product_type_id };
+      return { identifier: item.identifier, product_type: item.product_type_id ,status : item.status};
     }
   }
 };

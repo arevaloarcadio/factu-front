@@ -22,7 +22,7 @@
       />
     </CSidebarBrand>
 
-    <CRenderFunction flat :content-to-render="$options.nav"/>
+    <CRenderFunction flat :content-to-render="nav"/>
     <CSidebarMinimizer
       class="d-md-down-none"
       @click.native="$store.commit('set', ['sidebarMinimize', !minimize])"
@@ -31,12 +31,29 @@
 </template>
 
 <script>
-import nav from './_nav'
+import _nav from './_nav'
+import _navadmin from './_navadmin'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'TheSidebar',
-  nav,
+  data(){
+    return{
+      nav : null
+    }
+  },
+  created(){
+    if(this.getUser.admin){
+      this.nav = _navadmin
+    }else{
+      this.nav = _nav
+    }
+  },
+
   computed: {
+    ...mapGetters([
+                  'getUser'
+              ]),
     show () {
       return this.$store.state.menu.sidebarShow 
     },

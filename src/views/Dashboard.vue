@@ -24,7 +24,8 @@ export default {
                             entity: "Organización",
                             organization: [],
                             users: [],
-                            unit_ids :[]
+                            unit_ids :[],
+                            subordinates : []
                           }
                         },
                         methods:{

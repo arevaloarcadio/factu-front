@@ -36,6 +36,7 @@ export default {
 	        user_id: null,
 	        user: {
 	        	parent_id: 0,
+	        	above_id: 0,
 	        	user_id: 0,
 	        	level: 0,
 	        	unit_id: 0,
@@ -62,8 +63,8 @@ export default {
 
 	    storeUser(){
 	    	var node = this.chart.get(this.chart.editUI.nodeId)
-
 	    	this.user.parent_id = node.id
+	    	this.user.above_id = node.user_id
 	    	this.user.user_id = this.user_id.id
 	    	this.user.level = node.level + 1
 	    	this.user.unit_id = this.unit_id

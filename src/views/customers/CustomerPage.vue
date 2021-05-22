@@ -4,7 +4,7 @@
       <CCardHeader>
         <h5>
           {{ entity }}
-          <router-link :to="{ name: 'customers.create' }">
+          <router-link  :to="{ name: 'customers.create' }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               {{ newEntity }}
