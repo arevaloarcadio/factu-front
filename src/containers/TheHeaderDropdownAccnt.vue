@@ -16,15 +16,15 @@
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
-      <strong>Mi Cuenta</strong>
+      <strong>{{user.firstname+' '+user.lastname }}</strong>
     </CDropdownHeader>
-    <CDropdownItem>
+    <!--<CDropdownItem>
       <CIcon name="cil-envelope-open" /> Mensajes
       <CBadge color="success" class="ml-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
+    </CDropdownItem>-->
     <CDropdownItem>
       <CIcon name="cil-task" /> Tareas
-      <CBadge color="danger" class="ml-auto">{{ itemsCount }}</CBadge>
+      <CBadge color="danger" class="ml-auto">{{ task_items }}</CBadge>
     </CDropdownItem>
     <CDropdownHeader
       tag="div"
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+
+import axios from 'axios';
 import {mapGetters,mapState} from 'vuex';
 import jwtToken from '../plugins/jwt/jwt-token';
 import user from '../plugins/jwt/user' ; 
@@ -52,11 +54,16 @@ import router from '@/router'
 
 export default {
   name: 'TheHeaderDropdownAccnt',
+  
   data () {
     return { 
       itemsCount: 42,
+      task_items : 0,
       user : JSON.parse(user.getUser())
     }
+  },
+  created() {
+    this.getItemsTasks();
   },
   methods: {
     logout() {
@@ -66,7 +73,15 @@ export default {
         router.push({path: '/pages/login'});
       });
     },
-    
+    getItemsTasks() {
+      
+      axios
+        .get('v1/tasks')
+        .then(resp => {
+          this.task_items = resp.data.length;
+        })
+        .catch(err => console.log(err));
+    },
   },
   computed: {
     ...mapGetters([

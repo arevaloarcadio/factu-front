@@ -7,6 +7,7 @@
       <CCardFooter>
         <template v-for="subordinate in subordinates">
           <div class="timeline-item" :date-is='subordinate.created_at'>
+            <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
             <h1>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h1>
             <p v-html="subordinate.description"></p>
           </div>

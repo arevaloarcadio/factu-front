@@ -120,7 +120,7 @@ export default {
     };
   },
   created() {
-    this.getProducts();
+    this.getTasks();
   },
   mounted() {},
   methods: {
@@ -131,7 +131,7 @@ export default {
           return customer.firstname+' '+customer.lastname;
         }
     },
-    getProducts() {
+    getTasks() {
       
       axios
         .get(this.current_endpoint)

@@ -39,6 +39,7 @@ import formGenerator from "@/views/components/formGenerator.vue";
 import { mapGetters } from "vuex";
 import items from './task-create-items';
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import TheHeaderDropdownAccnt from "@/containers/TheHeaderDropdownAccnt.vue";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -56,7 +57,7 @@ tomorrow.setDate(new Date().getDate()+1)
 
 export default {
   name: "TaskCreate",
-  components: { formGenerator },
+  components: { formGenerator,TheHeaderDropdownAccnt },
   data() {
     return {
       next_day: tomorrow,
@@ -79,38 +80,11 @@ export default {
   created() {
     this.getCustomers();
     this.customer_id = this.$route.params.customerId !== undefined ? this.$route.params.customerId : null
+
   },
   computed: {
     ...mapGetters(["getUser"]),
   },
-
-  watch:{
-
-    // 'entityForm.date'(val)
-    // {
-    //   console.log(val)
-    //   // let current_date = `${this.next_day.getFullYear()}-${this.next_day.getMonth()}-${this.next_day.getDay()}`
-
-    //   let tomorrow = new Date();
-    //   tomorrow.setDate(new Date().getDate()+1)
-
-    //   // let currentFullYear = this.next_day.getFullYear()
-    //   // let currentFullMoth = this.next_day.getMonth() < 10 ? 0+''+this.next_day.getMonth() : this.next_day.getMonth()
-    //   // let currentFullDay = this.next_day.getDay() < 10 ? 0+''+this.next_day.getDay() : this.next_day.getDay()
-
-    //   let tomorrow_object = {
-    //     year: tomorrow.getFullYear(),
-    //     moth: tomorrow.getMonth(),
-    //     day: tomorrow.getDay(),
-    //   }
-
-    //   // let currentFullTomorrowDate = `${currentFullYear}-${currentFullMoth}-${currentFullDay}`
-
-    //   console.log([tomorrow_object, 'currentFullTomorrowDate'])
-    // }
-
-  },
-
   methods: {
 
     getCustomer($event){
@@ -130,7 +104,7 @@ export default {
               icon: 'success',
               title: 'Operación completada',
             })
-					this.$router.go(-1)
+          this.$router.go(-1)
 				}
 			})
 			.catch(err => console.log(err));
