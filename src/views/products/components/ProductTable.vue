@@ -1,7 +1,23 @@
 
 <template>
   <div>
-
+    <div class="controls">
+      <div class="row">
+        <div class="col-md-1">
+           <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Estatus</label>
+        </div>
+          <div class="col-md-4">
+            <select id="filter" @change="onChange()" v-model="filter" class="form-control">
+                  <option value="Activo" selected="true">Activo</option>
+                  <option value="No Activo">No Activo</option>
+                  <option value="Anulado">Anulado</option>
+                  <option value="En Vigor">En Vigor</option>
+                  <option value="En Riesgo">En Riesgo</option>
+                  <option value="Finalizado">Finalizado</option>
+            </select>
+          </div>
+        </div>
+     </div>   
     <table class="table table-responsive-sm table-striped">
      <thead>
       <tr>
@@ -19,7 +35,6 @@
         </td>
       </tr>
       <tr v-for="item in paginated('items')">
-        <td>{{item.customer.firstname }} {{ item.customer.lastname }}</td> 
         <td>{{item.product_types.name }}</td> 
         <td>{{item.identifier }}</td>
         <router-link :to="{ name: 'products.edit', params: getParams(item), query: getQuery(item) }">
@@ -62,8 +77,8 @@ export default {
     return {
       paginate : ['items'],
       entityTable: "products",
+      filter : 'Activo',
       tableFields: [
-        { key: "customer",      label: "Cliente" },
         { key: "product_types", label: "Tipo",          _classes: "text-center" },
         { key: "identifier",    label: "Identificador", _classes: "text-center" },
         {
@@ -78,11 +93,29 @@ export default {
   },
   methods: {
     getParams(item) {
-      return { customerId: item.customer_id, productId: item.id ,status : item.status};
+      return { 
+        customerId : item.customer_id,
+        productId  : item.id ,
+        status     : item.status
+      };
     },
     getQuery(item) {
-      return { identifier: item.identifier, product_type: item.product_type_id ,status : item.status};
-    }
+      return { 
+        identifier  : item.identifier, 
+        product_type: item.product_type_id ,
+        status      : item.status,
+        price       : item.price
+      };
+    },
+    onChange (){
+      this.$emit("change",this.filter);
+      this.reset_page(this.paginate);
+    },
+    reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
+    },
   }
 };
 </script>

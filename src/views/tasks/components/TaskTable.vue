@@ -91,8 +91,8 @@ import axios from "axios";
 import VueNotifications from "vue-notifications";
 
 export default {
-  props:['customer_id'],
-  name: "TaskPage",
+  props:['items','customer_id'],
+  name: "TaskTable",
   components: {},
   data() {
     return {
@@ -118,10 +118,6 @@ export default {
       nextUrl: "",
     };
   },
-  created() {
-    this.getTasks();
-  },
-  mounted() {},
   methods: {
     has_customer  : function (customer) {
         if(customer == null){
@@ -130,15 +126,7 @@ export default {
           return customer.firstname+' '+customer.lastname;
         }
     },
-    getTasks() {
-      
-      axios
-        .get(this.current_endpoint+'/'+this.customer_id+'/customer')
-        .then(resp => {
-          this.items = resp.data;
-        })
-        .catch(err => console.log(err));
-    },
+    
   },
   notifications: {
     showSuccessMsg: {

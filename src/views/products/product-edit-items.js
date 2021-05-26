@@ -8,7 +8,7 @@ const items = [
         placeholder: "Introduzca Móvil",
         validation: "required",
         type: "select",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-6 col-md-offset-right-4",
         opciones: [],
       },
       {
@@ -17,7 +17,15 @@ const items = [
         placeholder: "0039293029302",
         validation: "required",
         type: "string",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-6 col-md-offset-right-4",
+      },
+      {
+        name: "price",
+        title: "Precio de Producto",
+        placeholder: "Ingrese el  precio",
+        validation: "",
+        type: "decimal",
+        size: "col-md-6 col-md-offset-right-4",
       },
        {
         name: "status",
@@ -25,7 +33,7 @@ const items = [
         placeholder: "Introduzca el Estado",
         validation: "required",
         type: "select",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-6 col-md-offset-right-4",
         opciones : [ 
               {
                 id:'Activo',
@@ -42,6 +50,14 @@ const items = [
               {
                 id:'En Vigor',
                 name: 'En Vigor'
+              },
+              {
+                id:'En Riesgo',
+                name: 'En Riesgo'
+              },
+              {
+                id:'Finalizado',
+                name: 'Finalizado'
               }
             ]
           },

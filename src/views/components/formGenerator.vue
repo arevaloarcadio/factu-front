@@ -34,7 +34,7 @@
 
                             <template v-if="campo.type == 'string'" >
                               <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                                <input type="text" :name="campo.name" class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
+                                <input type="text" :name="campo.name" @blur="onBlur($event, campo.name)"  class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
                                 <span class="small text-danger">{{ errors[0] }}</span>
                               </ValidationProvider>
                             </template>
@@ -69,7 +69,7 @@
 
                             <template v-if="campo.type == 'decimal'" >
                               <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                                <input type="number" step="2"  :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
+                                <input type="number" step="any"  :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
                                 <span class="small text-danger">{{ errors[0] }}</span>
                               </ValidationProvider>
                             </template>
@@ -111,7 +111,7 @@
               </div>
             </div>
             <div v-if="buttonHidden === undefined" class="card-footer py-1">
-              <button class="btn btn-primary btn-sm float-right"  :disabled="invalid" >Guardar</button>
+              <button class="btn btn-primary btn-sm float-right"  :disabled="invalid" v-html="nameButton === undefined ? 'Guardar' : nameButton"></button>
             </div>
 
          </div>
@@ -140,7 +140,7 @@
 
                               <template v-if="campo.type == 'string'" >
                                 <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
-                                  <input type="text" :name="campo.name" class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
+                                  <input type="text"  @blur="onBlur($event, campo.name)"  :name="campo.name" class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
                                   <span class="small text-danger">{{ errors[0] }}</span>
                                 </ValidationProvider>
                               </template>
@@ -217,7 +217,7 @@
                 </div>
               </div>
               <div v-if="buttonHidden === undefined" class="card-footer py-1">
-                <button class="btn btn-primary btn-sm float-right"  :disabled="invalid" >Guardar</button>
+                <button class="btn btn-primary btn-sm float-right"  :disabled="invalid" v-html="nameButton === undefined ? 'Guardar' : nameButton" ></button>
               </div>
             </CCollapse>
           </div>
@@ -230,7 +230,7 @@
 <script>
 export default {
   name: "formGenerator",
-  props: ["items", "entity","buttonHidden","hasCollapse"],
+  props: ["items", "entity","buttonHidden","hasCollapse","nameButton"],
   mounted() {
     // console.log(this.items,"-----------<<")
   },

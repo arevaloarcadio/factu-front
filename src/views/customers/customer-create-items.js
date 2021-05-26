@@ -3,6 +3,14 @@ const items = [
     "name": "Identificación",
     "campos": [
       {
+        "name": "cif",
+        "title": "DNI",
+        "placeholder": "Introduzca DNI",
+        "validation": "required",
+        "type": "string",
+        "size": "col-md-4"
+      },
+      {
         "name": "firstname",
         "title": "Nombre",
         "placeholder": "Introduzca Nombre",
@@ -18,13 +26,7 @@ const items = [
         "type": "string",
         "size": "col-md-4"
       },
-      {
-        "name": "cif",
-        "title": "DNI",
-        "validation": "required",
-        "type": "string",
-        "size": "col-md-4"
-      },
+      
       {
         "name": "birthdate",
         "title": "Fecha Nacimiento",

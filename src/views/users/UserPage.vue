@@ -55,53 +55,8 @@
          
          <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
 
-        <!--<CDataTable
-          class="mb-0 table-outline"
-          hover
-          :items="items"
-          :fields="tableFields"
-          head-color="light"
-          no-sorting
-          v-if="items">
-
-          <td slot="name" slot-scope="{ item }">
-            {{ item.name }}
-          </td>
-          <td slot="admin" slot-scope="{ item }" class="text-center">
-            <CIcon
-              name="cil-check"
-              style="color:green;"
-              height="25"
-              v-show="item.admin"/>
-          </td>
-          <td slot="actions" slot-scope="{ item }">
-            <router-link :to="{ name: 'users.edit', params: { id: item.id } }">
-              <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
-            </router-link>
-          </td>
-        </CDataTable>-->
       </CCardBody>
-      <!--<CCardFooter v-if="items">
-        <nav>
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a
-                class="page-link"
-                @click="page(previousUrl)"
-                v-show="previousUrl"
-                tabindex="-1">
-                Anterior
-              </a
-              >
-            </li>
-            <li class="page-item">
-              <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">
-                Siguiente
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </CCardFooter>-->
+      
     </CCard>
   </div>
 </template>

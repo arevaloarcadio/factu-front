@@ -39,6 +39,7 @@ export default {
         product_type_id: 0,
         identifier: "",
         status: "",
+        price: 0,
       },
     };
   },
@@ -55,6 +56,7 @@ export default {
         productTypeId: this.entityForm.product_type_id,
         identifier:    this.entityForm.identifier,
         status:        this.entityForm.status,
+        price:         this.entityForm.price,
         customerId:    this.$route.params.customerId 
       };
 			axios
@@ -85,6 +87,7 @@ export default {
       this.entityForm.product_type_id = this.$route.query.product_type;
       this.entityForm.identifier = this.$route.query.identifier;
       this.entityForm.status = this.$route.query.status;
+      this.entityForm.price = this.$route.query.price;
       this.entityForm = { ...this.entityForm };
     },
 		

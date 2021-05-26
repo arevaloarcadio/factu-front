@@ -1,17 +1,28 @@
 <template>
   <div class="container">
+      <formGenerator
+      :items="itemsForm"
+      :entity="entityForm"
+      :nameButton="'Filtrar'"
+      @update="filter()">
+      Filtrar
+    </formGenerator>
+
      <CCard class="col-md-12">
       <CCardHeader class="text-success py-1">
         <strong>Timeline</strong>
       </CCardHeader>
       <CCardFooter>
-        <template v-for="subordinate in subordinates">
-          <div class="timeline-item" :date-is='new Date(subordinate.created_at).toLocaleDateString()+" "+new Date(subordinate.created_at).toLocaleTimeString()'>
-            <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
-            <h1>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h1>
-            <p v-html="subordinate.description"></p>
-          </div>
-        </template>
+        <paginate name="subordinates" :list="subordinates" :per="10" tag="tbody">
+          <template v-for="subordinate in paginated('subordinates')">
+            <div class="timeline-item" style="font-size: 12px" :date-is='new Date(subordinate.created_at).toLocaleDateString()+" "+new Date(subordinate.created_at).toLocaleTimeString()'>
+              <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
+              <h5>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h5>
+              <p style="font-size: 12px" v-html="subordinate.description"></p>
+            </div>
+          </template>
+        </paginate>
+          <paginate-links for="subordinates" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
       </CCardFooter>
     </CCard>
   
@@ -22,15 +33,26 @@
 <script>
 import axios from "axios";
 import VueNotifications from "vue-notifications";
+import formGenerator from "@/views/components/formGenerator.vue";
+import items from './timelines-filters-items';
 import VuePaginate from 'vue-paginate'
 import { mapGetters } from 'vuex'
 
 export default {
   name: "TimelinePage",
+  components: { formGenerator },
   data() {
     return {
       entity: "Timeline",
-      subordinates : []
+      subordinates : [],
+      itemsForm: items,
+      entityForm: {
+        date_from:  '',
+        date_to:  '',
+        subordinate:  '',
+      },
+      paginate : ['subordinates'],
+      users: [],
 
     };
   },
@@ -43,12 +65,32 @@ export default {
     ]),
   },
   mounted() {
+    
     this.getSubordinates();
+    this.getUsers();
   },
   methods: {
  
+     getUsers(){
+      axios.get("users")
+        .then(resp => {
+
+           let users = resp.data;
+            for (var i = 0; i < users.length; i++) {
+              this.users.push({
+                id : parseInt(users[i].id),
+                name: users[i].firstname +' '+users[i].lastname
+              });
+            }
+          this.itemsForm[0].campos[2].opciones = this.users;
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
     getSubordinates(){
-      axios({url: 'organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET' })
+      axios({url: 'organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET'})
         .then(resp => {
           this.subordinates = resp.data
           resolve(resp)
@@ -58,6 +100,18 @@ export default {
           //reject(err)
         });
     },
+    filter(){
+      const data = { ...this.entityForm}
+      axios.post('organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit, data)
+        .then(resp => {
+          this.subordinates = resp.data
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    }
   }
 };
 

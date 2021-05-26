@@ -14,7 +14,7 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Escritorio',
+        name: 'Organigrama',
         to: '/dashboard',
         icon: 'cil-speedometer',
         badge: {

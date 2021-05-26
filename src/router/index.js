@@ -64,7 +64,7 @@ function configRoutes () {
       children: [
         {
           path: 'dashboard',
-          name: 'Escritorio',
+          name: 'Organigrama',
           component: Dashboard
         },
         {

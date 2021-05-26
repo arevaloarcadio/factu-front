@@ -128,6 +128,13 @@ const items = {
     {
       "name": "Identificación",
       "campos": [
+       {  
+          "name": "cif",
+          "title": "DNI",
+          "validation": "required",
+          "type": "string",
+          "size": "col-md-4"
+        },
         {
           "name": "firstname",
           "title": "Nombre",
@@ -144,13 +151,7 @@ const items = {
           "type": "string",
           "size": "col-md-4"
         },
-        {
-          "name": "cif",
-          "title": "DNI",
-          "validation": "required",
-          "type": "string",
-          "size": "col-md-4"
-        },
+        
         {
           "name": "birthdate",
           "title": "Fecha Nacimiento",
@@ -199,7 +200,24 @@ const items = {
           "validation": "",
           "type": "text",
           "size": "col-md-4"
-        }
+        },  
+         {
+          "name": "status",
+          "title": "Estado",
+          "placeholder": "Estado",
+          "type": "select",
+          "size": "col-md-4",
+          "opciones": [
+            {
+              id : 'Activo',
+              name : 'Activo'
+            },
+            {
+              id : 'Inactivo',
+              name : 'Inactivo'
+            }
+          ]
+        },
       ]
     },
   ],
@@ -207,13 +225,20 @@ const items = {
     {
       "name": "Identificación",
       "campos": [
+       {  
+          "name": "cifCollapse",
+          "title": "DNI",
+          "validation": "required",
+          "type": "string",
+          "size": "col-md-4"
+        },
         {
           "name": "firstnameCollapse",
           "title": "Nombre",
           "placeholder": "Introduzca Nombre",
           "validation": "required|min:3",
           "type": "string",
-          "size": "col-md-6"
+          "size": "col-md-4"
         },
         {
           "name": "lastnameCollapse",
@@ -221,7 +246,7 @@ const items = {
           "placeholder": "Introduzca Apellidos",
           "validation": "required|min:3",
           "type": "string",
-          "size": "col-md-6"
+          "size": "col-md-4"
         }
       ]
     },

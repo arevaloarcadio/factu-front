@@ -39,6 +39,7 @@
               <td>{{item.firstname}}</td> 
               <td>{{item.lastname}}</td> 
               <td>{{item.email}}</td> 
+              <td>{{item.status}}</td> 
               <td slot="actions">
                 <router-link :to="{ name: 'customers.edit', params: { id: item.id } }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
@@ -109,6 +110,7 @@ export default {
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
         { key: "email",     label: "Correo electrónico", _classes: "text-center" },
+        { key: "status",    label: "Estado", _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',

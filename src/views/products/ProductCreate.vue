@@ -44,13 +44,11 @@ export default {
         customer_id: 0,
         product_type_id: 0,
         identifier: "",
+        price: "",
       },
     };
   },
   created() {
-    // this.getItems("v1/customers");
-		// this.getItems("product_types");
-		// this.getCustomers();
 		this.getProductTypes();
 	},
   computed: {
@@ -76,16 +74,6 @@ export default {
 			})
 			.catch(err => console.log(err));
     },
-		getCustomers() {
-			
-			axios
-        .get("v1/customers")
-        .then(res => {
-					this.customers = res.data;
-					this.setCustomers(this.customers);
-        })
-        .catch((err) => console.log(err));
-		},
 		getProductTypes() {
 			
 			axios
@@ -96,17 +84,6 @@ export default {
         })
         .catch((err) => console.log(err));
 		},
-		
-		
-		// setters
-    setCustomers(customers) {
-			const options = this.customers.map(c => {
-				return { id: c.id, name: `${c.firstname} ${c.lastname}` };
-			});
-
-      this.itemsForm[0].campos[0].opciones = options;
-			this.itemsForm = { ...this.itemsForm };
-    },
     setProductTypes(productTypes) {
 			this.itemsForm[0].campos[0].opciones = productTypes;
 			this.itemsForm = { ...this.itemsForm };

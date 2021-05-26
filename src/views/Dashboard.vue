@@ -21,7 +21,7 @@ export default {
                         },
                         data () {
                           return {
-                            entity: "Organización",
+                            entity: "Organigrama",
                             organization: [],
                             users: [],
                             unit_ids :[],

@@ -5,7 +5,7 @@
       <CCardHeader>
         <h5>
           {{ entity }}
-          <router-link :to="{ name: 'customers.create.relationships',params:{customerId:customer_id} }">
+          <router-link :to="{ name: 'customers.create.relationships',params:{customerId:customerId} }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               {{ newEntity }}
@@ -32,12 +32,15 @@
               </td>
             </tr>
                <tr v-for="item in paginated('items')">
-              <td>{{item.firstname}}</td> 
-              <td>{{item.lastname}}</td> 
+              <td>    
+                  <a :href="'#/customers/'+item.id+'/edit'">{{item.firstname +' '+item.lastname}}</a>
+                 
+    
+              </td>
               <td>{{item.email}}</td> 
               <td>{{item.pivot.description}}</td> 
               <td slot="actions">
-                <router-link :to="{ name: 'customers.edit.relationships', params:{customerId:customer_id,relationshipId:item.pivot.relationship_customer_id}, query: getQuery(item) }">
+                <router-link :to="{ name: 'customers.edit.relationships', params:{customerId:customerId,relationshipId:item.pivot.relationship_customer_id}, query: getQuery(item) }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
                 </router-link>
               </td>    
@@ -54,6 +57,7 @@
 
 import axios from "axios";
 import VueNotifications from "vue-notifications";
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 export default {
   props:['customer_id'],
@@ -61,6 +65,7 @@ export default {
   components: {},
   data() {
     return {
+      customerId : null,
       entity: "Relación",
       current_endpoint: 'v1/tasks',
       newEntity: "Nuevo Relación",
@@ -68,8 +73,7 @@ export default {
       items: [],
       paginate : ['items'],
       fields: [
-        { key: "firstname", label: "Nombre" },
-        { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
+        { key: "firstname_lastname", label: "Nombre y Apellido" },
         { key: "email",     label: "Correo electrónico", _classes: "text-center" },
         { key: "relationships",  label: "Relación", _classes: "text-center" },
         {
@@ -85,18 +89,28 @@ export default {
     };
   },
   created() {
+    this.customerId = this.customer_id;
     this.getRelationships();
   },
-  mounted() {},
+ watch: {
+    '$route.params.id': function (id) {
+      Swal.showLoading()
+      this.$emit("update")
+      this.customerId = id;
+      this.getRelationships();
+    }
+  },
   methods: {
     getRelationships() {
       
       axios
-        .get('v1/customers/'+this.customer_id+'/relationships')
+        .get('v1/customers/'+this.customerId+'/relationships')
         .then(resp => {
           this.items = resp.data;
+          Swal.close()
         })
         .catch(err => console.log(err));
+
     },
     getParams(item) {
       return { relationship_customer_id: item.pivot.relationship_customer_id, description: item.pivot.description };
@@ -122,4 +136,10 @@ export default {
 
 <style lang="scss" scoped>
 .btn--link { color: #FFF }
+</style>
+
+<style type="text/css">
+  a{
+    color: blue;
+  }
 </style>
