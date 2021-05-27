@@ -100,7 +100,6 @@ export default {
       current_endpoint: 'v1/tasks',
       newEntity: "Nueva Tarea",
       entityTable: "tasks",
-      items: [],
       paginate : ['items'],
       fields: [
         { key: "subject", label: "Tema",          _classes: "text-center" },

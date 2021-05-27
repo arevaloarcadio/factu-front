@@ -30,7 +30,9 @@ export default {
     }
   },
   mounted(){
-    this.getMyReminders();
+    if(this.$route.query.reminder){
+      this.getMyReminders();
+    }
   },
   methods:{
 

@@ -32,7 +32,7 @@
               </td>
             </tr>
             <tr v-for="item in paginated('items')">
-              <td>{{item.customer.firstname }} {{ item.customer.lastname }}</td> 
+              <td><a :href="'#/customers/'+item.id+'/edit'">{{item.customer.firstname +' '+item.customer.lastname}}</a></td> 
               <td>{{item.product_types.name }}</td> 
               <td>{{item.identifier}}</td> 
               <td slot="admin" slot-scope="{ item }" class="text-center">

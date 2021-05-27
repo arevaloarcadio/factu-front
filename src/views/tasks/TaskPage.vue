@@ -128,7 +128,7 @@ export default {
         if(customer == null){
           return '<span class="badge badge-primary">No tiene cliente actualmente</span>';
         }else{
-          return customer.firstname+' '+customer.lastname;
+          return  '<a href="#/customers/'+customer.id+'/edit">'+customer.firstname +' '+customer.lastname+'</a>'
         }
     },
     getTasks() {

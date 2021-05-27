@@ -34,9 +34,13 @@ const TaskPage = () => import('@/views/tasks/TaskPage')
 const TaskCreate = () => import('@/views/tasks/TaskCreate')
 const TaskEdit = () => import('@/views/tasks/TaskEdit')
 
-const ReminderPage = () => import('@/views/reminders/ReminderPage')
+const ProductTypeCreate = () => import('@/views/product_types/ProductTypeCreate')
+const ProductTypeEdit = () => import('@/views/product_types/ProductTypeEdit')
+const ProductTypePage = () => import('@/views/product_types/ProductTypePage')
+
 const ReminderCreate = () => import('@/views/reminders/ReminderCreate')
 const ReminderEdit = () => import('@/views/reminders/ReminderEdit')
+const ReminderPage = () => import('@/views/reminders/ReminderPage')
 
 const RelationshipCreate = () => import('@/views/relationships/RelationshipCreate')
 const RelationshipEdit = () => import('@/views/relationships/RelationshipEdit')
@@ -221,6 +225,31 @@ function configRoutes () {
           ]
         },
         {
+          path: 'product_types',
+          redirect: 'product_types',
+          component: { render(c) { return c('router-view') } },
+          children: [
+            {
+              path: '',
+              name: 'product_types.index',
+              meta: { label: 'Tipo de Producto' },
+              component: ProductTypePage
+            },
+            {
+              path: 'create',
+              name: 'product_types.create',
+              meta: { label: 'Crear Tipo de Producto' },
+              component: ProductTypeCreate
+            },
+            {
+              path: ':id/edit',
+              meta: { label: 'Editar Tipo de Producto' },
+              name: 'product_types.edit',
+              component: ProductTypeEdit
+            },
+          ]
+        },
+        {
           path: 'reminders',
           redirect: 'reminders',
           component: { render(c) { return c('router-view') } },
@@ -244,7 +273,7 @@ function configRoutes () {
               component: ReminderEdit
             },
           ]
-        },
+        }
       ]
     },
     {

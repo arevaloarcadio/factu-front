@@ -32,6 +32,12 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
+        name: 'Tipo de Productos',
+        to: '/product_types',
+        icon: 'cil-puzzle'
+      },
+      {
+        _name: 'CSidebarNavItem',
         name: 'Tareas',
         to: '/tasks',
         icon: 'cil-puzzle'

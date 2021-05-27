@@ -133,7 +133,7 @@ export default {
             if(response.data[0].unit){
               self.setUnit(response.data[0].unit_id)
             }
-            self.$router.push({path: '/#/dashboard'});
+            self.$router.push({path: '/#/dashboard', query : { reminder : true }});
           }
         })
         .catch(err => {

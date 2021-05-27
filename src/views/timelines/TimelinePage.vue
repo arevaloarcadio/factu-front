@@ -15,7 +15,7 @@
       <CCardFooter>
         <paginate name="subordinates" :list="subordinates" :per="10" tag="tbody">
           <template v-for="subordinate in paginated('subordinates')">
-            <div class="timeline-item" style="font-size: 12px" :date-is='new Date(subordinate.created_at).toLocaleDateString()+" "+new Date(subordinate.created_at).toLocaleTimeString()'>
+            <div class="timeline-item" style="font-size: 12px" :date-is='new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString()'>
               <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
               <h5>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h5>
               <p style="font-size: 12px" v-html="subordinate.description"></p>
@@ -26,7 +26,6 @@
       </CCardFooter>
     </CCard>
   
-    
   </div>
 </template>
 
@@ -105,12 +104,18 @@ export default {
       axios.post('organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit, data)
         .then(resp => {
           this.subordinates = resp.data
+          this.reset_page(this.paginate)
           resolve(resp)
         })
         .catch(err => {
           //commit('auth_error', err)
           //reject(err)
         });
+    },
+    reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
     }
   }
 };
