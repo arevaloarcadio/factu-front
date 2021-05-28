@@ -49,6 +49,8 @@ const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
 
 const TimelinePage = () => import('@/views/timelines/TimelinePage')
 
+const RevisionPage = () => import('@/views/revisions/RevisionPage')
+
 Vue.use(Router)
 
 export default new Router({
@@ -272,6 +274,19 @@ function configRoutes () {
               name: 'reminders.edit',
               component: ReminderEdit
             },
+          ]
+        },
+        {
+          path: 'revisions',
+          redirect: 'revisions',
+          component: { render(c) { return c('router-view') } },
+          children: [
+            {
+              path: '',
+              name: 'revisions.index',
+              meta: { label: 'Revisión' },
+              component: RevisionPage
+            }
           ]
         }
       ]

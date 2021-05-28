@@ -89,7 +89,7 @@ export default {
         });
     },
     getSubordinates(){
-      axios({url: 'organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET'})
+      axios({url: 'organizations/get_timelines/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET'})
         .then(resp => {
           this.subordinates = resp.data
           resolve(resp)
@@ -101,7 +101,7 @@ export default {
     },
     filter(){
       const data = { ...this.entityForm}
-      axios.post('organizations/subordinate/'+this.getUser.id+'/'+this.getUser.unit, data)
+      axios.post('organizations/get_timelines/'+this.getUser.id+'/'+this.getUser.unit, data)
         .then(resp => {
           this.subordinates = resp.data
           this.reset_page(this.paginate)

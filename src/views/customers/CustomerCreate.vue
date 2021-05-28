@@ -49,6 +49,7 @@ export default {
         cellphone: "",
         email: "",
         description: "",
+        revision_time: 90,
       },
     };
   },

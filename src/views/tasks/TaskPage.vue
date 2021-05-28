@@ -15,10 +15,24 @@
       </CCardHeader>
 
       <CCardBody class="py-2" v-if="items">
-
+        <div class="controls">
+          <div class="row">
+            <div class="col-md-1">
+               <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar</label>
+            </div>
+              <div class="col-md-2">
+                <select id="filter" v-model="filter" @change="getTasks()" class="form-control">
+                      <option value="Mis Tareas" >Mis Tareas</option>
+                      <option value="Suborbinados">Tareas de mis Suborbinado</option>
+                </select>
+              </div>
+            </div>
+         </div> 
+         <br> 
           <table class="table table-responsive-sm table-striped">
            <thead >
             <tr>
+              <th v-if="filter == 'Suborbinados'">Nombre del Suborbinado</th>
               <th v-for="field in fields" :class="{true : field._classes }">{{field.label}}</th>
             </tr>
           </thead>
@@ -33,6 +47,7 @@
               </td>
             </tr>
             <tr v-for="item in paginated('items')">
+              <td  v-if="filter == 'Suborbinados'" v-html="getResponsable(item.users)">{{item.subject}}</td> 
               <td>{{item.subject}}</td> 
               <td>{{item.description }}</td>
               <td v-html="has_customer(item.customer)"></td>  
@@ -90,6 +105,8 @@
 
 import axios from "axios";
 import VueNotifications from "vue-notifications";
+import { mapGetters } from 'vuex'
+
 
 export default {
   name: "TaskPage",
@@ -102,6 +119,8 @@ export default {
       entityTable: "tasks",
       items: [],
       paginate : ['items'],
+      subordinates: [],
+      filter : '',
       fields: [
         { key: "subject", label: "Tema",          _classes: "text-center" },
         { key: "description", label: "Descripción",          _classes: "text-center" },
@@ -120,9 +139,16 @@ export default {
     };
   },
   created() {
+    this.filter = 'Mis Tareas'; 
     this.getTasks();
+    this.getSubordinates();
+    
   },
-  mounted() {},
+  computed: {
+    ...mapGetters([
+        'getUser'
+    ]),
+  },
   methods: {
     has_customer  : function (customer) {
         if(customer == null){
@@ -132,38 +158,61 @@ export default {
         }
     },
     getTasks() {
-      
-      axios
-        .get(this.current_endpoint)
-        .then(resp => {
-          this.items = resp.data;
-        })
-        .catch(err => console.log(err));
-    },
-    updated() {
-      console.log(this.entityForm, "<----");
-    },
+      this.items = [];
 
-    page(url) {
-      axios({ url: url, method: "GET" })
-        .then((resp) => {
-          const t = this;
-          t.items = resp.data.users;
-          if (resp.data.users.next_page_url) {
-            t.nextUrl = resp.data.users.next_page_url;
-          } else {
-            t.nextUrl = "";
-          }
-          if (resp.data.users.prev_page_url) {
-            t.previousUrl = resp.data.users.prev_page_url;
-          } else {
-            t.previousUrl = "";
-          }
-          resolve(resp);
-        })
-        .catch((err) => {
-          reject(err);
+      if(this.filter == 'Suborbinados'){
+        
+        if (this.subordinates.length == 0) {
+          return;
+        }
+
+        const user_ids = this.subordinates.map(subordinate => {
+          console.log(subordinate)
+          return { id: subordinate.id };
         });
+
+        axios
+          .post(this.current_endpoint+'/subordinate',{user_ids : user_ids})
+          .then(resp => {
+            this.items = resp.data;
+            this.reset_page(this.paginate)
+          })
+          .catch(err => console.log(err));
+
+      }else{
+
+         axios
+          .get(this.current_endpoint)
+          .then(resp => {
+            this.items = resp.data;
+            this.reset_page(this.paginate)
+          })
+          .catch(err => console.log(err));
+      }
+    },
+    getResponsable (users){
+      for (var i = 0; i < users.length; i++) {
+        if(users[i].pivot.is_responsable){
+          return users[i].firstname +' '+users[i].lastname;
+        }
+      }
+      return users[0].firstname +' '+users[i].lastname;
+    },
+    getSubordinates(){
+      axios({url: 'organizations/subordinates/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET'})
+        .then(resp => {
+          this.subordinates = resp.data
+          resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
+     reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
     },
   },
   notifications: {

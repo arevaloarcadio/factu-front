@@ -109,6 +109,7 @@ const items = [
         "size": "col-md-4 col-md-offset-right-4"
       }
     ]
+
   },
   {
     "name": "Información adicional",
@@ -120,7 +121,15 @@ const items = [
         "validation": "",
         "type": "text",
         "size": "col-md-4"
-      }
+      },
+       {
+          "name": "revision_time",
+          "title": "Tiempo de revisión",
+          "placeholder": "Introduzca el tiempo de revisión",
+          "validation": "required",
+          "type": "number",
+          "size": "col-md-4"
+      }, 
     ]
   }
 ]

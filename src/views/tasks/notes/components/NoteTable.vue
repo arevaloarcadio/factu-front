@@ -97,7 +97,7 @@ export default {
     getFiles(files){
       console.log(files)
       for (var i = 0; i < files.length; i++) {
-         location.href = axios.defaults.baseURL+'v1/tasks/download/'+files[i].id
+         location.href = axios.defaults.baseURL+'/v1/tasks/download/'+files[i].id
       }
        
     }

@@ -270,7 +270,8 @@ export default {
         email: "",
         description: "",
         status : "",
-        image : ""
+        image : "",
+        revision_time : 90
       },
       entityFormAddressArr: [],
       entityFormAddress: {
@@ -440,6 +441,7 @@ export default {
         phone:       data.phone,
         cellphone:   data.cellphone,
         email:       data.email,
+        revision_time: data.revision_time,
         description: data.description,
         status:     data.status,
         image:     data.image,

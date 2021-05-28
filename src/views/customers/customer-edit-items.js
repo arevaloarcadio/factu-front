@@ -218,6 +218,14 @@ const items = {
             }
           ]
         },
+        {
+          "name": "revision_time",
+          "title": "Tiempo de revisión",
+          "placeholder": "Introduzca el tiempo de revisión",
+          "validation": "required",
+          "type": "number",
+          "size": "col-md-4"
+        },  
       ]
     },
   ],
