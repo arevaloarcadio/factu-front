@@ -71,7 +71,7 @@ export default {
   methods: {
  
      getUsers(){
-      axios.get("users")
+      axios.get('organizations/subordinates/'+this.getUser.id+'/'+this.getUser.unit)
         .then(resp => {
 
            let users = resp.data;

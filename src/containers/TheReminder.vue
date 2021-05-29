@@ -1,6 +1,7 @@
 <template>
 <CModal title="Recordatorios!" :show.sync="ReminderModal">
-      <CCard v-for="reminder in reminders">
+  <template v-for="reminder in reminders">
+      <CCard >
             <CCardHeader >
               <b>{{ reminder.description }}</b>
             </CCardHeader>
@@ -15,6 +16,7 @@
 
             </CCardFooter>
       </CCard>
+    </template>   
     </CModal>
 </template>
 

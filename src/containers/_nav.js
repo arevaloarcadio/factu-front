@@ -46,7 +46,7 @@ export default [
         _name: 'CSidebarNavItem',
         name: 'Recordatorio',
         to: '/reminders',
-        icon: 'cil-bullhorn'
+        icon: 'cil-puzzle'
       },
       {
         _name: 'CSidebarNavItem',
