@@ -8,7 +8,7 @@ const items = [
         placeholder: "Introduzca la relacion",
         validation: "",
         type: "date",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-6 col-md-offset-right-4",
       },
       {
         name: "date_to",
@@ -16,7 +16,7 @@ const items = [
         placeholder: "Introduzca la relacion",
         validation: "",
         type: "date",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-6 col-md-offset-right-4",
       },
       {
         name: "subordinate",
@@ -24,7 +24,7 @@ const items = [
         placeholder: "Introduzca la relacion",
         validation: "",
         type: "select",
-        size: "col-md-4 col-md-offset-right-4",
+        size: "col-md-12 col-md-offset-right-4",
         opciones : 
         [ 
           {

@@ -1,30 +1,38 @@
 <template>
-  <div class="container">
-      <formGenerator
-      :items="itemsForm"
-      :entity="entityForm"
-      :nameButton="'Filtrar'"
-      @update="filter()">
-      Filtrar
-    </formGenerator>
+  <div class="col-md-12">
+    <CRow class="col-md-12">
+      <CCol class="col-md-8">
+        <CCard>
+          <CCardHeader class="text-success py-1">
+            <strong>Timeline</strong>
+          </CCardHeader>
+          <CCardFooter>
+            <paginate name="subordinates" :list="subordinates" :per="10" tag="tbody" class="table-responsive">
+              <table class="table col-md-12">
+              <tr v-for="subordinate in paginated('subordinates')">
+                <td><img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px" class="float-left"></td>
+                 
+                <td><strong>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</strong></td>
 
-     <CCard class="col-md-12">
-      <CCardHeader class="text-success py-1">
-        <strong>Timeline</strong>
-      </CCardHeader>
-      <CCardFooter>
-        <paginate name="subordinates" :list="subordinates" :per="10" tag="tbody">
-          <template v-for="subordinate in paginated('subordinates')">
-            <div class="timeline-item" style="font-size: 12px" :date-is='new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString()'>
-              <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
-              <h5>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h5>
-              <p style="font-size: 12px" v-html="subordinate.description"></p>
-            </div>
-          </template>
-        </paginate>
-          <paginate-links for="subordinates" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
-      </CCardFooter>
-    </CCard>
+                <td><div v-html="subordinate.description"></div></td>
+                <td>{{ new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString() }}</td>
+              </tr>
+              </table>
+            </paginate>
+              <paginate-links for="subordinates" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+          </CCardFooter>
+        </CCard>
+      </CCol>
+      <CCol class="col-md-4">
+        <formGenerator
+          :items="itemsForm"
+          :entity="entityForm"
+          :nameButton="'Filtrar'"
+          @update="filter()">
+          Filtrar
+        </formGenerator>
+      </CCol>
+    </CRow>
   
   </div>
 </template>
