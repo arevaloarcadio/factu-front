@@ -9,7 +9,7 @@
             </h5>
            <br>
             <label for="file-input">
-                <img style="height:100px;width:100px;" title="Presione para cambiar foto de perfil" class="c-avatar-img" :src="'img/profiles/'+entityForm.image" alt="user@email.com">
+                <img style="height:100px;width:100px;" title="Presione para cambiar foto de perfil" class="c-avatar-img" :src="baseURL+'img/profiles/'+entityForm.image" alt="user@email.com">
             </label>
             <input type="file" @change="getPicture" style="display: none"  ref="picture"  id="file-input" name="file-input" accept="image/x-png,image/jpeg" />
            
@@ -118,6 +118,7 @@ export default {
   data() {
     return {
       userId: null,
+      baseURL :'',
       interactions: [],
       itemsForm: items.information,
       itemsSecurity: items.security,
@@ -141,7 +142,7 @@ export default {
   created() {
 
     this.userId = this.$route.params.id;
-
+    this.baseURL = axios.defaults.baseURL;
     this.getUser();
     this.getInteractions();
 
