@@ -45,7 +45,7 @@
             <CDropdownItem >
               <CIcon name="cil-task" />
                 <router-link class="a_href"
-                  :to="notification.link"
+                  :to="'/'+notification.link"
                   >{{notification.data}}
                 </router-link>
              

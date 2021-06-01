@@ -35,6 +35,24 @@ const items = [
         type: "text",
         size: "col-md-12",
       },
+      {
+        name: "status",
+        title: "Estado",
+        placeholder: "Introduzca el Estado",
+        validation: "required",
+        type: "select",
+        size: "col-md-12 col-md-offset-right-4",
+        opciones : [ 
+              {
+                id:'Abierta',
+                name: 'Abierta'
+              },
+              {
+                id:'Cerrada',
+                name: 'Cerrada'
+              }
+            ]
+          },
       /*{
         name: "customer_id",
         title: "Cliente",

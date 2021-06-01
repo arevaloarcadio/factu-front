@@ -6,29 +6,28 @@
       @update="createTask()">
       Crear Tarea
     </formGenerator>
- 
-
-   <!--<CCard class="col-md-12">
+    
+  <CCol class="col-md-12 col-xs-12"> 
+    <CCard class="col-md-12">
       <CCardHeader class="text-success py-1">
-        <strong>Agregar Cliente</strong> <small>(Opcional)</small>
+        <strong>Equipo</strong>
       </CCardHeader>
-      <CCardFooter>
-        <CRow>
+      <CCardBody>
+           <CRow>
           <CCol class="col-md-3">
-            <label for="user" class="strong"><strong>Clientes:</strong></label>
+            <label for="user" class="strong"><strong>Usuarios:</strong></label>
           </CCol>
           <CCol class="col-md-6">
-            <multiselect v-model="customer"  placeholder="Introduzca el cliente"  :options="customers.map(type => type.id)"
-                :custom-label="opt => customers.find(x => x.id == opt).firstname+' '+customers.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
-                id="customer" name="customer" :multiple="false" :hide-selected="true">
+            <multiselect v-model="selectedUsers" placeholder="Introduzca Nombre"  :options="users.map(type => type.id)"
+                :custom-label="opt => users.find(x => x.id == opt).firstname + ' '+ users.find(x => x.id == opt).lastname" :show-labels="false" :option-height="30" 
+                id="user" name="user" :multiple="true" :hide-selected="true">
             </multiselect>
           </CCol>
-          <CCol class="col-md-3">
-              <button @click="getSelecteUnit" class="btn btn-primary float-left">Añadir</button>
-          </CCol>
         </CRow>
-      </CCardFooter>
-    </CCard>-->
+
+      </CCardBody>
+    </CCard>
+  </CCol>
   </div>
 </template>
 
@@ -68,6 +67,8 @@ export default {
       product_types: [],
       customers: [],
       customer : null,
+      users: [],
+      selectedUsers:[],
       identifier: "",
 			itemsForm: items,
       entityForm: {
@@ -78,7 +79,8 @@ export default {
     };
   },
   created() {
-    this.getCustomers();
+    this.getUsers();
+    //this.getCustomers();
     this.customer_id = this.$route.params.customerId !== undefined ? this.$route.params.customerId : null
 
   },
@@ -87,6 +89,20 @@ export default {
   },
   methods: {
 
+    getUsers() {      
+      axios
+         .get(`users`)
+        .then(res => {
+          this.users = res.data;
+          for(var i in this.users){
+            if(this.users[i].id == this.getUser.id){
+                this.users.splice(i,1);
+                break;
+            }
+          }
+        })
+        .catch(err => console.log(err));
+    },
     getCustomer($event){
       console.log($event)
     },
@@ -94,7 +110,11 @@ export default {
     {
 			const HTTP_CREATED = 201;
 			
-			const data = { ...this.entityForm, customer_id : this.customer_id}
+			const data = { 
+        ...this.entityForm,
+        customer_id : this.customer_id,
+        user_ids : this.selectedUsers
+      }
     
     	axios
 			.post(this.current_endpoint, data)
@@ -104,7 +124,7 @@ export default {
               icon: 'success',
               title: 'Operación completada',
             })
-          this.$router.go(-1)
+          this.$router.push({ name: 'tasks.edit', params: { id: res.data.task.id } })
 				}
 			})
 			.catch(err => console.log(err));

@@ -50,7 +50,7 @@
                 Notas
                 <router-link :to="{ name: 'notes.create', params: { id: taskId } }">
                   <CButton class="float-right py-0 mr-1" color="success">
-                    <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>Nueva Tarea
+                    <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>Nueva Nota
                   </CButton>
                 </router-link>
               </h5>
@@ -104,7 +104,8 @@ export default {
         subject:  '',
         description:  '',
         date: '',
-        customer_id : ''
+        customer_id : '',
+        status : ''
       },
     };
   },
@@ -116,7 +117,7 @@ export default {
     this.getNotes();
     this.getOrganizations()
     this.getAttachedUsers();
-    this.getCustomers()
+    //this.getCustomers()
     // this.getProductTypes();
     // this.setSelectedProduct();
 	},
@@ -181,6 +182,7 @@ export default {
         description:  data.description,
         date:         data.date,
         customer_id:  data.customer,
+        status:       data.status,
       };
 
       this.entityForm = { ...this.entityForm };
@@ -200,7 +202,7 @@ export default {
               title: 'Operación completada',
             })
             // this.showSuccessMsg();
-            this.$router.go(-1)
+           // this.$router.go(-1)
           }
         })
         .catch(err => console.log(err));
@@ -217,7 +219,7 @@ export default {
               icon: 'success',
               title: 'Operación completada',
             })
-            this.$router.go(-1)
+            this.getAttachedUsers();
           }
         })
         .catch(err => console.log(err));

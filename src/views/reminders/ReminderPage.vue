@@ -110,7 +110,7 @@ export default {
         { key: "description", label: "Descripción",          _classes: "text-center" },
         { key: "date_when", label: "Fecha de aviso",          _classes: "text-center" },
         { key: "customer", label: "Cliente",          _classes: "text-center" },
-        { key: "status", label: "Estatus",          _classes: "text-center" },
+        { key: "status", label: "Status",          _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',

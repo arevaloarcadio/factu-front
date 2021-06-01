@@ -16,7 +16,7 @@
         <paginate name="subordinates" :list="subordinates" :per="10" tag="tbody">
           <template v-for="subordinate in paginated('subordinates')">
             <div class="timeline-item" style="font-size: 12px" :date-is='new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString()'>
-              <img :src="'/img/profiles/'+subordinate.user.image" style="width:  40px">
+              <img :src="baseURL+'/img/profiles/'+subordinate.user.image" style="width:  40px">
               <h5>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</h5>
               <p style="font-size: 12px" v-html="subordinate.description"></p>
             </div>
@@ -44,6 +44,7 @@ export default {
     return {
       entity: "Timeline",
       subordinates : [],
+      baseURL : '',
       itemsForm: items,
       entityForm: {
         date_from:  '',
@@ -64,7 +65,7 @@ export default {
     ]),
   },
   mounted() {
-    
+     this.baseURL = axios.defaults.baseURL;
     this.getSubordinates();
     this.getUsers();
   },

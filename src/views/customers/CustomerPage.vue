@@ -51,42 +51,9 @@
          
          <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
               
-        <!--<CDataTable
-          class="mb-0 table-outline"
-          hover
-          :items="items"
-          :fields="fields"
-          head-color="light"
-          no-sorting
-          v-if="items">
-          <td slot="actions" slot-scope="{ item }">
-            <router-link :to="{ name: 'customers.edit', params: { id: item.id } }">
-              <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
-            </router-link>
-          </td>
-        </CDataTable>-->
+   
       </CCardBody>
 
-      <!--<CCardFooter v-if="items">
-        <nav>
-          <ul class="pagination justify-content-center">
-            <li class="page-item">
-              <a
-                class="page-link"
-                @click="page(previousUrl)"
-                v-show="previousUrl"
-                tabindex="-1">
-                Anterior
-              </a>
-            </li>
-            <li class="page-item">
-              <a class="page-link" @click="page(nextUrl)" v-show="nextUrl">
-                Siguiente
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </CCardFooter>-->
     </CCard>
   </div>
 </template>
@@ -110,7 +77,7 @@ export default {
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
         { key: "email",     label: "Correo electrónico", _classes: "text-center" },
-        { key: "status",    label: "Estado", _classes: "text-center" },
+        { key: "status",    label: "Status", _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',
