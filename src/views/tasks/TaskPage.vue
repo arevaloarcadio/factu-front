@@ -17,8 +17,11 @@
       <CCardBody class="py-2" v-if="items">
         <div class="controls">
           <div class="row">
+            <div class="col-md-3">
+                  <input class="form-control"  size="50" placeholder="Buscar Tareas" v-model="filter_text" type="text"><span class="input-group-append"></span>
+              </div>
             <div class="col-md-1">
-               <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar</label>
+               <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por</label>
             </div>
               <div class="col-md-2">
                 <select id="filter" v-model="filter" @change="getTasks()" class="form-control">
@@ -26,8 +29,21 @@
                       <option value="Suborbinados">Tareas de mis Suborbinado</option>
                 </select>
               </div>
+            <div class="col-md-1">
+               <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por Status</label>
             </div>
-         </div> 
+              <div class="col-md-2">
+                <select id="filter" v-model="select_filter" @change="getTasks(true)" class="form-control">
+                      <option value="">Seleccione</option>
+                      <option value="Abierta" >Abierta</option>
+                      <option value="Cerrada">Cerrada</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              
+            </div> 
+          </div>   
          <br> 
           <table class="table table-responsive-sm table-striped">
            <thead >
@@ -36,7 +52,7 @@
               <th v-for="field in fields" :class="{true : field._classes }">{{field.label}}</th>
             </tr>
           </thead>
-          <paginate name="items" :list="items" :per="10" tag="tbody">
+          <paginate name="items" :list="filterTableItems" :per="10" tag="tbody">
             <tr v-if="items.length == 0">
               <td :colspan="fields.length">
                 <center>
@@ -52,6 +68,12 @@
               <td>{{item.description }}</td>
               <td v-html="has_customer(item.customer)"></td>  
               <td>{{item.date}}</td> 
+               <td v-if ="item.status == 'Cerrada'">
+                <span class="badge badge-danger">{{item.status}}</span>
+              </td> 
+              <td v-else>
+                <span class="badge badge-success">{{item.status}}</span>
+              </td> 
               <td>
                 <router-link :to="{ name: 'tasks.edit', params: { id: item.id } }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
@@ -121,11 +143,13 @@ export default {
       paginate : ['items'],
       subordinates: [],
       filter : '',
+      filter_text : '',
       fields: [
         { key: "subject", label: "Tema",          _classes: "text-center" },
         { key: "description", label: "Descripción",          _classes: "text-center" },
         { key: "customer", label: "Cliente",          _classes: "text-center" },
         { key: "date",    label: "Fecha", _classes: "text-center" },
+        { key: "status",    label: "Status", _classes: "text-center" },
         {
           key: 'actions',
           label: 'Acciones',
@@ -140,6 +164,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
+    this.select_filter = ''
     this.getTasks();
     this.getSubordinates();
     
@@ -148,16 +173,44 @@ export default {
     ...mapGetters([
         'getUser'
     ]),
+    filterTableItems: function(){
+      return this.items.filter(item  => {
+        return this.searchInObject(item, this.filter_text);
+      });
+    }
   },
   methods: {
+     searchInObject : function(object, input_text){
+      for (let key in object){
+        if(object[key] != null){
+
+          if (typeof object[key] === 'object') {
+
+            for (let key1 in object[key]){
+              if (object[key].hasOwnProperty(key1) &&  object[key][key1].toString().toLowerCase().includes(input_text)  ) {
+                return true;
+              }else{
+                this.reset_page(this.paginate);
+              }
+            }
+          }
+          if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {
+            return true;
+          }else{
+            this.reset_page(this.paginate);
+          }
+        }
+      }
+      return false;
+    },
     has_customer  : function (customer) {
         if(customer == null){
-          return '<span class="badge badge-primary">No tiene cliente actualmente</span>';
+          return '<span class="badge badge-primary">Sin cliente</span>';
         }else{
           return  '<a href="#/customers/'+customer.id+'/edit">'+customer.firstname +' '+customer.lastname+'</a>'
         }
     },
-    getTasks() {
+    getTasks(select = false) {
       this.items = [];
 
       if(this.filter == 'Suborbinados'){
@@ -167,12 +220,13 @@ export default {
         }
 
         const user_ids = this.subordinates.map(subordinate => {
-          console.log(subordinate)
           return { id: subordinate.id };
         });
 
+        let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/subordinate/'+this.select_filter :  this.current_endpoint+'/subordinate';
+         
         axios
-          .post(this.current_endpoint+'/subordinate',{user_ids : user_ids})
+          .post(url,{user_ids : user_ids})
           .then(resp => {
             this.items = resp.data;
             this.reset_page(this.paginate)
@@ -180,9 +234,11 @@ export default {
           .catch(err => console.log(err));
 
       }else{
-
+         
+         let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/'+this.select_filter :  this.current_endpoint;
+         
          axios
-          .get(this.current_endpoint)
+          .get(url)
           .then(resp => {
             this.items = resp.data;
             this.reset_page(this.paginate)

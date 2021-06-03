@@ -67,13 +67,21 @@ export default {
       ],
     };
   },
+  updated(){
+     this.reset_page(this.paginate)
+  },
   methods: {
     getParams(item) {
       return { customerId: item.customer_id, productId: item.id };
     },
     getQuery(item) {
       return { identifier: item.identifier, product_type: item.product_type_id };
-    }
+    },
+    reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
+    },
   }
 };
 </script>

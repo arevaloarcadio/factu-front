@@ -460,11 +460,20 @@ export default {
 
       let validate = this.ValidateSpanishID(this.entityForm.cif)
       
+
       if(!validate.valid){
 
         Toast.fire({
           icon: 'error',
           title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
+        })
+        return;
+      }
+
+      if(this.entityForm.phone == null && this.entityForm.cellphone == null){
+        Toast.fire({
+          icon: 'error',
+          title: 'Es requerido al menos un telefono',
         })
         return;
       }
@@ -478,8 +487,6 @@ export default {
               icon: 'success',
               title: 'Operación completada',
             })
-             this.$router.go(0);
-            // this.showSuccessMsg();
            }
          })
          .catch(err => {});
@@ -500,7 +507,7 @@ export default {
         .then(res => {
 
           if (res.status == HTTP_OK) {
-            this.$router.go(0);
+            //this.$router.go(0);
             Toast.fire({
               icon: 'success',
               title: 'Operación completada',

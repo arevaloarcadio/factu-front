@@ -88,7 +88,7 @@ const items = [
         "name": "phone",
         "title": "Teléfono",
         "placeholder": "Introduzca Teléfono",
-        "validation": "required",
+        "validation": 'required_if:cellphone,null|numeric',
         "type": "number",
         "size": "col-md-4"
       },
@@ -96,7 +96,7 @@ const items = [
         "name": "cellphone",
         "title": "Móvil",
         "placeholder": "Introduzca Móvil",
-        "validation": "required",
+        "validation": 'required_if:phone,null|numeric',
         "type": "number",
         "size": "col-md-4 col-md-offset-right-4"
       },

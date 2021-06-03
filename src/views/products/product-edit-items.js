@@ -48,10 +48,6 @@ const items = [
                 name: 'Anulado'
               },
               {
-                id:'En Vigor',
-                name: 'En Vigor'
-              },
-              {
                 id:'En Riesgo',
                 name: 'En Riesgo'
               },

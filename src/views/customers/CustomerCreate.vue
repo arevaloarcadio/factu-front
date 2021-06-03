@@ -88,12 +88,21 @@ export default {
       }
     },
     create() {
+
       let validate = this.ValidateSpanishID(this.entityForm.cif)
       
       if(!validate.valid){
         Toast.fire({
           icon: 'error',
           title: 'DNI no es valido',
+        })
+        return;
+      }
+      
+      if(this.entityForm.phone== null && this.entityForm.cellphone == null){
+        Toast.fire({
+          icon: 'error',
+          title: 'Es requerido al menos un telefono',
         })
         return;
       }

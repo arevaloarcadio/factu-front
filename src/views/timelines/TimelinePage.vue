@@ -52,6 +52,7 @@ export default {
     return {
       entity: "Timeline",
       subordinates : [],
+      baseURL : '',
       itemsForm: items,
       entityForm: {
         date_from:  '',
@@ -72,7 +73,7 @@ export default {
     ]),
   },
   mounted() {
-    
+     this.baseURL = axios.defaults.baseURL;
     this.getSubordinates();
     this.getUsers();
   },

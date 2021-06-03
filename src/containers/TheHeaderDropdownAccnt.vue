@@ -9,7 +9,7 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            :src="'img/profiles/'+user.image"
+            :src="baseURL+'/img/profiles/'+user.image"
             class="c-avatar-img "
           />
         </div>
@@ -58,11 +58,13 @@ export default {
   data () {
     return { 
       itemsCount: 42,
+      baseURL : null,
       task_items : 0,
       user : JSON.parse(user.getUser())
     }
   },
   created() {
+    this.baseURL = axios.defaults.baseURL;
     this.getItemsTasks();
   },
   methods: {
