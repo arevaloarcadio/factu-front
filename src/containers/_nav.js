@@ -26,12 +26,6 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Productos',
-        to: '/products',
-        icon: 'cil-puzzle'
-      },
-      {
-        _name: 'CSidebarNavItem',
         name: 'Tipo de Productos',
         to: '/product_types',
         icon: 'cil-puzzle'

@@ -9,7 +9,7 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            :src="baseURL+'/img/profiles/'+user.image"
+            :src="baseURL+'img/profiles/'+user.image"
             class="c-avatar-img "
           />
         </div>

@@ -68,7 +68,7 @@ export default {
       customerId : null,
       entity: "Relación",
       current_endpoint: 'v1/tasks',
-      newEntity: "Nuevo Relación",
+      newEntity: "Nueva Relación",
       entityTable: "relationships",
       items: [],
       paginate : ['items'],
