@@ -22,7 +22,7 @@
          <td slot="user">
            <img width="70px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE985qTr1hauge-1nv0jJbyFmZL5j_R9U-Ug&usqp=CAU"><br>
             <small>
-              <strong>{{ item.user.firstname + ' ' + item.user.lastname }}</strong>
+              <strong>{{ item.customer.firstname + ' ' + item.customer.lastname }}</strong>
             </small>
           </td>
         <td>{{item.description}}</td> 
