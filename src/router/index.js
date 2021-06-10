@@ -51,6 +51,8 @@ const TimelinePage = () => import('@/views/timelines/TimelinePage')
 
 const RevisionPage = () => import('@/views/revisions/RevisionPage')
 
+const FileAreaCreate = () => import('@/views/customers/files_area/FileAreaCreate')
+
 Vue.use(Router)
 
 export default new Router({
@@ -286,6 +288,19 @@ function configRoutes () {
               name: 'revisions.index',
               meta: { label: 'Revisión' },
               component: RevisionPage
+            }
+          ]
+        },
+        {
+          path: 'files_area',
+          redirect: 'files_area',
+          component: { render(c) { return c('router-view') } },
+          children: [
+            {
+              path: ':customerId/create',
+              name: 'files_area.create',
+              meta: { label: 'Crear Archivo' },
+              component: FileAreaCreate
             }
           ]
         }

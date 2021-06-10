@@ -117,6 +117,12 @@ export default {
       nextUrl: "",
     };
   },
+  'customer_id': function (id) {
+      Swal.showLoading()
+      this.$emit("update")
+      this.customer_id = id;
+      this.reset_page(this.paginate);
+    },
   methods: {
     has_customer  : function (customer) {
         if(customer == null){
@@ -125,7 +131,11 @@ export default {
           return customer.firstname+' '+customer.lastname;
         }
     },
-    
+     reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
+    },
   },
   notifications: {
     showSuccessMsg: {

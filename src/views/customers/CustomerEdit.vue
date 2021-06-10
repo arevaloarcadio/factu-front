@@ -171,6 +171,24 @@
           <RelationshipsTable v-bind:customer_id="customerId" @update="changeParam()" ref="RelationshipsTable"></RelationshipsTable>
         </div>
 
+
+         <CCard class="col-sm-12 col-md-12">
+        <CCardHeader>
+          <h5>
+            Area de Archivos
+            <router-link :to="{ name: 'files_area.create', params: { customerId: customerId } }">
+            <CButton class="float-right py-0 mr-1" color="success">
+              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+              Nuevo Archivo
+            </CButton>
+            </router-link>
+          </h5>
+        </CCardHeader>
+
+        <CCardBody class="py-2">
+           <FileAreaTable v-bind:items="file_areas" v-bind:customer_id="customerId" @update="changeParam()" ref="FileAreaTable"></FileAreaTable>
+        </CCardBody>
+      </CCard>
     </CRow>
 
 
@@ -200,6 +218,7 @@ import items from "./customer-edit-items";
 import InteractionTable from "@/views/interactions/components/InteractionTable.vue";
 import TaskTable from "@/views/tasks/components/TaskTable.vue";
 import RelationshipsTable from "@/views/relationships/components/RelationshipsTable.vue";
+import FileAreaTable from "@/views/customers/files_area/components/FileAreaTable.vue";
 import { cilArrowRight,cilArrowBottom } from '@coreui/icons'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import Croppr from 'croppr';
@@ -229,7 +248,8 @@ export default {
     ProductTable,
     InteractionTable,
     TaskTable,
-    RelationshipsTable
+    RelationshipsTable,
+    FileAreaTable
   },
   data() {
     return {
@@ -251,6 +271,7 @@ export default {
       tasks : [],
       products: [],
       unit_ids : [],
+      file_areas : [],
       upload_profile :{
         file_picture : null,
         picture : null,
@@ -310,7 +331,10 @@ export default {
         this.addressesByCustomerId(),
         this.countries(),
       ]).catch(err => console.log(err));
-      this.$refs.TaskTable.getTasks()
+
+      //this.$refs.TaskTable.getTasks()
+      this.$refs.TaskTable.reset_page(this.$refs.TaskTable.paginate)
+
       //this.$refs.TaskTable.getTasks();
     },
     validateDNI($event){
@@ -353,6 +377,7 @@ export default {
         this.getProducts();
         this.getInteractions();
         this.getAttachedUsers();
+        this.getFileAreas()
       }).catch(err => {
         console.log(err)
         this.$router.go(-1)
@@ -409,6 +434,14 @@ export default {
         .get(`v1/customers/${this.customerId}/users`)
         .then(res => {
           this.attachedUsers = res.data
+        })
+        .catch(err => console.log(err));
+    },
+    getFileAreas() {
+      axios
+        .get(`v1/customers/${this.customerId}/file`)
+        .then(res => {
+          this.file_areas = res.data
         })
         .catch(err => console.log(err));
     },
