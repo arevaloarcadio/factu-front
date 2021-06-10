@@ -39,6 +39,7 @@
               <td>{{item.firstname}}</td> 
               <td>{{item.lastname}}</td> 
               <td>{{item.email}}</td> 
+              <td>{{item.unit.name}}</td> 
               <td>{{item.status}}</td> 
               <td slot="actions">
                 <router-link :to="{ name: 'customers.edit', params: { id: item.id } }">
@@ -77,6 +78,7 @@ export default {
         { key: "firstname", label: "Nombre" },
         { key: "lastname",  label: "Apellidos",          _classes: "text-center" },
         { key: "email",     label: "Correo electrónico", _classes: "text-center" },
+        { key: "unit",     label: "Empresa", _classes: "text-center" },
         { key: "status",    label: "Status", _classes: "text-center" },
         {
           key: 'actions',
@@ -98,7 +100,8 @@ export default {
     }
   },
   mounted() {
-    this.getCustomers();
+    //this.getCustomers();
+    this.getCustomersUnits();
   },
   methods: {
     reset_page : function (paginate){
@@ -122,6 +125,15 @@ export default {
 
       axios
         .get('v1/customers')
+        .then(res => {
+          this.items = res.data;;
+        })
+        .catch(err => console.log);
+    },
+    getCustomersUnits() {
+
+      axios
+        .get('v1/customers/all_units')
         .then(res => {
           this.items = res.data;;
         })
