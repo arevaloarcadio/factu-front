@@ -235,7 +235,7 @@ export default {
 
       }else{
          
-         let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/'+this.select_filter :  this.current_endpoint;
+         let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/'+this.select_filter+'/status' :  this.current_endpoint;
          
          axios
           .get(url)
