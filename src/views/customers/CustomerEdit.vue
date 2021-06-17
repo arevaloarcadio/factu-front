@@ -398,6 +398,7 @@ export default {
       axios
         .get('v1/tasks/'+this.customerId+'/customer')
         .then(resp => {
+          console.log(resp)
           this.tasks = resp.data;
         })
         .catch(err => console.log(err));

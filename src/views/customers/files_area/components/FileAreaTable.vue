@@ -74,7 +74,7 @@ export default {
       return { identifier: item.identifier, product_type: item.product_type_id };
     },
     getFile(file){
-         location.href = axios.defaults.baseURL+'/v1/customers/file/download/'+file
+         location.href = axios.defaults.baseURL+'v1/customers/file/download/'+file
       
     }
   }

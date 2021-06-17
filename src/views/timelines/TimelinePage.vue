@@ -15,7 +15,8 @@
                 <td><strong>{{subordinate.user.firstname+' '+subordinate.user.lastname}}</strong></td>
 
                 <td><div v-html="subordinate.description"></div></td>
-                <td>{{ new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString() }}</td>
+                <!--<td>{{ new Date(new Date(subordinate.created_at).setDate(new Date(subordinate.created_at).getDate() + 1)).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString() }}</td>-->
+                <td>{{ new Date(subordinate.created_at).toLocaleDateString() +" "+new Date(subordinate.created_at).toLocaleTimeString() }}</td>
               </tr>
               </table>
             </paginate>
@@ -84,6 +85,9 @@ export default {
         .then(resp => {
 
            let users = resp.data;
+           
+           this.users.push({id:'',name:'Seleccione'});
+            
             for (var i = 0; i < users.length; i++) {
               this.users.push({
                 id : parseInt(users[i].id),
