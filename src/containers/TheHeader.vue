@@ -40,6 +40,11 @@
             <CBadge color="danger" class="ml-auto">{{total}}</CBadge>
             </CHeaderNavLink>
           </template>
+          <template v-if="total == 0">
+            <CDropdownItem >
+             No hay notificaciones nuevas
+            </CDropdownItem>
+          </template>
           <template v-for="(notification,key) in notifications">
             <CDropdownDivider v-if="key!=0"></CDropdownDivider>
             <CDropdownItem >
