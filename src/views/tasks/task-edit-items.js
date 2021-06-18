@@ -53,15 +53,12 @@ const items = [
               }
             ]
           },
-      /*{
-        name: "customer_id",
+      {
+        name: "customer",
         title: "Cliente",
-        placeholder: "Introduzca el cliente",
-        validation: "nullable",
-        type: "select",
+        type: "badge",
         size: "col-md-12",
-        opciones: [],
-      },*/
+      },
     ],
   }
 ]

@@ -135,7 +135,7 @@ export default {
       for(let pag in paginate){
         paginate[pag].page = 0;
       }
-    },
+    }
   },
   notifications: {
     showSuccessMsg: {

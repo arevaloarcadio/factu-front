@@ -134,19 +134,14 @@ export default {
         this.setTaskInformation(res.data);
       }).catch(err => console.log(err));
     },
-    getCustomers() {
+    getCustomer(customer) {
       
       axios
-        .get("v1/customers")
+        .get("v1/customers/"+customer)
         .then(res => {
-          let customers = res.data;
-          for (var i = 0; i < customers.length; i++) {
-            this.customers.push({
-              id : parseInt(customers[i].id),
-              name: customers[i].firstname +' '+customers[i].lastname
-            });
-          }
-          this.setCustomer();
+           
+           this.entityForm.customer = res.data.firstname+' '+res.data.lastname;
+          
         })
         .catch((err) => console.log(err));
     },
@@ -176,14 +171,19 @@ export default {
     {
       let date = new Date(data.date)
 
-
       this.entityForm = {
         subject:      data.subject,
         description:  data.description,
         date:         data.date,
-        customer_id:  data.customer,
         status:       data.status,
       };
+      
+      if(data.customer){
+        this.getCustomer(data.customer); 
+      }else{
+         this.entityForm.customer = 'Sin cliente'
+      }
+      
 
       this.entityForm = { ...this.entityForm };
     },

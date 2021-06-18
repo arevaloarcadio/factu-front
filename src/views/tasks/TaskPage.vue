@@ -17,7 +17,7 @@
       <CCardBody class="py-2" v-if="items">
         <div class="controls">
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                   <input class="form-control"  size="50" placeholder="Buscar Tareas" v-model="filter_text" type="text"><span class="input-group-append"></span>
               </div>
             <div class="col-md-1">
@@ -39,6 +39,18 @@
                       <option value="Cerrada">Cerrada</option>
                 </select>
               </div>
+
+              <div  v-if="filter == 'Suborbinados'" class="col-md-1">
+                 <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por Suborbinado</label>
+              </div>
+                <div  v-if="filter == 'Suborbinados'" class="col-md-2">
+                  <select id="filter" v-model="select_filter_subordinate" @change="getTasks(true)" class="form-control">
+                        <option value="">Seleccione</option>
+                        <option v-for="subordinate in subordinates" :value="subordinate.id" >{{subordinate.firstname+' '+subordinate.lastname}}</option>
+                  </select>
+                </div>
+         
+
             </div>
             <div class="row">
               
@@ -142,6 +154,7 @@ export default {
       items: [],
       paginate : ['items'],
       subordinates: [],
+      select_filter_subordinate:'',
       filter : '',
       filter_text : '',
       fields: [
@@ -164,7 +177,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
-    this.select_filter = ''
+    this.select_filter = 'Abierta'
     this.getTasks();
     this.getSubordinates();
     
@@ -218,10 +231,15 @@ export default {
         if (this.subordinates.length == 0) {
           return;
         }
+        let user_ids;
 
-        const user_ids = this.subordinates.map(subordinate => {
-          return { id: subordinate.id };
-        });
+        if (this.select_filter_subordinate != '') {
+           user_ids = [this.select_filter_subordinate];
+        }else{
+           user_ids = this.subordinates.map(subordinate => {
+            return { id: subordinate.id };
+          });
+        }
 
         let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/subordinate/'+this.select_filter :  this.current_endpoint+'/subordinate';
          

@@ -31,6 +31,11 @@
                               :id="campo.name"
                               v-model="entity[campo.name]">
                             </template>
+                            
+                            <template v-if="campo.type == 'badge'" >
+                              <br>
+                              <span class="badge badge-primary" style="margin-left: 3%;">{{entity[campo.name]}}</span>
+                            </template>
 
                             <template v-if="campo.type == 'string'" >
                               <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">

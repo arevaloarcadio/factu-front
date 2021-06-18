@@ -186,7 +186,7 @@
         </CCardHeader>
 
         <CCardBody class="py-2">
-           <FileAreaTable v-bind:items="file_areas" v-bind:customer_id="customerId" @update="changeParam()" ref="FileAreaTable"></FileAreaTable>
+           <FileAreaTable v-bind:items="file_areas" v-bind:customer_id="customerId" ref="FileAreaTable"></FileAreaTable>
         </CCardBody>
       </CCard>
     </CRow>
@@ -334,12 +334,14 @@ export default {
 
       //this.$refs.TaskTable.getTasks()
       this.$refs.TaskTable.reset_page(this.$refs.TaskTable.paginate)
+      this.$refs.FileAreaTable.reset_page(this.$refs.FileAreaTable.paginate)
+      
 
       //this.$refs.TaskTable.getTasks();
     },
     validateDNI($event){
       if($event.name == "cif"){
-
+        this.entityForm.cif = this.entityForm.cif.toUpperCase();
         let validate = this.ValidateSpanishID(this.entityForm.cif)
       
         if(!validate.valid){
@@ -351,7 +353,7 @@ export default {
         }
 
         axios
-        .post(`v1/customers/find_by_dni`, {cif : $event.name})
+        .post(`v1/customers/find_by_dni`, {cif : this.entityForm.cif})
         .then(res => {
           if(res.data.length > 0){
              Toast.fire({
@@ -491,10 +493,9 @@ export default {
       this.entityForm = { ...this.entityForm };
     },
     updated() {
-
+      this.entityForm.cif = this.entityForm.cif.toUpperCase();
       let validate = this.ValidateSpanishID(this.entityForm.cif)
       
-
       if(!validate.valid){
 
         Toast.fire({

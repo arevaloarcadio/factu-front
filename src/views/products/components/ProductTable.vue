@@ -11,7 +11,6 @@
                   <option value="Activo" selected="true">Activo</option>
                   <option value="No Activo">No Activo</option>
                   <option value="Anulado">Anulado</option>
-                  <option value="En Vigor">En Vigor</option>
                   <option value="En Riesgo">En Riesgo</option>
                   <option value="Finalizado">Finalizado</option>
             </select>

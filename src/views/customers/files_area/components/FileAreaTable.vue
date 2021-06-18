@@ -66,6 +66,8 @@ export default {
   created(){
     console.log(this.items)
   },
+  
+ 
   methods: {
     getParams(item) {
       return { customerId: item.customer_id, productId: item.id };
@@ -76,6 +78,11 @@ export default {
     getFile(file){
          location.href = axios.defaults.baseURL+'v1/customers/file/download/'+file
       
+    },
+    reset_page : function (paginate){
+      for(let pag in paginate){
+        paginate[pag].page = 0;
+      }
     }
   }
 };
