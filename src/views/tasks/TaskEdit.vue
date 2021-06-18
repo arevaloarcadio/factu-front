@@ -94,6 +94,7 @@ export default {
 			itemsForm: items,
       current_endpoint: 'v1/tasks',
       taskId: null,
+      customer : null,
       selectedUsers: [],
       attachedUsers: [],
       unit_ids : [],
@@ -134,16 +135,33 @@ export default {
         this.setTaskInformation(res.data);
       }).catch(err => console.log(err));
     },
-    getCustomer(customer) {
-      
-      axios
-        .get("v1/customers/"+customer)
+    getCustomer(data) {
+      if( data.customer != null){
+        axios
+        .get("v1/customers/"+data.customer)
         .then(res => {
            
-           this.entityForm.customer = res.data.firstname+' '+res.data.lastname;
-          
+          this.entityForm = {
+            subject:      data.subject,
+            description:  data.description,
+            date:         data.date,
+            status:       data.status,
+            customer :    res.data.firstname+' '+res.data.lastname
+          };
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err));   
+      }else{
+        this.entityForm = {
+            subject:      data.subject,
+            description:  data.description,
+            date:         data.date,
+            status:       data.status,
+            customer :    'Sin cliente'
+          }; 
+      }
+      
+
+  this.entityForm = { ...this.entityForm };
     },
     setCustomer() {
       this.itemsForm[0].campos[3].opciones = this.customers;
@@ -170,22 +188,7 @@ export default {
     setTaskInformation(data)
     {
       let date = new Date(data.date)
-
-      this.entityForm = {
-        subject:      data.subject,
-        description:  data.description,
-        date:         data.date,
-        status:       data.status,
-      };
-      
-      if(data.customer){
-        this.getCustomer(data.customer); 
-      }else{
-         this.entityForm.customer = 'Sin cliente'
-      }
-      
-
-      this.entityForm = { ...this.entityForm };
+      this.getCustomer(data)
     },
 
     editTask()
