@@ -47,7 +47,7 @@
           </template>
           <template v-for="(notification,key) in notifications">
             <CDropdownDivider v-if="key!=0"></CDropdownDivider>
-            <CDropdownItem >
+            <CDropdownItem @click="readAt(notification)" >
               <CIcon name="cil-task" />
                 <router-link class="a_href"
                   :to="'/'+notification.link"
@@ -182,6 +182,16 @@ export default {
           t.notifications = resp.data.data
           t.total = resp.data.total
           resolve(resp)
+        })
+        .catch(err => {
+          //commit('auth_error', err)
+          //reject(err)
+        });
+    },
+    readAt(notification){
+      this.$http({url: 'v1/users/read_at',  method: 'POST' , data :{ ...notification} })
+        .then(resp => {
+          this.getMyNotifications();
         })
         .catch(err => {
           //commit('auth_error', err)
