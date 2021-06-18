@@ -98,7 +98,7 @@ localize({
 ///////////////////////////////////////////////////////////
 
 
-new Vue({
+const app = new Vue({
   el: '#app',
   router,
   store,
@@ -106,5 +106,17 @@ new Vue({
   template: '<App/>',
   components: {
     App
+  },
+  data: {
+    key: null,
+  },
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.reuse === false)) {
+    app.key = to.path
+  } else {
+    app.key = null
   }
+  next()
 })

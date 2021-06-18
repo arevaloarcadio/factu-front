@@ -322,7 +322,7 @@ export default {
   },
   methods: {
     changeParam(){
-      this.customerId = this.$route.params.id;
+     /* this.customerId = this.$route.params.id;
     
       this.getCustomerById();
 
@@ -337,7 +337,7 @@ export default {
       this.$refs.FileAreaTable.reset_page(this.$refs.FileAreaTable.paginate)
       
 
-      //this.$refs.TaskTable.getTasks();
+      //this.$refs.TaskTable.getTasks();*/
     },
     validateDNI($event){
       if($event.name == "cif"){

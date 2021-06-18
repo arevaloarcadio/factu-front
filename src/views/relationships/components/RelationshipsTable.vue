@@ -93,12 +93,12 @@ export default {
     this.getRelationships();
   },
  watch: {
-    '$route.params.id': function (id) {
+    /*'$route.params.id': function (id) {
       Swal.showLoading()
       this.$emit("update")
       this.customerId = id;
       this.getRelationships();
-    }
+    }*/
   },
   methods: {
     getRelationships() {

@@ -126,7 +126,8 @@ function configRoutes () {
               path: ':id/edit',
               meta: { label: 'Editar Cliente' },
               name: 'customers.edit',
-              component: CustomerEdit
+              component: CustomerEdit,
+              meta: { reuse: false },
             },
             {
               path: ':id/products/create',
@@ -206,7 +207,8 @@ function configRoutes () {
               path: ':id/edit',
               meta: { label: 'Editar Tarea' },
               name: 'tasks.edit',
-              component: TaskEdit
+              component: TaskEdit ,
+              meta: { reuse: false },
             },
             {
               path: ':id/notes/create',
