@@ -19,6 +19,7 @@
                 </td>
               </tr>
             <tr v-for="item in paginated('items')">
+               <td>{{item.user.firstname+' '+item.user.lastname}}</td> 
               <td>{{item.type}}</td> 
               <td>{{item.description }}</td> 
               <td>{{new Date(item.created_at).toLocaleString()  }}</td> 
@@ -54,6 +55,7 @@ export default {
       paginate : ['items'],
       entityTable: "products",
       tableFields: [
+        { key: "user",        label: "Usuario",        _classes: "text-center" },
         { key: "type",        label: "Tipo",        _classes: "text-center" },
         { key: "description", label: "Descripción", _classes: "text-center" },
         { key: "description", label: "Fecha", _classes: "text-center" },
