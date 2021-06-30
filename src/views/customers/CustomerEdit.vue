@@ -1,5 +1,22 @@
 <template>
   <div>
+
+
+      <CModal title="Subir foto de perfil" :show.sync="upload_profile.pictureModal">
+        <div id="editProfile">
+        </div> 
+        <center>
+          <hr>
+          <h3>Previsualizar</h3>
+          <canvas id="preview">
+          </canvas>
+        </center>
+       <template #footer>
+        <CButton @click="pictureModal = false" color="danger">Cerrar</CButton>
+        <CButton color="primary" @click="uploadImage()">Subir Foto</CButton>
+      </template>
+     </CModal>
+
     <CCard  class="col-sm-12 col-md-12">
         <CCardHeader>
           <center>
@@ -192,20 +209,6 @@
     </CRow>
 
 
-      <CModal title="Subir foto de perfil" :show.sync="upload_profile.pictureModal">
-        <div id="editProfile">
-        </div> 
-        <center>
-          <hr>
-          <h3>Previsualizar</h3>
-          <canvas id="preview">
-          </canvas>
-        </center>
-       <template #footer>
-        <CButton @click="pictureModal = false" color="danger">Cerrar</CButton>
-        <CButton color="primary" @click="uploadImage()">Subir Foto</CButton>
-      </template>
-     </CModal>
   </div>
 </template>
 
@@ -965,7 +968,7 @@ export default {
 canvas{
   vertical-align: middle;
   max-width: 100%;
-  height: 300px
+  height: 250px
 }
   .croppr-container * {
   user-select: none;
@@ -979,7 +982,7 @@ canvas{
 
 .croppr-container img {
   vertical-align: middle;
-  max-width: 100%;
+  max-width: %;
   height: 300px
 }
 
