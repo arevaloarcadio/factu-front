@@ -40,7 +40,7 @@
                 </select>
               </div>
 
-              <div  v-if="filter == 'Suborbinados'" class="col-md-1">
+              <!--<div  v-if="filter == 'Suborbinados'" class="col-md-1">
                  <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por Suborbinado</label>
               </div>
                 <div  v-if="filter == 'Suborbinados'" class="col-md-2">
@@ -48,7 +48,7 @@
                         <option value="">Seleccione</option>
                         <option v-for="subordinate in subordinates" :value="subordinate.id" >{{subordinate.firstname+' '+subordinate.lastname}}</option>
                   </select>
-                </div>
+                </div>-->
          
 
             </div>
@@ -60,7 +60,7 @@
           <table class="table table-responsive-sm table-striped">
            <thead >
             <tr>
-              <th v-if="filter == 'Suborbinados'">Nombre del Suborbinado</th>
+              <th v-if="filter == 'Suborbinados'">Nombres de los Suborbinados</th>
               <th v-for="field in fields" :class="{true : field._classes }">{{field.label}}</th>
             </tr>
           </thead>
@@ -75,7 +75,7 @@
               </td>
             </tr>
             <tr v-for="item in paginated('items')">
-              <td  v-if="filter == 'Suborbinados'" v-html="getResponsable(item.users)">{{item.subject}}</td> 
+              <td  v-if="filter == 'Suborbinados'" >{{item.subordinate}}</td> 
               <td>{{item.subject}}</td> 
               <td>{{item.description }}</td>
               <td v-html="has_customer(item.customer)"></td>  
@@ -177,7 +177,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
-    this.select_filter = 'Abierta'
+    this.select_filter = ''
     this.getTasks(true);
     this.getSubordinates();
     
@@ -246,19 +246,42 @@ export default {
         axios
           .post(url,{user_ids : user_ids})
           .then(resp => {
-            this.items = resp.data;
+
+            if(this.filter == 'Suborbinados'){ 
+             this.items = resp.data.filter((thing, index) => {
+              const _thing = JSON.stringify(thing);
+              return index ===  resp.data.findIndex(obj => {
+                return JSON.stringify(obj) === _thing;
+              });
+            });
+            
+            
+              this.items.forEach((data, index) => {
+                let subordinate = ''
+                data.users.forEach((data) => {
+                  if (this.getUser.id != data.id) {
+                    subordinate += data.firstname+' '+data.lastname+','
+                  }
+                })
+                this.items[index].subordinate = subordinate.substr(0,subordinate.length-1)
+              });
+            }else{
+              this.items = resp.data
+            }
+            
             this.reset_page(this.paginate)
           })
           .catch(err => console.log(err));
 
       }else{
-         
+        
          let url =  select == true && this.select_filter != '' ? this.current_endpoint+'/'+this.select_filter+'/status' :  this.current_endpoint;
-         
+        
          axios
           .get(url)
           .then(resp => {
             this.items = resp.data;
+            console.log(resp.data)
             this.reset_page(this.paginate)
           })
           .catch(err => console.log(err));

@@ -110,6 +110,7 @@ export default {
       }
     },
      searchInObject : function(object, input_text){
+      console.log(object)
       for (let key in object){
         if(object[key] != null){
           if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {

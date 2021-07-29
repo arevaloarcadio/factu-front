@@ -23,6 +23,7 @@
 import OrgChart from '@balkangraph/orgchart.js'
 import Multiselect from 'vue-multiselect'
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 
 export default {
 
@@ -98,7 +99,7 @@ export default {
 		this.editForm = function () {
             this.nodeId = null;
         };
-
+        var self = this
         this.editForm.prototype.init = function (obj) {
             var that = this;
             this.obj = obj;
@@ -117,6 +118,7 @@ export default {
         };
 
         this.editForm.prototype.show = function (nodeId) {
+        	if(self.getUser.admin){
         	var that = this
         		this.hide();
         	that.nodeId = nodeId
@@ -124,6 +126,7 @@ export default {
             var left = document.body.offsetWidth / 2 - 150;
             this.editForm.style.display = "block";
             this.editForm.style.left = left + "px";
+            }
         };
 
         this.editForm.prototype.hide = function (showldUpdateTheNode) {
@@ -144,7 +147,10 @@ export default {
 
 			});
 			return this.org
-		}
+		},
+    	 ...mapGetters([
+        'getUser'
+	    ]),
 	}
 }
 </script>

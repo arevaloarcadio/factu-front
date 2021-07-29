@@ -73,6 +73,8 @@ import formGenerator from "@/views/components/formGenerator.vue";
 import items from './task-edit-items';
 import NoteTable from "@/views/tasks/notes/components/NoteTable.vue";
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import { mapGetters } from 'vuex'
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -114,14 +116,19 @@ export default {
   created()
   {
     this.taskId = this.$route.params.id;
+
     this.getTaskById();
     this.getNotes();
     this.getOrganizations()
     this.getAttachedUsers();
+    
     //this.getCustomers()
     // this.getProductTypes();
     // this.setSelectedProduct();
 	},
+  mounted(){
+    this.getTaskStatusByUser()
+  },
 
   methods: {
     customLabel ({ firstname, lastname }) {
@@ -135,33 +142,39 @@ export default {
         this.setTaskInformation(res.data);
       }).catch(err => console.log(err));
     },
+    getTaskStatusByUser()
+    {
+      axios.get(`${this.current_endpoint}/status/${this.getUser.id}/${this.taskId}`)
+      .then(res => {
+         this.entityForm.status = res.data.status
+      }).catch(err => console.log(err));
+    },
     getCustomer(data) {
       if( data.customer != null){
         axios
         .get("v1/customers/"+data.customer)
         .then(res => {
-           
-          this.entityForm = {
-            subject:      data.subject,
-            description:  data.description,
-            date:         data.date,
-            status:       data.status,
-            customer :    res.data.firstname+' '+res.data.lastname
-          };
+        
+        this.entityForm.subject =   data.subject
+        this.entityForm.description = data.description
+        this.entityForm.date =  data.date
+        this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
+        this.entityForm.customer_id =  res.data.id
+       
+  
         })
         .catch((err) => console.log(err));   
       }else{
-        this.entityForm = {
-            subject:      data.subject,
-            description:  data.description,
-            date:         data.date,
-            status:       data.status,
-            customer :    'Sin cliente'
-          }; 
+        this.entityForm.subject =   data.subject
+        this.entityForm.description = data.description
+        this.entityForm.date =  data.date
+        this.entityForm.customer =  'Sin cliente'
+       
+  
       }
       
 
-  this.entityForm = { ...this.entityForm };
+  //this.entityForm = { ...this.entityForm };
     },
     setCustomer() {
       this.itemsForm[0].campos[3].opciones = this.customers;
@@ -289,6 +302,9 @@ export default {
     },
   },
   computed: {
+   ...mapGetters([
+        'getUser'
+    ]),
     groups: {
       get () { 
         return this.selectedUsers.map(value => this.users.find(option => option.key === value))

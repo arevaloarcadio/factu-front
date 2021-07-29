@@ -4,7 +4,7 @@
       <CCardHeader>
         <h5>
           Usuarios
-          <router-link :to="{ name: 'users.create' }">
+          <router-link v-show="getUser.admin" :to="{ name: 'users.create' }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Usuario
@@ -66,6 +66,7 @@ import axios from "axios";
 import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import VuePaginate from 'vue-paginate'
+import { mapGetters } from 'vuex'
 
 export default {
   name: "UserPage",
@@ -98,6 +99,14 @@ export default {
     this.getOrganizations();
     //this.getUsers();
 
+  },
+  mounted(){
+    console.log(this.getUser)
+  },
+  computed: {
+     ...mapGetters([
+        'getUser'
+    ]),
   },
   methods: {
     getUsers() {

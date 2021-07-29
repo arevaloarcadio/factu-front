@@ -131,7 +131,7 @@ const items = {
        {  
           "name": "cif",
           "title": "DNI",
-          "validation": "required",
+          "validation": "",
           "type": "string",
           "size": "col-md-4"
         },
@@ -184,7 +184,7 @@ const items = {
           "name": "email",
           "title": "Email",
           "placeholder": "Introduzca Email",
-          "validation": "required|email",
+          "validation": "email",
           "type": "string",
           "size": "col-md-4 col-md-offset-right-4"
         }

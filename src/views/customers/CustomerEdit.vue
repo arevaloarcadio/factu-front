@@ -111,7 +111,7 @@
         <CCardHeader>
           <h5>
             Productos
-            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+            <router-link v-show="getUser.admin" :to="{ name: 'products.create', params: { id: customerId } }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Producto
@@ -226,6 +226,7 @@ import { cilArrowRight,cilArrowBottom } from '@coreui/icons'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import Croppr from 'croppr';
 import $ from 'jquery';
+import { mapGetters } from 'vuex'
 
 const Toast = Swal.mixin({
   toast: true,
@@ -323,6 +324,11 @@ export default {
 
     
   },
+  computed: {
+     ...mapGetters([
+        'getUser'
+    ]),
+  },
   methods: {
     changeParam(){
      /* this.customerId = this.$route.params.id;
@@ -344,10 +350,15 @@ export default {
     },
     validateDNI($event){
       if($event.name == "cif"){
+        
+        if (this.entityForm.cif == '' ||this.entityForm.cif == null) {
+          return;
+        }
+        
         this.entityForm.cif = this.entityForm.cif.toUpperCase();
         let validate = this.ValidateSpanishID(this.entityForm.cif)
-      
-        if(!validate.valid){
+        console.log(validate)
+        if(validate.valid != null && validate.valid == false){
           Toast.fire({
             icon: 'error',
             title: 'DNI no es valido',
@@ -496,18 +507,19 @@ export default {
       this.entityForm = { ...this.entityForm };
     },
     updated() {
-      this.entityForm.cif = this.entityForm.cif.toUpperCase();
-      let validate = this.ValidateSpanishID(this.entityForm.cif)
       
-      if(!validate.valid){
-
-        Toast.fire({
-          icon: 'error',
-          title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
-        })
-        return;
+      if (this.entityForm.cif != '') {
+        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+        let validate = this.ValidateSpanishID(this.entityForm.cif)
+        if(!validate.valid){
+          Toast.fire({
+            icon: 'error',
+            title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
+          })
+          return;
+        }
       }
-
+      
       if(this.entityForm.phone == null && this.entityForm.cellphone == null){
         Toast.fire({
           icon: 'error',
@@ -689,7 +701,9 @@ export default {
     },
     
     ValidateSpanishID ( str ) {
-
+    if(str == null){
+     return {};
+    }  
     // Ensure upcase and remove whitespace
     str = str.toUpperCase().replace(/\s/, '');
 
