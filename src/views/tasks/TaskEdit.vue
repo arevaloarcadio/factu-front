@@ -147,6 +147,7 @@ export default {
       axios.get(`${this.current_endpoint}/status/${this.getUser.id}/${this.taskId}`)
       .then(res => {
          this.entityForm.status = res.data.status
+         document.getElementById('status').disabled = !res.data.creator
       }).catch(err => console.log(err));
     },
     getCustomer(data) {

@@ -83,6 +83,9 @@
                <td v-if ="item.status == 'Cerrada'">
                 <span class="badge badge-danger">{{item.status}}</span>
               </td> 
+               <td v-if ="item.status == 'Pendiente'">
+                <span class="badge badge-primary">{{item.status}}</span>
+              </td> 
               <td v-else>
                 <span class="badge badge-success">{{item.status}}</span>
               </td> 
