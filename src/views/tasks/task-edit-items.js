@@ -48,9 +48,13 @@ const items = [
                 name: 'Abierta'
               },
               {
+                id:'Pendiente',
+                name: 'Pendiente'
+              },
+              {
                 id:'Cerrada',
                 name: 'Cerrada'
-              }
+              },
             ]
           },
       {

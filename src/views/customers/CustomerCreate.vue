@@ -62,6 +62,9 @@ export default {
   methods: {
     validateDNI($event){
       if($event.name == "cif"){
+        if ($event.value == '' || $event.value == null) {
+          return;
+        }
         
         let validate = this.ValidateSpanishID($event.value)
       
@@ -89,15 +92,18 @@ export default {
     },
     create() {
 
-      let validate = this.ValidateSpanishID(this.entityForm.cif)
-      
-      if(!validate.valid){
-        Toast.fire({
-          icon: 'error',
-          title: 'DNI no es valido',
-        })
-        return;
+       if (this.entityForm.cif != '') {
+        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+        let validate = this.ValidateSpanishID(this.entityForm.cif)
+        if(!validate.valid){
+          Toast.fire({
+            icon: 'error',
+            title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
+          })
+          return;
+        }
       }
+      
       
       if(this.entityForm.phone== null && this.entityForm.cellphone == null){
         Toast.fire({
