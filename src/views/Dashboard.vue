@@ -10,7 +10,6 @@ import OrgChart from './components/OrgChart.vue'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
 
-
 export default {
                         name: 'app',
                         components: {
