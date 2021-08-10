@@ -203,14 +203,14 @@ export default {
           if (typeof object[key] === 'object') {
 
             for (let key1 in object[key]){
-              if (object[key].hasOwnProperty(key1) &&  object[key][key1].toString().toLowerCase().includes(input_text)  ) {
+              if (object[key].hasOwnProperty(key1) &&   (object[key].toString().toLowerCase().includes(input_text) || object[key].toString().includes(input_text))  ) {
                 return true;
               }else{
                 this.reset_page(this.paginate);
               }
             }
           }
-          if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {
+          if (object.hasOwnProperty(key) &&   (object[key].toString().toLowerCase().includes(input_text) || object[key].toString().includes(input_text))  ) {
             return true;
           }else{
             this.reset_page(this.paginate);
