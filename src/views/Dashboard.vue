@@ -8,92 +8,106 @@
 
 import OrgChart from './components/OrgChart.vue'
 import axios from 'axios'
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 
 export default {
-                        name: 'app',
-                        components: {
-                          OrgChart,
-                        },
-                        mounted(){
-                          this.getItems()
-                        },
-                        data () {
-                          return {
-                            entity: "Organigrama",
-                            organization: [],
-                            users: [],
-                            unit_ids :[],
-                            subordinates : []
-                          }
-                        },
-                        methods:{
-                          getItems(){
-                            axios({url: this.entityTable,  method: 'GET' })
-                              .then(resp => {
-                                const t = this
-                                t.organization = resp.data
-                                this.unit_ids.push(this.getUser.unit)
-                                this.getUsers()
-                                resolve(resp)
-                              })
-                              .catch(err => {
-                                //commit('auth_error', err)
-                                //reject(err)
-                              });
-                          },
-                          getUsers(){
-                            axios.get("users")
-                              .then(resp => {
-                                const t = this
-                                t.users = resp.data
-                                resolve(resp)
-                              })
-                              .catch(err => {
-                                //commit('auth_error', err)
-                                //reject(err)
-                              });
-                          },
-                        },
-    computed: {
-      ...mapGetters([
-                  'getUser'
-              ]),
-      entityTable(){
-        return 'organizations/'+this.getUser.unit
-      }
-    },
-    watch: {
-      entityTable(){
-        this.$router.go(0)
-
-        this.getItems()
-      }
+name: 'app',
+components: {
+  OrgChart,
+},
+mounted(){
+  this.getItems()
+  this.getParents()
+},
+data () {
+  return {
+    entity: "Organigrama",
+    organization: [],
+    users: [],
+    unit_ids :[],
+    subordinates : []
+  }
+},
+methods:{
+  ...mapActions([
+    'setParent'
+  ]),
+  getItems(){
+    axios({url: this.entityTable,  method: 'GET' })
+      .then(resp => {
+        const t = this
+        t.organization = resp.data
+        this.unit_ids.push(this.getUser.unit)
+        this.getUsers()
+        resolve(resp)
+      })
+      .catch(err => {
+        //commit('auth_error', err)
+        //reject(err)
+      });
+  },
+   getParents(){
+    axios({url: 'organizations/parent/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET' })
+      .then(resp => {
+        console.log(resp)
+         this.setParent(resp.data.parent_id)
+      })
+      .catch(err => {
+        //commit('auth_error', err)
+        //reject(err)
+      });
+  },
+  getUsers(){
+    axios.get("users")
+      .then(resp => {
+        const t = this
+        t.users = resp.data
+        resolve(resp)
+      })
+      .catch(err => {
+        //commit('auth_error', err)
+        //reject(err)
+      });
+  },
+},
+  computed: {
+    ...mapGetters([
+      'getUser','getParent'
+    ]),
+    entityTable(){
+      return 'organizations/'+this.getUser.unit
+    }
+  },
+  watch: {
+    entityTable(){
+      this.$router.go(0)
+      this.getItems()
     }
   }
-                    </script>
+}
+</script>
 
-                    <style>
-                        #app {
-                            font-family: 'Avenir', Helvetica, Arial, sans-serif;
-                            -webkit-font-smoothing: antialiased;
-                            -moz-osx-font-smoothing: grayscale;
-                            text-align: center;
-                            color: #2c3e50;
-                            margin-top: 60px;
-                        }
+<style>
+#app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+}
 
-                        html, body {
-                            width: 100%;
-                            height: 100%;
-                            padding: 0;
-                            margin: 0;
-                            overflow: hidden;
-                            font-family: Helvetica;
-                        }
+html, body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    font-family: Helvetica;
+}
 
-                        #tree {
-                            width: 100%;
-                            height: 100%;
-                        }
-                    </style>
+#tree {
+    width: 100%;
+    height: 100%;
+}
+</style>

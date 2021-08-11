@@ -111,7 +111,7 @@
         <CCardHeader>
           <h5>
             Productos
-            <router-link v-show="getUser.admin" :to="{ name: 'products.create', params: { id: customerId } }">
+            <router-link v-show="getParent == getUser.id" :to="{ name: 'products.create', params: { id: customerId } }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Producto
@@ -326,7 +326,7 @@ export default {
   },
   computed: {
      ...mapGetters([
-        'getUser'
+        'getUser','getParent'
     ]),
   },
   methods: {
