@@ -111,7 +111,9 @@
         <CCardHeader>
           <h5>
             Productos
-            <router-link v-show="getParent == getUser.id" :to="{ name: 'products.create', params: { id: customerId } }">
+            <!--<router-link v-show="getParent == getUser.id" :to="{ name: 'products.create', params: { id: customerId } }">-->
+            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+            
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Producto
