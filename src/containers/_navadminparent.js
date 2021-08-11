@@ -4,6 +4,16 @@ export default [
     _children: [
       {
         _name: 'CSidebarNavItem',
+        name: 'Timeline',
+        to: '/timeline',
+        icon: 'cil-speedometer',
+        badge: {
+          color: 'success',
+          text: 'NEW'
+        },
+      },
+      {
+        _name: 'CSidebarNavItem',
         name: 'Organigrama',
         to: '/dashboard',
         icon: 'cil-speedometer',
@@ -23,6 +33,12 @@ export default [
         name: 'Clientes',
         to: '/customers',
         icon: 'cil-people'
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: 'Tipo de Productos',
+        to: '/product_types',
+        icon: 'cil-puzzle'
       },
       {
         _name: 'CSidebarNavItem',
