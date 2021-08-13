@@ -35,13 +35,16 @@
       </tr>
       <tr v-for="item in paginated('items')">
         <td>{{item.product_types.name }}</td> 
+         <td>{{item.price }} €</td>
         <td>{{item.identifier }}</td>
         <router-link :to="{ name: 'products.edit', params: getParams(item), query: getQuery(item) }">
           <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
         </router-link>
       </tr>
     </paginate>
+
   </table>
+    <div> <h5 style="margin: 0;"> Sumatoria: {{sum_products}} €</h5></div><br>
   <paginate-links for="items" :limit="5" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
     <!--<CDataTable
       class="mb-0 table-outline"
@@ -71,7 +74,7 @@
 
 export default {
   name: "ProductTable",
-  props: ["items"],
+  props: ["items","sum_products"],
   data() {
     return {
       paginate : ['items'],
@@ -79,6 +82,7 @@ export default {
       filter : 'Activo',
       tableFields: [
         { key: "product_types", label: "Tipo",          _classes: "text-center" },
+        { key: "price",    label: "Precio", _classes: "text-center" },
         { key: "identifier",    label: "Identificador", _classes: "text-center" },
         {
           key: 'actions',

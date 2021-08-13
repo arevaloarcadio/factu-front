@@ -124,7 +124,7 @@
 
         <CCardBody class="py-2">
           
-          <ProductTable :items="products" ref="ProductTable"  @change="getProducts()" ></ProductTable>
+          <ProductTable :items="products" :sum_products="sum_products" ref="ProductTable"  @change="getProducts()" ></ProductTable>
         </CCardBody>
 
 
@@ -276,6 +276,7 @@ export default {
       interactions: [],
       tasks : [],
       products: [],
+      sum_products : 0,
       unit_ids : [],
       file_areas : [],
       upload_profile :{
@@ -605,6 +606,10 @@ export default {
         .post(`v1/customers/${this.customerId}/products`,data)
         .then(resp => {
           this.products = resp.data;
+          this.products.forEach((product) => {
+            console.log(product.price)
+            this.sum_products =  this.sum_products + parseInt(product.price == null ? 0 : product.price) 
+          })
           // console.log(resp);
         })
         .catch(err => console.log(err));
