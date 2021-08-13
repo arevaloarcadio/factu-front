@@ -22,7 +22,7 @@
               <th v-for="field in fields" :class="{true : field._classes }">{{field.label}}</th>
             </tr>
           </thead>
-          <paginate name="items" :list="items" :per="3" tag="tbody">
+          <paginate name="items" :list="items" :per="5" tag="tbody">
             <tr v-if="items.length == 0">
               <td :colspan="fields.length">
                 <center>
@@ -35,6 +35,15 @@
             <tr v-for="item in paginated('items')">
               <td>{{item.subject}}</td> 
               <td>{{item.description }}</td>
+              <td v-if ="item.status == 'Cerrada'">
+                <span class="badge badge-danger">{{item.status}}</span>
+              </td> 
+               <td v-else-if ="item.status == 'Pendiente'">
+                <span class="badge badge-primary">{{item.status}}</span>
+              </td> 
+              <td v-else>
+                <span class="badge badge-success">{{item.status}}</span>
+              </td> 
               <td>{{item.date}}</td> 
               <td>
                 <router-link :to="{ name: 'tasks.edit', params: { id: item.id } }">
@@ -44,7 +53,7 @@
             </tr>
           </paginate>
         </table>
-        <paginate-links for="items" :limit="3" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+        <paginate-links for="items" :limit="5" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
         <!--<CDataTable
           class="mb-0 table-outline"
           hover
@@ -104,6 +113,7 @@ export default {
       fields: [
         { key: "subject", label: "Tema",          _classes: "text-center" },
         { key: "description", label: "Descripción",          _classes: "text-center" },
+        { key: "status", label: "Status",          _classes: "text-center" },
         { key: "date",    label: "Fecha", _classes: "text-center" },
         {
           key: 'actions',
@@ -116,6 +126,8 @@ export default {
       previousUrl: "",
       nextUrl: "",
     };
+  },
+  mounted(){
   },
   'customer_id': function (id) {
       Swal.showLoading()

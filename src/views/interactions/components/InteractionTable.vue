@@ -8,7 +8,7 @@
               <th v-for="field in tableFields" :class="{true : field._classes }">{{field.label}}</th>
             </tr>
           </thead>
-          <paginate name="items" :list="items" :per="3" tag="tbody">
+          <paginate name="items" :list="items" :per="5" tag="tbody">
             <tr v-if="items.length == 0">
                 <td :colspan="tableFields.length">
                   <center>
@@ -26,7 +26,7 @@
             </tr>
           </paginate>
         </table>
-        <paginate-links for="items" :limit="3" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+        <paginate-links for="items" :limit="5" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
     <!--<CDataTable
       class="mb-0 table-outline"
       hover

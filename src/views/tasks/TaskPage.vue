@@ -180,7 +180,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
-    this.select_filter = ''
+    this.select_filter = 'Abierta'
     this.getTasks(true);
     this.getSubordinates();
     
