@@ -358,7 +358,8 @@ export default {
           return;
         }
         
-        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+        this.entityForm.cif = this.entityForm.cif == '' || this.entityForm.cif == null ? null : this.entityForm.cif.toUpperCase();
+
         let validate = this.ValidateSpanishID(this.entityForm.cif)
         console.log(validate)
         if(validate.valid != null && validate.valid == false){
@@ -511,10 +512,12 @@ export default {
     },
     updated() {
       
-      if (this.entityForm.cif != '') {
-        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+      if (this.entityForm.cif !== null) {
+        this.entityForm.cif = this.entityForm.cif == '' || this.entityForm.cif == null ? null : this.entityForm.cif.toUpperCase();
+
         let validate = this.ValidateSpanishID(this.entityForm.cif)
         if(!validate.valid){
+
           Toast.fire({
             icon: 'error',
             title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
