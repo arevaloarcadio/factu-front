@@ -37,7 +37,7 @@
         <formGenerator
           :items="itemsInformationCollapse"
           :entity="entityFormCollapse"
-          :buttonHidden="!collapseInformation"
+          @update="updatedBasic()"
          >
           <span @click="collapse()"> Cliente<CIcon :content="$options.ArrowRigth"/></span> 
           
@@ -285,9 +285,9 @@ export default {
         pictureModal : false
       },
       entityFormCollapse: {
-        cifCollapse: "",
         firstnameCollapse: "",
         lastnameCollapse: "",
+        birthdateCollapse: "",
       },
       entityForm: {
         firstname: "",
@@ -326,6 +326,9 @@ export default {
     ]).catch(err => console.log(err));
 
     
+  },
+  mounted(){
+    $('#cifCollapse').attr("disabled","true")
   },
   computed: {
      ...mapGetters([
@@ -503,7 +506,8 @@ export default {
       };
 
       this.entityFormCollapse = {
-        cifCollapse:   data.cif,
+         cifCollapse:         data.cif,
+        birthdateCollapse:   data.birthdate,
         firstnameCollapse:   data.firstname,
         lastnameCollapse:    data.lastname,
       };
@@ -539,6 +543,29 @@ export default {
          .then(res => {
 
            if (res.status == HTTP_OK) {
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
+              this.entityFormCollapse.firstnameCollapse = this.entityForm.firstname
+              this.entityFormCollapse.lastnameCollapse = this.entityForm.lastname
+              this.entityFormCollapse.birthdateCollapse = this.entityForm.birthdate
+           }
+         })
+         .catch(err => {});
+    },
+    updatedBasic() {
+
+      let data = {
+        firstname : this.entityFormCollapse.firstnameCollapse,
+        lastname  : this.entityFormCollapse.lastnameCollapse,
+        birthdate : this.entityFormCollapse.birthdateCollapse
+      }
+
+      axios
+         .put(`v1/customers/${this.customerId}/basic`, data)
+         .then(res => {
+          if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
               title: 'Operación completada',

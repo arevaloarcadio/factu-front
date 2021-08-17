@@ -233,12 +233,14 @@ const items = {
     {
       "name": "Identificación",
       "campos": [
-       {  
+      {
           "name": "cifCollapse",
           "title": "DNI",
-          "validation": "required",
+          "placeholder": "",
+          "validation": "",
           "type": "string",
-          "size": "col-md-4"
+          "size": "col-md-3",
+          "disabled" : true
         },
         {
           "name": "firstnameCollapse",
@@ -246,7 +248,7 @@ const items = {
           "placeholder": "Introduzca Nombre",
           "validation": "required|min:3",
           "type": "string",
-          "size": "col-md-4"
+          "size": "col-md-3"
         },
         {
           "name": "lastnameCollapse",
@@ -254,8 +256,15 @@ const items = {
           "placeholder": "Introduzca Apellidos",
           "validation": "required|min:3",
           "type": "string",
-          "size": "col-md-4"
-        }
+          "size": "col-md-3"
+        },
+        {
+        "name": "birthdateCollapse",
+        "title": "Fecha Nacimiento",
+        "validation": "",
+        "type": "date",
+        "size": "col-md-3"
+      }
       ]
     },
   ],
