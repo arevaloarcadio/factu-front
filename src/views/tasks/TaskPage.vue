@@ -77,7 +77,7 @@
             <tr v-for="item in paginated('items')">
               <td  v-if="filter == 'Suborbinados'" >{{item.subordinate}}</td> 
               <td>{{item.subject}}</td> 
-              <td>{{item.description }}</td>
+              <td v-html="item.description.substr(0,65)+'...</p>'"></td>
               <td v-html="has_customer(item.customer)"></td>  
               <td>{{item.date}}</td> 
                <td v-if ="item.status == 'Cerrada'">

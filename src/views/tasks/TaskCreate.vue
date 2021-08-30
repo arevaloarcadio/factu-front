@@ -84,6 +84,11 @@ export default {
     this.customer_id = this.$route.params.customerId !== undefined ? this.$route.params.customerId : null
 
   },
+  mounted(){
+    tinymce.init({
+      selector: 'textarea#description',
+    });
+  },
   computed: {
     ...mapGetters(["getUser"]),
   },
@@ -109,9 +114,11 @@ export default {
     createTask()
     {
 			const HTTP_CREATED = 201;
-			
+
 			const data = { 
-        ...this.entityForm,
+        description : tinyMCE.activeEditor.getContent(),
+        date : this.entityForm.date,
+        subject : this.entityForm.subject,
         customer_id : this.customer_id,
         user_ids : this.selectedUsers
       }

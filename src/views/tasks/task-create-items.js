@@ -31,7 +31,7 @@ const items = [
         name: "description",
         title: "Descripción",
         placeholder: "Introduzca la descripción",
-        validation: "required",
+        validation: "",
         type: "text",
         size: "col-md-12 col-md-offset-right-4",
       },

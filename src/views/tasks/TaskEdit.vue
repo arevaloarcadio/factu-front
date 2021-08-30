@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol class="col-md-4 col-xs-12">
+      <CCol class="col-md-6 col-xs-12">
         <formGenerator
           :items="itemsForm"
           :entity="entityForm"
@@ -42,7 +42,7 @@
           </CCardFooter>
         </CCard>
       </CCol>
-      <CCol class="col-md-8 col-xs-12">
+      <CCol class="col-md-6 col-xs-12">
         <CRow>
           <CCard class="col-sm-12">
             <CCardHeader class="py-1">
@@ -127,6 +127,9 @@ export default {
     // this.setSelectedProduct();
 	},
   mounted(){
+     tinymce.init({
+      selector: 'textarea#description_edit',
+    });
     this.getTaskStatusByUser()
   },
 
@@ -157,7 +160,8 @@ export default {
         .then(res => {
         
         this.entityForm.subject =   data.subject
-        this.entityForm.description = data.description
+        //this.entityForm.description_edit = data.description
+        tinymce.activeEditor.setContent(data.description)
         this.entityForm.date =  data.date
         this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
         this.entityForm.customer_id =  res.data.id
@@ -167,7 +171,8 @@ export default {
         .catch((err) => console.log(err));   
       }else{
         this.entityForm.subject =   data.subject
-        this.entityForm.description = data.description
+        //this.entityForm.description_edit = data.description
+        tinymce.activeEditor.setContent(data.description)
         this.entityForm.date =  data.date
         this.entityForm.customer =  'Sin cliente'
        
@@ -208,7 +213,7 @@ export default {
     editTask()
     {
       const HTTP_OK = 200;
-
+      this.entityForm.description = tinyMCE.activeEditor.getContent();
 			axios
         .put(`${this.current_endpoint}/${this.taskId}`, this.entityForm)
         .then(res => {
