@@ -37,7 +37,7 @@
         <formGenerator
           :items="itemsInformationCollapse"
           :entity="entityFormCollapse"
-          :buttonHidden="!collapseInformation"
+          @update="updatedBasic()"
          >
           <span @click="collapse()"> Cliente<CIcon :content="$options.ArrowRigth"/></span> 
           
@@ -111,7 +111,9 @@
         <CCardHeader>
           <h5>
             Productos
-            <router-link v-show="getUser.admin" :to="{ name: 'products.create', params: { id: customerId } }">
+            <!--<router-link v-show="getParent == getUser.id" :to="{ name: 'products.create', params: { id: customerId } }">-->
+            <router-link :to="{ name: 'products.create', params: { id: customerId } }">
+            
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Producto
@@ -122,7 +124,7 @@
 
         <CCardBody class="py-2">
           
-          <ProductTable :items="products" ref="ProductTable"  @change="getProducts()" ></ProductTable>
+          <ProductTable :items="products" :sum_products="sum_products" ref="ProductTable"  @change="getProducts()" ></ProductTable>
         </CCardBody>
 
 
@@ -274,6 +276,7 @@ export default {
       interactions: [],
       tasks : [],
       products: [],
+      sum_products : 0,
       unit_ids : [],
       file_areas : [],
       upload_profile :{
@@ -282,9 +285,9 @@ export default {
         pictureModal : false
       },
       entityFormCollapse: {
-        cifCollapse: "",
         firstnameCollapse: "",
         lastnameCollapse: "",
+        birthdateCollapse: "",
       },
       entityForm: {
         firstname: "",
@@ -324,9 +327,12 @@ export default {
 
     
   },
+  mounted(){
+    $('#cifCollapse').attr("disabled","true")
+  },
   computed: {
      ...mapGetters([
-        'getUser'
+        'getUser','getParent'
     ]),
   },
   methods: {
@@ -355,7 +361,8 @@ export default {
           return;
         }
         
-        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+        this.entityForm.cif = this.entityForm.cif == '' || this.entityForm.cif == null ? null : this.entityForm.cif.toUpperCase();
+
         let validate = this.ValidateSpanishID(this.entityForm.cif)
         console.log(validate)
         if(validate.valid != null && validate.valid == false){
@@ -499,7 +506,8 @@ export default {
       };
 
       this.entityFormCollapse = {
-        cifCollapse:   data.cif,
+         cifCollapse:         data.cif,
+        birthdateCollapse:   data.birthdate,
         firstnameCollapse:   data.firstname,
         lastnameCollapse:    data.lastname,
       };
@@ -508,10 +516,12 @@ export default {
     },
     updated() {
       
-      if (this.entityForm.cif != '') {
-        this.entityForm.cif = this.entityForm.cif.toUpperCase();
+      if (this.entityForm.cif !== null) {
+        this.entityForm.cif = this.entityForm.cif == '' || this.entityForm.cif == null ? null : this.entityForm.cif.toUpperCase();
+
         let validate = this.ValidateSpanishID(this.entityForm.cif)
         if(!validate.valid){
+
           Toast.fire({
             icon: 'error',
             title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
@@ -533,6 +543,29 @@ export default {
          .then(res => {
 
            if (res.status == HTTP_OK) {
+            Toast.fire({
+              icon: 'success',
+              title: 'Operación completada',
+            })
+              this.entityFormCollapse.firstnameCollapse = this.entityForm.firstname
+              this.entityFormCollapse.lastnameCollapse = this.entityForm.lastname
+              this.entityFormCollapse.birthdateCollapse = this.entityForm.birthdate
+           }
+         })
+         .catch(err => {});
+    },
+    updatedBasic() {
+
+      let data = {
+        firstname : this.entityFormCollapse.firstnameCollapse,
+        lastname  : this.entityFormCollapse.lastnameCollapse,
+        birthdate : this.entityFormCollapse.birthdateCollapse
+      }
+
+      axios
+         .put(`v1/customers/${this.customerId}/basic`, data)
+         .then(res => {
+          if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
               title: 'Operación completada',
@@ -603,6 +636,10 @@ export default {
         .post(`v1/customers/${this.customerId}/products`,data)
         .then(resp => {
           this.products = resp.data;
+          this.products.forEach((product) => {
+            console.log(product.price)
+            this.sum_products =  this.sum_products + parseInt(product.price == null ? 0 : product.price) 
+          })
           // console.log(resp);
         })
         .catch(err => console.log(err));

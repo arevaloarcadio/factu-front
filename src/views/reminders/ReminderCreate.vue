@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     see_periodicity(){
-      let day = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[0]) + 1;
+      let day = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[0]);
       let month = parseInt(new Date(this.entityForm.date_reminder).toLocaleString().split('/')[1]);
 
        if ( this.entityForm.periodicity == 'Anual') {

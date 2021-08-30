@@ -83,7 +83,7 @@
                <td v-if ="item.status == 'Cerrada'">
                 <span class="badge badge-danger">{{item.status}}</span>
               </td> 
-               <td v-if ="item.status == 'Pendiente'">
+               <td v-else-if ="item.status == 'Pendiente'">
                 <span class="badge badge-primary">{{item.status}}</span>
               </td> 
               <td v-else>
@@ -180,7 +180,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
-    this.select_filter = ''
+    this.select_filter = 'Abierta'
     this.getTasks(true);
     this.getSubordinates();
     
@@ -203,14 +203,14 @@ export default {
           if (typeof object[key] === 'object') {
 
             for (let key1 in object[key]){
-              if (object[key].hasOwnProperty(key1) &&  object[key][key1].toString().toLowerCase().includes(input_text)  ) {
+              if (object[key].hasOwnProperty(key1) &&   (object[key].toString().toLowerCase().includes(input_text) || object[key].toString().includes(input_text))  ) {
                 return true;
               }else{
                 this.reset_page(this.paginate);
               }
             }
           }
-          if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {
+          if (object.hasOwnProperty(key) &&   (object[key].toString().toLowerCase().includes(input_text) || object[key].toString().includes(input_text))  ) {
             return true;
           }else{
             this.reset_page(this.paginate);
@@ -283,8 +283,15 @@ export default {
          axios
           .get(url)
           .then(resp => {
-            this.items = resp.data;
+            //this.items = resp.data;
             console.log(resp.data)
+
+            this.items = resp.data.filter((thing, index) => {
+              const _thing = JSON.stringify(thing);
+              return index ===  resp.data.findIndex(obj => {
+                return JSON.stringify(obj) === _thing;
+              });
+              });
             this.reset_page(this.paginate)
           })
           .catch(err => console.log(err));

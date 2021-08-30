@@ -113,7 +113,7 @@ export default {
       console.log(object)
       for (let key in object){
         if(object[key] != null){
-          if (object.hasOwnProperty(key) &&  object[key].toString().toLowerCase().includes(input_text)  ) {
+          if (object.hasOwnProperty(key) &&  (object[key].toString().toLowerCase().includes(input_text) || object[key].toString().includes(input_text))  ) {
             return true;
           }else{
             this.reset_page(this.paginate);
