@@ -30,7 +30,7 @@ const items = [
       {
         "name": "birthdate",
         "title": "Fecha Nacimiento",
-        "validation": "",
+        "validation": "required",
         "type": "date",
         "size": "col-md-4"
       }

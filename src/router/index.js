@@ -124,9 +124,10 @@ function configRoutes () {
             },
             {
               path: ':id/edit',
+              meta: { label: 'Editar Cliente' },
               name: 'customers.edit',
-              meta: { label: 'Editar Cliente',reuse: false },
               component: CustomerEdit,
+              meta: { reuse: false },
             },
             {
               path: ':id/products/create',
