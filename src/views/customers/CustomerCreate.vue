@@ -71,7 +71,7 @@ export default {
           if(!validate.valid){
             Toast.fire({
               icon: 'error',
-              title: 'DNI no es valido',
+              title: 'DNI NO ES VALIDO',
             })
             return;
           }
@@ -82,7 +82,7 @@ export default {
           if(res.data.id !== undefined ){
             Toast.fire({
               icon: 'warning',
-              title: 'Existe un cliente con este DNI',
+              title: 'EXISTE UN CLIENTE CON ESTE DNI',
             })
             this.$router.push({ name: 'customers.edit', params: { id: res.data.id } })
           }
@@ -98,7 +98,7 @@ export default {
         if(!validate.valid){
           Toast.fire({
             icon: 'error',
-            title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
+            title: validate.type !== undefined ? validate.type.toUpperCase()+' NO ES VALIDO' : 'DNI NO ES VALIDO',
           })
           return;
         }
@@ -108,7 +108,7 @@ export default {
       if(this.entityForm.phone== null && this.entityForm.cellphone == null){
         Toast.fire({
           icon: 'error',
-          title: 'Es requerido al menos un telefono',
+          title: 'ES REQUERIDO AL MENOS UN TELEFONO',
         })
         return;
       }
@@ -128,7 +128,7 @@ export default {
            if (response.status == HTTP_CREATED) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CRACION DE CLIENTE COMPLETADA',
             })
           
             const customerId = response.data.data.id;

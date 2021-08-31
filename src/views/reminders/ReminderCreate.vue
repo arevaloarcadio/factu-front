@@ -125,7 +125,7 @@ export default {
 				if (res.status == HTTP_CREATED) {
 					  Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CREACION DE RECORDATORIO COMPLETADA',
             })
 					this.$router.go(-1)
 				}

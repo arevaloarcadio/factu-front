@@ -68,7 +68,7 @@ export default {
           this.$router.go(-1);
           Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CREACION DE NOTA COMPLETADA',
           })
         })
         .catch(err => console.log(err));

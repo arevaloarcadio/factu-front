@@ -66,7 +66,7 @@ function configRoutes () {
   return [
     {
       path: '/',
-      redirect: '/dashboard',
+      redirect: '/tasks',
       name: 'Inicio',
       component: TheContainer,
       children: [

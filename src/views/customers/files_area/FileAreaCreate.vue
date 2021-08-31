@@ -4,7 +4,7 @@
       :items="itemsForm" 
       :entity="entityForm" 
       @update="createFile()">
-      Crear Nota
+      Crear Archivo
     </formGenerator>
       <FileAreaAttached v-bind:customerId="customerId" ref="FileAreaAttached"></FileAreaAttached>
   </div>
@@ -69,7 +69,7 @@ export default {
             // this.showSuccessMsg();
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CREACION DE ARCHIVO COMPLETDA',
             })
             this.$router.go(-1);
           }

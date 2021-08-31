@@ -40,6 +40,7 @@
         <router-link :to="{ name: 'products.edit', params: getParams(item), query: getQuery(item) }">
           <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
         </router-link>
+          <CButton class="m-2 btn--link" size="sm" color="danger" @click="delete_item(item)">Quitar</CButton>
       </tr>
     </paginate>
 
@@ -71,6 +72,21 @@
 </template>
 
 <script>
+import axios from 'axios'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
+
 
 export default {
   name: "ProductTable",
@@ -110,6 +126,52 @@ export default {
         price       : item.price
       };
     },
+    delete_item(product){
+
+      Swal.fire({
+        width: 600,
+        title: 'Confirmación de eliminación del producto',
+        icon: 'warning',
+        html:  'Esta a punto de eliminar el producto <b>'+product.product_types.name+'</b> al cliente <b>'+product.customer.firstname+' '+product.customer.lastname+'</b>',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        confirmButtonColor : '#e55353',
+        cancelmButtonText: 'Cancelar',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+          return axios
+            .delete("products/delete/"+product.id)
+            .then(response => {
+              return response.data;
+            })
+            .catch(error => {
+                  //console.log(error.status )
+              Swal.showValidationMessage(
+               `Request fail: ${error}`
+              )
+              /*if(error.response?.data.error.status_code == '422') {
+                Swal.showValidationMessage(
+                   `${error.response.data.error.message.error}`
+                 )
+              }else{
+                  Swal.showValidationMessage(
+                   `Request fail: ${error}`
+                 )
+              }*/
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+      }).then(result => {
+          if(result.value){
+            this.$emit("delete")
+            Toast.fire({
+              icon: 'success',
+              title: 'EL PRODUCTO DEL CLIENTE HA SIDO ELIMINADO'
+            });
+          }
+      });
+
+    },
     onChange (){
       this.$emit("change",this.filter);
       this.reset_page(this.paginate);
@@ -125,4 +187,10 @@ export default {
 
 <style lang="scss" scoped>
 .btn--link { color: #FFF }
+</style>
+
+<style scoped>
+  .swal2-cancel{
+    margin-left: 1px;
+  }
 </style>

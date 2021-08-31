@@ -127,13 +127,18 @@ export default {
     // this.setSelectedProduct();
 	},
   mounted(){
-     tinymce.init({
-      selector: 'textarea#description_edit',
-    });
+      //this.initTiny()
     this.getTaskStatusByUser()
+  
   },
 
   methods: {
+      initTiny(){
+      var s =  tinymce.init({
+        selector: 'textarea#description_edit',
+      });
+      console.log(s)
+    },
     customLabel ({ firstname, lastname }) {
       return `${firstname} ${lastname}`
     },
@@ -159,20 +164,18 @@ export default {
         .get("v1/customers/"+data.customer)
         .then(res => {
         
-        this.entityForm.subject =   data.subject
-        //this.entityForm.description_edit = data.description
-        tinymce.activeEditor.setContent(data.description)
-        this.entityForm.date =  data.date
-        this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
-        this.entityForm.customer_id =  res.data.id
-       
-  
+          this.entityForm.subject =   data.subject
+          this.entityForm.description =  data.description
+          this.entityForm.date =  data.date
+          this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
+          this.entityForm.customer_id =  res.data.id
+         
         })
         .catch((err) => console.log(err));   
       }else{
         this.entityForm.subject =   data.subject
         //this.entityForm.description_edit = data.description
-        tinymce.activeEditor.setContent(data.description)
+        this.entityForm.description =  data.description
         this.entityForm.date =  data.date
         this.entityForm.customer =  'Sin cliente'
        
@@ -213,7 +216,6 @@ export default {
     editTask()
     {
       const HTTP_OK = 200;
-      this.entityForm.description = tinyMCE.activeEditor.getContent();
 			axios
         .put(`${this.current_endpoint}/${this.taskId}`, this.entityForm)
         .then(res => {
@@ -221,7 +223,7 @@ export default {
             console.log(res.data);
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE TAREA COMPLETADA',
             })
             // this.showSuccessMsg();
            // this.$router.go(-1)
@@ -239,7 +241,7 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'ASIGNACION DE RESPONSABLE COMPLETADA',
             })
             this.getAttachedUsers();
           }
@@ -288,7 +290,7 @@ export default {
            this.getAttachedUsers();
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'USUARIO AÑADIDO',
             })
         })
         .catch(err => console.log(err));

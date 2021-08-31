@@ -180,7 +180,7 @@ export default {
           if (res.status == HTTP_OK) {
              Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE USUARIO COMPLETADA',
             })
             this.$router.go(-1);
           }
@@ -291,9 +291,9 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'FOTO DE PERFIL DEL USUARIO ACTUALIZADA',
             })
-            this.$router.go(-1);
+            //this.$router.go(-1);
           }
         })
         .catch(err => console.log(err.response));
@@ -311,7 +311,7 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CAMBIO DE CONTRASEÑA COMPLETADA',
             })
             this.$router.go(-1);
           }

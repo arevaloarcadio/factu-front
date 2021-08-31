@@ -81,7 +81,7 @@ export default {
             console.log(res.data);
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE TIPO DE PRODUCTO COMPLETADA',
             })
             // this.showSuccessMsg();
             this.$router.go(-1)

@@ -28,11 +28,11 @@ const items = [
         size: "col-md-12  col-md-offset-right-6",
       },
       {
-        name: "description_edit",
+        name: "description",
         title: "Descripción",
         placeholder: "Introduzca la descripción",
         validation: "",
-        type: "text",
+        type: "tiny",
         size: "col-md-12",
       },
       {

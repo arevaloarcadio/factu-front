@@ -32,7 +32,7 @@ const items = [
         title: "Descripción",
         placeholder: "Introduzca la descripción",
         validation: "",
-        type: "text",
+        type: "tiny",
         size: "col-md-12 col-md-offset-right-4",
       },
     ],
