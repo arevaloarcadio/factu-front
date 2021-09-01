@@ -27,8 +27,8 @@ const itemsOLD = [
       },
       {
         "name": "birthdate",
-        "title": "Fecha Nacimiento",
-        "validation": "required",
+        "title": "Fecha de Nacimiento",
+        "validation": "",
         "type": "date",
         "size": "col-md-4"
       }
