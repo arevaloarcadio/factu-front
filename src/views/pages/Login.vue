@@ -102,7 +102,7 @@ export default {
 
             Toast.fire({
               icon: 'success',
-              title: 'Acceso concedido',
+              title: 'ACCESSO CONCEDIDO',
             })
             //self.showSuccessMsg()
             user.setUser(response.data.user)
@@ -116,7 +116,7 @@ export default {
            
            Toast.fire({
               icon: 'error',
-              title: 'Acceso denegado',
+              title: 'ACCESSO DENEGADO',
             })
 
           //commit('auth_error', err)
@@ -133,7 +133,7 @@ export default {
             if(response.data[0].unit){
               self.setUnit(response.data[0].unit_id)
             }
-            self.$router.push({path: '/#/dashboard', query : { reminder : true }});
+            self.$router.push({path: '/tasks', query : { reminder : true }});
           }
         })
         .catch(err => {

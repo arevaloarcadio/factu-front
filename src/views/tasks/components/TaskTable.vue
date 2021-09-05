@@ -34,7 +34,12 @@
             </tr>
             <tr v-for="item in paginated('items')">
               <td>{{item.subject}}</td> 
-              <td>{{item.description }}</td>
+               <template v-if="item.description.length > 65">
+                <td v-html="item.description.substr(0,65)+'...</p>'"></td>
+              </template>
+              <template v-else>
+                 <td v-html="item.description.substr(0,65)"></td>
+              </template>
               <td v-if ="item.status == 'Cerrada'">
                 <span class="badge badge-danger">{{item.status}}</span>
               </td> 

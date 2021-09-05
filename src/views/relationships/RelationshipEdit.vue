@@ -87,7 +87,7 @@ export default {
         if (res.status == HTTP_OK) {
           Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE RELACION COMPLETADA',
             })
           // this.showSuccessMsg();
           this.$router.go(-1)

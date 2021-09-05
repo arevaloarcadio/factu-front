@@ -70,7 +70,7 @@ export default {
             // this.showSuccessMsg();
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CREACION DE INTERACCION COMPLETADA',
             })
             this.$router.go(-1);
           }

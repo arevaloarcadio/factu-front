@@ -36,11 +36,12 @@
                 <select id="filter" v-model="select_filter" @change="getTasks(true)" class="form-control">
                       <option value="">Seleccione</option>
                       <option value="Abierta" >Abierta</option>
+                      <option value="Pendiente" >Pendiente</option>
                       <option value="Cerrada">Cerrada</option>
                 </select>
               </div>
 
-              <!--<div  v-if="filter == 'Suborbinados'" class="col-md-1">
+              <div  v-if="filter == 'Suborbinados'" class="col-md-1">
                  <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por Suborbinado</label>
               </div>
                 <div  v-if="filter == 'Suborbinados'" class="col-md-2">
@@ -48,7 +49,7 @@
                         <option value="">Seleccione</option>
                         <option v-for="subordinate in subordinates" :value="subordinate.id" >{{subordinate.firstname+' '+subordinate.lastname}}</option>
                   </select>
-                </div>-->
+                </div>
          
 
             </div>
@@ -66,7 +67,7 @@
           </thead>
           <paginate name="items" :list="filterTableItems" :per="10" tag="tbody">
             <tr v-if="items.length == 0">
-              <td :colspan="fields.length">
+              <td :colspan="fields.length+1">
                 <center>
                   <h4 style="margin: 0;">
                     Sin  registros
@@ -77,7 +78,12 @@
             <tr v-for="item in paginated('items')">
               <td  v-if="filter == 'Suborbinados'" >{{item.subordinate}}</td> 
               <td>{{item.subject}}</td> 
-              <td>{{item.description }}</td>
+              <template v-if="item.description.length > 65">
+                <td v-html="item.description.substr(0,65)+'...</p>'"></td>
+              </template>
+              <template v-else>
+                 <td v-html="item.description.substr(0,65)"></td>
+              </template>
               <td v-html="has_customer(item.customer)"></td>  
               <td>{{item.date}}</td> 
                <td v-if ="item.status == 'Cerrada'">
@@ -142,7 +148,7 @@
 
 import axios from "axios";
 import VueNotifications from "vue-notifications";
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
 
 
 export default {
@@ -183,6 +189,7 @@ export default {
     this.select_filter = 'Abierta'
     this.getTasks(true);
     this.getSubordinates();
+    this.getParents()
     
   },
   computed: {
@@ -196,6 +203,9 @@ export default {
     }
   },
   methods: {
+  ...mapActions([
+    'setParent'
+  ]),
      searchInObject : function(object, input_text){
       for (let key in object){
         if(object[key] != null){
@@ -316,6 +326,18 @@ export default {
           //reject(err)
         });
     },
+
+   getParents(){
+    axios({url: 'organizations/parent/'+this.getUser.id+'/'+this.getUser.unit,  method: 'GET' })
+      .then(resp => {
+        console.log(resp)
+         this.setParent(resp.data.parent_id)
+      })
+      .catch(err => {
+        //commit('auth_error', err)
+        //reject(err)
+      });
+  },
      reset_page : function (paginate){
       for(let pag in paginate){
         paginate[pag].page = 0;

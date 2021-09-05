@@ -84,11 +84,19 @@ export default {
     this.customer_id = this.$route.params.customerId !== undefined ? this.$route.params.customerId : null
 
   },
+  mounted(){
+    //this.initTiny()
+  },
   computed: {
     ...mapGetters(["getUser"]),
   },
   methods: {
-
+    initTiny(){
+      var s =  tinymce.init({
+        selector: 'textarea#description',
+      });
+      console.log(s)
+    },
     getUsers() {      
       axios
          .get(`users`)
@@ -109,9 +117,11 @@ export default {
     createTask()
     {
 			const HTTP_CREATED = 201;
-			
+
 			const data = { 
-        ...this.entityForm,
+        description : this.entityForm.description,
+        date : this.entityForm.date,
+        subject : this.entityForm.subject,
         customer_id : this.customer_id,
         user_ids : this.selectedUsers
       }
@@ -122,7 +132,7 @@ export default {
 				if (res.status == HTTP_CREATED) {
 					  Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'CREACION DE TAREA COMPLETADA',
             })
           this.$router.push({ name: 'tasks.edit', params: { id: res.data.task.id } })
 				}

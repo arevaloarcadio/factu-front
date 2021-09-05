@@ -89,7 +89,7 @@ export default {
         .get("product_types")
         .then(res => {
           this.items = res.data;
-          this.setProductTypes(this.items);
+          //this.setProductTypes(this.items);
         })
         .catch((err) => console.log(err));
     },

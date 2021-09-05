@@ -74,7 +74,7 @@
       <CBreadcrumbRouter class="border-0 mb-0"/>
     </CSubheader>
 
-   <CToaster :autohide="10000">
+   <CToaster :autohide="20000">
       <template v-for="not in notification">
         <CToast
           :key="'toast' + not.id"

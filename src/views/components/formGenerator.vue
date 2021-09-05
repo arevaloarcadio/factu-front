@@ -108,6 +108,12 @@
                                 <span class="small text-danger">{{ errors[0] }}</span>
                               </ValidationProvider>
                             </template>
+
+                             <template v-if="campo.type == 'tiny'">
+                                <editor v-model="entity[campo.name]" :name="campo.name" 
+                                    api-key="pbk6mof35r4bpt8m2cpcp86izffldmphfob6yffgkurnlan9"
+                                  />
+                            </template>
                           </div>
                       </div>
                     </div>
@@ -214,6 +220,12 @@
                                   <span class="small text-danger">{{ errors[0] }}</span>
                                 </ValidationProvider>
                               </template>
+
+                               <template v-if="campo.type == 'tiny'">
+                                <editor v-model="entity[campo.name]" :name="campo.name"  :id="campo.name"  
+                                    api-key="pbk6mof35r4bpt8m2cpcp86izffldmphfob6yffgkurnlan9"
+                                  />
+                            </template>
                             </div>
                         </div>
                       </div>
@@ -233,9 +245,12 @@
 </template>
 
 <script>
+import Editor from '@tinymce/tinymce-vue';
+
 export default {
   name: "formGenerator",
   props: ["items", "entity","buttonHidden","hasCollapse","nameButton"],
+  components : {Editor},
   mounted() {
     // console.log(this.items,"-----------<<")
   },

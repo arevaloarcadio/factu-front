@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol class="col-md-4 col-xs-12">
+      <CCol class="col-md-6 col-xs-12">
         <formGenerator
           :items="itemsForm"
           :entity="entityForm"
@@ -42,7 +42,7 @@
           </CCardFooter>
         </CCard>
       </CCol>
-      <CCol class="col-md-8 col-xs-12">
+      <CCol class="col-md-6 col-xs-12">
         <CRow>
           <CCard class="col-sm-12">
             <CCardHeader class="py-1">
@@ -127,10 +127,18 @@ export default {
     // this.setSelectedProduct();
 	},
   mounted(){
+      //this.initTiny()
     this.getTaskStatusByUser()
+  
   },
 
   methods: {
+      initTiny(){
+      var s =  tinymce.init({
+        selector: 'textarea#description_edit',
+      });
+      console.log(s)
+    },
     customLabel ({ firstname, lastname }) {
       return `${firstname} ${lastname}`
     },
@@ -156,18 +164,18 @@ export default {
         .get("v1/customers/"+data.customer)
         .then(res => {
         
-        this.entityForm.subject =   data.subject
-        this.entityForm.description = data.description
-        this.entityForm.date =  data.date
-        this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
-        this.entityForm.customer_id =  res.data.id
-       
-  
+          this.entityForm.subject =   data.subject
+          this.entityForm.description =  data.description
+          this.entityForm.date =  data.date
+          this.entityForm.customer =  res.data.firstname+' '+res.data.lastname
+          this.entityForm.customer_id =  res.data.id
+         
         })
         .catch((err) => console.log(err));   
       }else{
         this.entityForm.subject =   data.subject
-        this.entityForm.description = data.description
+        //this.entityForm.description_edit = data.description
+        this.entityForm.description =  data.description
         this.entityForm.date =  data.date
         this.entityForm.customer =  'Sin cliente'
        
@@ -208,7 +216,6 @@ export default {
     editTask()
     {
       const HTTP_OK = 200;
-
 			axios
         .put(`${this.current_endpoint}/${this.taskId}`, this.entityForm)
         .then(res => {
@@ -216,7 +223,7 @@ export default {
             console.log(res.data);
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE TAREA COMPLETADA',
             })
             // this.showSuccessMsg();
            // this.$router.go(-1)
@@ -234,7 +241,7 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'ASIGNACION DE RESPONSABLE COMPLETADA',
             })
             this.getAttachedUsers();
           }
@@ -283,7 +290,7 @@ export default {
            this.getAttachedUsers();
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'USUARIO AÑADIDO',
             })
         })
         .catch(err => console.log(err));

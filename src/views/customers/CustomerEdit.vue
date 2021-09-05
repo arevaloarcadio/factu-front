@@ -25,7 +25,7 @@
             </h5>
            <br>
             <label for="file-input">
-                <img style="height:100px;width:100px;" title="Presione para cambiar foto de perfil" class="c-avatar-img" :src="baseURL+'img/profiles/'+entityForm.image" alt="user@email.com">
+                <img style="height: 200px;width: 200px;" title="Presione para cambiar foto de perfil" class="c-avatar-img" :src="baseURL+'img/profiles/'+entityForm.image" alt="user@email.com">
             </label>
             <input type="file" @change="getPicture" style="display: none"  ref="picture"  id="file-input" name="file-input" accept="image/x-png,image/jpeg" />
            
@@ -124,7 +124,7 @@
 
         <CCardBody class="py-2">
           
-          <ProductTable :items="products" :sum_products="sum_products" ref="ProductTable"  @change="getProducts()" ></ProductTable>
+          <ProductTable :items="products" :sum_products="sum_products" ref="ProductTable"  @change="getProducts()" @delete="getProducts()"></ProductTable>
         </CCardBody>
 
 
@@ -368,7 +368,7 @@ export default {
         if(validate.valid != null && validate.valid == false){
           Toast.fire({
             icon: 'error',
-            title: 'DNI no es valido',
+            title: 'DNI NO ES VALIDO',
           })
           return;
         }
@@ -379,7 +379,7 @@ export default {
           if(res.data.length > 0){
              Toast.fire({
               icon: 'warning',
-              title: 'Existe Cliente con este DNI',
+              title: 'EXISTE CLIENTE CON ESTE DNI',
             })
           }
         })
@@ -482,7 +482,7 @@ export default {
           this.getAttachedUsers();
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'ASIGNACION DE USUARIO COMPLETADA',
             })
           this.selectedUsers = null;
         })
@@ -524,7 +524,7 @@ export default {
 
           Toast.fire({
             icon: 'error',
-            title: validate.type !== undefined ? validate.type.toUpperCase()+' no es valido' : 'DNI no es valido',
+            title: validate.type !== undefined ? validate.type.toUpperCase()+' NO ES VALIDO' : 'DNI NO ES VALIDO',
           })
           return;
         }
@@ -533,7 +533,7 @@ export default {
       if(this.entityForm.phone == null && this.entityForm.cellphone == null){
         Toast.fire({
           icon: 'error',
-          title: 'Es requerido al menos un telefono',
+          title: 'ES REQUERIDO AL MENOS UN TELEFONO',
         })
         return;
       }
@@ -545,7 +545,7 @@ export default {
            if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE CLIENTE COMPLETADA',
             })
               this.entityFormCollapse.firstnameCollapse = this.entityForm.firstname
               this.entityFormCollapse.lastnameCollapse = this.entityForm.lastname
@@ -568,7 +568,7 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE CLIENTE COMPLETADA',
             })
            }
          })
@@ -593,7 +593,7 @@ export default {
             //this.$router.go(0);
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'MODIFICACION DE DIRECCION DEL CLIENTE COMPLETADA',
             })
           }
         })
@@ -618,7 +618,7 @@ export default {
           if (res.status == HTTP_OK) {
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'ASIGNACION DE RESPONSABLE COMPLETADA',
             })
             this.getAttachedUsers()
             //this.$router.go(-1)
@@ -636,8 +636,8 @@ export default {
         .post(`v1/customers/${this.customerId}/products`,data)
         .then(resp => {
           this.products = resp.data;
+          this.sum_products = 0
           this.products.forEach((product) => {
-            console.log(product.price)
             this.sum_products =  this.sum_products + parseInt(product.price == null ? 0 : product.price) 
           })
           // console.log(resp);
@@ -807,51 +807,56 @@ export default {
 
    validCIF ( cif ) {
 
-      var CIF_REGEX = /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/;
+    if (!cif || cif.length !== 9) {
+      return false;
+    }
 
-      var match = cif.match( CIF_REGEX );
-      var letter  = match[1],
-          number  = match[2],
-          control = match[3];
+    var letters = ['J', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'];
+    var digits = cif.substr(1, cif.length - 2);
+    var letter = cif.substr(0, 1);
+    var control = cif.substr(cif.length - 1);
+    var sum = 0;
+    var i;
+    var digit;
 
-      var even_sum = 0;
-      var odd_sum = 0;
-      var n;
+    if (!letter.match(/[A-Z]/)) {
+      return false;
+    }
 
-      for ( var i = 0; i < number.length; i++) {
-        n = parseInt( number[i], 10 );
+    for (i = 0; i < digits.length; ++i) {
+      digit = parseInt(digits[i]);
 
-        // Odd positions (Even index equals to odd position. i=0 equals first position)
-        if ( i % 2 === 0 ) {
-          // Odd positions are multiplied first.
-          n *= 2;
+      if (isNaN(digit)) {
+        return false;
+      }
 
-          // If the multiplication is bigger than 10 we need to adjust
-          odd_sum += n < 10 ? n : n - 9;
-
-        // Even positions
-        // Just sum them
-        } else {
-          even_sum += n;
+      if (i % 2 === 0) {
+        digit *= 2;
+        if (digit > 9) {
+          digit = parseInt(digit / 10) + (digit % 10);
         }
 
-      }
-
-      var control_digit = (10 - (even_sum + odd_sum).toString().substr(-1) );
-      var control_letter = 'JABCDEFGHI'.substr( control_digit, 1 );
-
-      // Control must be a digit
-      if ( letter.match( /[ABEH]/ ) ) {
-        return control == control_digit;
-
-      // Control must be a letter
-      } else if ( letter.match( /[KPQS]/ ) ) {
-        return control == control_letter;
-
-      // Can be either
+        sum += digit;
       } else {
-        return control == control_digit || control == control_letter;
+        sum += digit;
       }
+    }
+
+    sum %= 10;
+    if (sum !== 0) {
+      digit = 10 - sum;
+    } else {
+      digit = sum;
+    }
+
+    if (letter.match(/[ABEH]/)) {
+      return String(digit) === control;
+    }
+    if (letter.match(/[NPQRSW]/)) {
+      return letters[digit] === control;
+    }
+
+    return String(digit) === control || letters[digit] === control;
 
     },
     getPicture : function () {
@@ -955,11 +960,13 @@ export default {
           console.log(res.data);
 
           if (res.status == HTTP_OK) {
+            this.upload_profile.pictureModal = false;
             Toast.fire({
               icon: 'success',
-              title: 'Operación completada',
+              title: 'FOTO DE PERFIL DEL CLIENTE ACTUALIZADA',
             })
-            this.$router.go(-1);
+            this.getCustomerById();
+            //this.$router.go(-1);
           }
         })
         .catch(err => console.log(err.response));

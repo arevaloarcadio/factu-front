@@ -42,12 +42,12 @@ export default [
         to: '/reminders',
         icon: 'cil-puzzle'
       },
-      {
+     /* {
         _name: 'CSidebarNavItem',
         name: 'Revisión',
         to: '/revisions',
         icon: 'cil-puzzle'
-      },
+      },*/
       {
         _name: 'CSidebarNavDivider',
         _class: 'm-2'
