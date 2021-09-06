@@ -24,7 +24,7 @@
                <label for="filter"  class="typo__label mb-0 text-dark" style="margin-top: 10px;">Filtrar por</label>
             </div>
               <div class="col-md-2">
-                <select id="filter" v-model="filter" @change="getTasks()" class="form-control">
+                <select id="filter" v-model="filter" @change="getTasks(true)" class="form-control">
                       <option value="Mis Tareas" >Mis Tareas</option>
                       <option value="Suborbinados">Tareas de mis Suborbinado</option>
                 </select>
