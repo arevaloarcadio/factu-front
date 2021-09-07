@@ -44,10 +44,6 @@ const items = [
         size: "col-md-12 col-md-offset-right-4",
         opciones : [ 
               {
-                id:'Abierta',
-                name: 'Abierta'
-              },
-              {
                 id:'Pendiente',
                 name: 'Pendiente'
               },
