@@ -35,8 +35,7 @@
               <div class="col-md-2">
                 <select id="filter" v-model="select_filter" @change="getTasks(true)" class="form-control">
                       <option value="">Seleccione</option>
-                      <option value="Abierta" >Abierta</option>
-                      <option value="Pendiente" >Pendiente</option>
+                      <option value="Pendiente">Pendiente</option>
                       <option value="Cerrada">Cerrada</option>
                 </select>
               </div>
@@ -186,7 +185,7 @@ export default {
   },
   created() {
     this.filter = 'Mis Tareas'; 
-    this.select_filter = 'Abierta'
+    this.select_filter = 'Pendiente'
     this.getTasks(true);
     this.getSubordinates();
     this.getParents()
