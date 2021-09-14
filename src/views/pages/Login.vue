@@ -102,7 +102,7 @@ export default {
 
             Toast.fire({
               icon: 'success',
-              title: 'ACCESSO CONCEDIDO',
+              title: 'ACCESO CONCEDIDO',
             })
             //self.showSuccessMsg()
             user.setUser(response.data.user)
@@ -116,7 +116,7 @@ export default {
            
            Toast.fire({
               icon: 'error',
-              title: 'ACCESSO DENEGADO',
+              title: 'ACCESO DENEGADO',
             })
 
           //commit('auth_error', err)
