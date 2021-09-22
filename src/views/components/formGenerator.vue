@@ -111,7 +111,7 @@
 
                              <template v-if="campo.type == 'tiny'">
                                 <editor v-model="entity[campo.name]" :name="campo.name" 
-                                    api-key="pbk6mof35r4bpt8m2cpcp86izffldmphfob6yffgkurnlan9"
+                                    api-key="rlm8qw2zm8zia98rirlrbkxh39wt7gcmk710tb21jrqsexp0"
                                   />
                             </template>
                           </div>
@@ -223,7 +223,7 @@
 
                                <template v-if="campo.type == 'tiny'">
                                 <editor v-model="entity[campo.name]" :name="campo.name"  :id="campo.name"  
-                                    api-key="pbk6mof35r4bpt8m2cpcp86izffldmphfob6yffgkurnlan9"
+                                    api-key="rlm8qw2zm8zia98rirlrbkxh39wt7gcmk710tb21jrqsexp0"
                                   />
                             </template>
                             </div>
