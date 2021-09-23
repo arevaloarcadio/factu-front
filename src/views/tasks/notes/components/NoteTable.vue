@@ -25,7 +25,7 @@
             <strong>{{ item.user.firstname + ' ' + item.user.lastname }}</strong>
           </small>
         </td>
-        <td v-html="item.note"></td>
+        <td v-html="item.note+'<br><small>'+new Date(item.created_at).toLocaleString()+'</small>'"></td>
         <td>
          <CButton class="m-2 btn--link" size="sm" color="success" @click="getFiles(item.files)" :class="{'hidden': item.files.length == 0}" >Descargar Archivo</CButton>
         </td>
