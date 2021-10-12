@@ -44,6 +44,7 @@
     "lodash": "^4.17.21",
     "mini-toastr": "^0.8.1",
     "private": "^0.1.8",
+    "push.js": "^1.0.12",
     "pusher": "^5.0.0",
     "pusher-js": "^7.0.3",
     "register-service-worker": "^1.7.2",
