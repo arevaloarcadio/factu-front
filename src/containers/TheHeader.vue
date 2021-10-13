@@ -98,6 +98,7 @@ import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
 import Pusher from 'pusher-js'
 import { mapGetters, mapActions } from 'vuex'
 import Swal from 'sweetalert2/dist/sweetalert2.js'
+import PushJs from 'push.js'
 
 const Toast = Swal.mixin({
   toast: true,
@@ -137,7 +138,8 @@ export default {
   },
   mounted(){
     TheHeader = this
-    Pusher.logToConsole = true;
+    
+    //Pusher.logToConsole = true;
    
     var pusher = new Pusher('91ab7afa0f283ea405d5', {
       cluster: 'eu'
@@ -147,12 +149,22 @@ export default {
 
     channel.bind(`my-notification-event`, function(data) {
       getNotification(data);
+      
+      PushJs.create("Hexcrm: Nueva Notificación",{
+        body: data.data,
+        icon: '/public/apple-icon-152x152.png',
+        //timeout: 2000,
+        onClick: function () {
+          window.focus();
+          TheHeader.$router.push({ path : data.link})
+        }
+      });
     });
- },
+  },
   computed: {
     ...mapGetters([
-          'getUser'
-      ]),
+      'getUser'
+    ]),
   },
   methods:{
 

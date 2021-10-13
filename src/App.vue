@@ -3,8 +3,15 @@
 </template>
 
 <script>
+import PushJs from 'push.js'
+
 export default {
-  name: 'App'
+  	name: 'App',
+  	mounted(){
+		document.addEventListener('DOMContentLoaded', () => {
+			PushJs.Permission.request();
+		});
+	}
 }
 </script>
 
