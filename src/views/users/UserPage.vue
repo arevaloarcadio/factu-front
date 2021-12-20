@@ -48,6 +48,11 @@
                 <router-link :to="{ name: 'users.edit', params: { id: item.id } }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
                 </router-link>
+                <template v-if="getUser.id == getParent && getUser.id != item.id">
+                   <CButton v-if="item.active"  @click="updateActive(item.id,false)" class="m-2 btn--link" size="sm" color="danger">Deshabilitar</CButton>
+
+                   <CButton v-else  @click="updateActive(item.id,true)" class="m-2 btn--link" size="sm" color="primary">Habilitar</CButton>
+                 </template>
               </td>    
             </tr>
           </paginate>
@@ -67,6 +72,19 @@ import VueNotifications from "vue-notifications";
 import formGenerator from "@/views/components/formGenerator.vue";
 import VuePaginate from 'vue-paginate'
 import { mapGetters } from 'vuex'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
 export default {
   name: "UserPage",
@@ -105,7 +123,7 @@ export default {
   },
   computed: {
      ...mapGetters([
-        'getUser'
+        'getUser','getParent'
     ]),
   },
   methods: {
@@ -115,6 +133,20 @@ export default {
          .get(`users`)
         .then(res => {
           this.items = res.data;
+        })
+        .catch(err => console.log(err));
+    },
+    updateActive(user_id,active) {
+
+      axios
+        .put('v1/users/'+user_id+'/active',{active : active})
+        .then(res => {
+          console.log(res.data)
+           Toast.fire({
+              icon: 'success',
+              title: 'USUARIO '+(active ? 'HABILITADO' : 'DESHABILITADO')+' EXISTOSAMENTE',
+            })
+           this.getUsers()
         })
         .catch(err => console.log(err));
     },

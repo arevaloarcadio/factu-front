@@ -48,6 +48,7 @@
     "pusher": "^5.0.0",
     "pusher-js": "^7.0.3",
     "register-service-worker": "^1.7.2",
+    "sass": "^1.45.0",
     "sweetalert2": "^11.0.8",
     "vee-validate": "^3.4.0",
     "vue": "~2.6.11",
@@ -76,9 +77,8 @@
     "eslint-plugin-vue": "~6.2.2",
     "jquery": "^3.6.0",
     "levenary": "^1.1.1",
-    "node-sass": "~4.13.1",
     "npm-run-all": "~4.1.5",
-    "sass-loader": "^7.3.1",
+    "sass-loader": "^10.2.0",
     "vue-template-compiler": "~2.6.11"
   },
   "browserslist": [
@@ -87,7 +87,7 @@
     "not ie <= 9"
   ],
   "engines": {
-    "node": ">= 12.0.0 <= 14.0.0",
+    "node": ">= 12.0.0 <= 16.13.0",
     "npm": ">= 5.6.0"
   }
 }
