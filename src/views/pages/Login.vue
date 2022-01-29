@@ -24,8 +24,16 @@
                   <template #prepend-content><CIcon name="cil-lock-locked"/></template>
                 </CInput>
                 <CRow>
-                  <CCol col="6">
-                    <CButton color="primary" class="px-4" @click="login">Login</CButton>
+                  <CCol col="4">
+                    <CButton color="success" class="px-4" @click="login">Login</CButton>
+                  </CCol>
+                  <CCol col="4">
+                    <CButton color="danger" class="px-4" @click="loginGoogle">Google</CButton>
+                  </CCol>
+                  <CCol col="4">
+                    <center>
+                     <CButton color="primary" class="px-4" @click="loginFacebook">Facebook</CButton>
+                     </center>
                   </CCol>
                   <CCol col="6" class="text-right">
                     <CButton color="link" class="px-0">¿Olvidaste tu password?</CButton>
@@ -46,6 +54,7 @@
             <CButton
               color="primary"
               class="active mt-3"
+              @click="$router.push({path : '/pages/register'})"
             >
               Regístrate ahora!
             </CButton>
@@ -64,6 +73,9 @@ import user from "@/plugins/jwt/user";
 import VueNotifications from "vue-notifications"
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 
+function onSignIn(user) {
+  console.log(user)
+}
 const Toast = Swal.mixin({
   toast: true,
   position: 'top',
@@ -87,28 +99,60 @@ export default {
     }
   },
   mounted(){
+    gapi.load('auth2', () => {
+      const clientConfig = {
+          client_id: document.getElementsByName('google-signin-client_id')[0].content
+      };
+      gapi.auth2.init(clientConfig);
+    });
     
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '298551098971580',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v12.0'
+      });
+      FB.AppEvents.logPageView();   
+    };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+  
   },
   methods:{
     ...mapActions([
-                'setAuthUser',
-                'setUnit'
-            ]),
-    login(){
-      let self = this
-      axios({url: 'auth/login', data: this.user, method: 'POST' })
+        'setAuthUser'
+    ]),
+    async loginGoogle(){
+      let google = await window.gapi.auth2.getAuthInstance().signIn();
+    
+      Swal.showLoading()
+      
+      let dataUser = {
+        name : google.getBasicProfile().getGivenName(),
+        last_name : google.getBasicProfile().getFamilyName(),
+        email : google.getBasicProfile().getEmail() 
+      }
+
+      axios.post('/api/auth/social',dataUser)
         .then(response => {
           if(response.status == "200"){
 
             Toast.fire({
               icon: 'success',
-              title: 'ACCESO CONCEDIDO',
+              title: 'Acceso Concedido',
             })
             //self.showSuccessMsg()
             user.setUser(response.data.user)
-            jwtToken.setToken(response.data.access_token);
-            self.setAuthUser(response.data.user)
-            self.getOrganization()
+            jwtToken.setToken(response.data.token);
+            this.setAuthUser(response.data.user)
+            this.$router.push({path : '/dashboard'})
           }
         })
         .catch(err => {
@@ -116,7 +160,7 @@ export default {
            
            Toast.fire({
               icon: 'error',
-              title: 'ACCESO DENEGADO',
+              title: 'Error Interno',
             })
 
           //commit('auth_error', err)
@@ -124,23 +168,49 @@ export default {
           //reject(err)
         });
     },
-    getOrganization(){
+    loginFacebook(){
+     FB.login(function(response) {
+        if (response.authResponse) {
+         console.log('Welcome!  Fetching your information.... ');
+         FB.api('/me', function(response) {
+           console.log('Good to see you, ' + response.name + '.');
+         });
+        } else {
+         console.log('User cancelled login or did not fully authorize.');
+        }
+    });
+    },
+
+    login(){
       let self = this
-      axios({url: 'organizations/mine', method: 'GET' })
+      axios({url: '/api/login', data: this.user, method: 'POST' })
         .then(response => {
           if(response.status == "200"){
-             
-            if(response.data[0].unit){
-              self.setUnit(response.data[0].unit_id)
-            }
-            self.$router.push({path: '/tasks', query : { reminder : true }});
+
+            Toast.fire({
+              icon: 'success',
+              title: 'Acceso Concedido',
+            })
+            //self.showSuccessMsg()
+            user.setUser(response.data.user)
+            jwtToken.setToken(response.data.token);
+            this.setAuthUser(response.data.user)
+            this.$router.push({path : '/dashboard'})
           }
         })
         .catch(err => {
+          console.log(err);
+           
+           Toast.fire({
+              icon: 'error',
+              title: 'Acceso Denegado',
+            })
+
+          //commit('auth_error', err)
           localStorage.removeItem('token')
+          //reject(err)
         });
-    }
-  },
+    },  },
   notifications: {
       showSuccessMsg: {
         type: VueNotifications.types.success,

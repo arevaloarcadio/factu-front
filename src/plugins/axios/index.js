@@ -4,17 +4,26 @@ import jwtToken from '@/plugins/jwt/jwt-token.js'
 import user from '@/plugins/jwt/user.js'
 import store from '@/plugins/store'
 import axios from 'axios'
+import Swal from 'sweetalert2/dist/sweetalert2'
 
+axios.defaults.baseURL = 'http://localhost'
 
-//axios.defaults.baseURL = 'http://localhost/Hexcrm/public/index.php'
-axios.defaults.baseURL = 'https://hex-crm-cbmbw.ondigitalocean.app/';
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 4000,
+  timerProgressBar: true,
+  onOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+});
 
-Vue.prototype.$http = axios;
 axios.interceptors.request.use(config => {
   config.headers['X-Requested-With'] = 'XMLHttpRequest';
   if (jwtToken.getToken()) {
     config.headers['Authorization'] = 'Bearer ' + jwtToken.getToken();
-    config.headers['UnitId'] = store.getters.getUnit;
   }
   return config;
 }, error => {
@@ -31,6 +40,23 @@ axios.interceptors.response.use(response => {
   }
   return response;
 }, error => {
+  
+  Swal.close()
+
+  if(error['response']['status'] == 422){
+    let message="";
+
+    console.log(error.response)
+    error.response.data.error.message.forEach(error => {
+      message += error+'<br>'
+    })
+
+    Toast.fire({
+      icon: 'warning',
+      html: message,
+    })
+  }
+
   let errorResponseData = error.response.data;
   const errors = ["token_invalid", 
                   "Token not provided", 

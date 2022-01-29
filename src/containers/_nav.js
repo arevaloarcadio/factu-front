@@ -4,47 +4,15 @@ export default [
     _children: [
       {
         _name: 'CSidebarNavItem',
-        name: 'Organigrama',
+        name: 'Dashboard',
         to: '/dashboard',
         icon: 'cil-speedometer',
-        badge: {
-          color: 'primary',
-          text: 'NEW'
-        }
       },
       {
         _name: 'CSidebarNavItem',
         name: 'Usuarios',
         to: '/users',
         icon: 'cil-people'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Clientes',
-        to: '/customers',
-        icon: 'cil-people'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Tareas',
-        to: '/tasks',
-        icon: 'cil-puzzle'
-      },
-      {
-        _name: 'CSidebarNavItem',
-        name: 'Recordatorio',
-        to: '/reminders',
-        icon: 'cil-puzzle'
-      },
-      /*{
-        _name: 'CSidebarNavItem',
-        name: 'Revisión',
-        to: '/revisions',
-        icon: 'cil-puzzle'
-      },*/
-      {
-        _name: 'CSidebarNavDivider',
-        _class: 'm-2'
       },
     ]
   }

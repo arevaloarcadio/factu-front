@@ -9,30 +9,16 @@
       <CHeaderNavLink>
         <div class="c-avatar">
           <img
-            :src="baseURL+'img/profiles/'+user.image"
+            :src="baseURL+'/img/default.png'"
             class="c-avatar-img "
           />
         </div>
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
-      <strong>{{user.firstname+' '+user.lastname }}</strong>
+      <strong>{{user.name}}</strong>
     </CDropdownHeader>
-    <!--<CDropdownItem>
-      <CIcon name="cil-envelope-open" /> Mensajes
-      <CBadge color="success" class="ml-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>-->
-    <CDropdownItem>
-      <CIcon name="cil-task" /> Tareas
-      <CBadge color="danger" class="ml-auto">{{ task_items }}</CBadge>
-    </CDropdownItem>
-    <CDropdownHeader
-      tag="div"
-      class="text-center"
-      color="light"
-    >
-      <strong>Configuración</strong>
-    </CDropdownHeader>
+   
     <CDropdownItem>
       <CIcon name="cil-user" /> Perfil
     </CDropdownItem>
@@ -65,7 +51,6 @@ export default {
   },
   created() {
     this.baseURL = axios.defaults.baseURL;
-    this.getItemsTasks();
   },
   methods: {
     logout() {
@@ -74,15 +59,6 @@ export default {
       .then(() => {
         router.push({path: '/pages/login'});
       });
-    },
-    getItemsTasks() {
-      
-      axios
-        .get('v1/tasks')
-        .then(resp => {
-          this.task_items = resp.data.length;
-        })
-        .catch(err => console.log(err));
     },
   },
   computed: {

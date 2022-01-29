@@ -13,45 +13,9 @@ const Page500 = () => import('@/views/pages/Page500')
 const Login = () => import('@/views/pages/Login')
 const Register = () => import('@/views/pages/Register')
 
-
-//USERS
 const UserPage = () => import('@/views/users/UserPage')
 const UserCreate = () => import('@/views/users/UserCreate')
 const UserEdit = () => import('@/views/users/UserEdit')
-
-const InteractionCreate = () => import('@/views/interactions/InteractionCreate.vue')
-
-//CUSTOMERS
-const CustomerPage = () => import('@/views/customers/CustomerPage')
-const CustomerCreate = () => import('@/views/customers/CustomerCreate')
-const CustomerEdit = () => import('@/views/customers/CustomerEdit')
-
-const ProductsPage = () => import('@/views/products/ProductPage')
-const ProductCreate = () => import('@/views/products/ProductCreate')
-const ProductEdit = () => import('@/views/products/ProductEdit')
-
-const TaskPage = () => import('@/views/tasks/TaskPage')
-const TaskCreate = () => import('@/views/tasks/TaskCreate')
-const TaskEdit = () => import('@/views/tasks/TaskEdit')
-
-const ProductTypeCreate = () => import('@/views/product_types/ProductTypeCreate')
-const ProductTypeEdit = () => import('@/views/product_types/ProductTypeEdit')
-const ProductTypePage = () => import('@/views/product_types/ProductTypePage')
-
-const ReminderCreate = () => import('@/views/reminders/ReminderCreate')
-const ReminderEdit = () => import('@/views/reminders/ReminderEdit')
-const ReminderPage = () => import('@/views/reminders/ReminderPage')
-
-const RelationshipCreate = () => import('@/views/relationships/RelationshipCreate')
-const RelationshipEdit = () => import('@/views/relationships/RelationshipEdit')
-
-const NoteCreate = () => import('@/views/tasks/notes/NoteCreate')
-
-const TimelinePage = () => import('@/views/timelines/TimelinePage')
-
-const RevisionPage = () => import('@/views/revisions/RevisionPage')
-
-const FileAreaCreate = () => import('@/views/customers/files_area/FileAreaCreate')
 
 Vue.use(Router)
 
@@ -66,19 +30,14 @@ function configRoutes () {
   return [
     {
       path: '/',
-      redirect: '/tasks',
+      redirect: '/pages/login',
       name: 'Inicio',
       component: TheContainer,
       children: [
         {
           path: 'dashboard',
-          name: 'Organigrama',
+          name: 'Dashboard',
           component: Dashboard
-        },
-        {
-          path: 'timeline',
-          name: 'Timeline',
-          component: TimelinePage
         },
         {
           path: 'users',
@@ -105,207 +64,6 @@ function configRoutes () {
             }
           ]
         },
-        {
-          path: 'customers',
-          redirect: 'customers',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'customers.index',
-              meta: { label: 'Clientes' },
-              component: CustomerPage
-            },
-            {
-              path: 'create',
-              meta: { label: 'Crear Cliente' },
-              name: 'customers.create',
-              component: CustomerCreate
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Editar Cliente' },
-              name: 'customers.edit',
-              component: CustomerEdit,
-              meta: { reuse: false },
-            },
-            {
-              path: ':id/products/create',
-              meta: { label: 'Crear Producto' },
-              name: 'products.create',
-              component: ProductCreate
-            },
-            {
-              path: ':customerId/products/:productId/edit',
-              meta: { label: 'Editar Producto' },
-              name: 'products.edit',
-              component: ProductEdit
-            },
-            {
-              path: ':customerId/interactions/create',
-              meta: { label: 'Crear Interacción' },
-              name: 'interactions.create',
-              component: InteractionCreate
-            },
-            {
-              path: ':customerId/relationships/:relationshipId/edit',
-              meta: { label: 'Editar Relación' },
-              name: 'customers.edit.relationships',
-              component: RelationshipEdit
-            },
-            {
-              path: ':customerId/relationships/create',
-              meta: { label: 'Crear Relación' },
-              name: 'customers.create.relationships',
-              component: RelationshipCreate
-            }
-          ]
-        },
-        {
-          path: 'products',
-          redirect: 'products',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'products.index',
-              meta: { label: 'Productos' },
-              component: ProductsPage
-            },
-            // {
-            //   path: 'create',
-            //   name: 'products.create',
-            //   meta: { label: 'Crear Producto' },
-            //   component: ProductCreate
-            // }
-          ]
-        },
-        {
-          path: 'tasks',
-          redirect: 'tasks',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'tasks.index',
-              meta: { label: 'Tareas' },
-              component: TaskPage
-            },
-            {
-              path: 'create',
-              name: 'tasks.create',
-              meta: { label: 'Crear Tarea' },
-              component: TaskCreate
-            },
-            {
-              path: ':customerId/create',
-              name: 'tasks.create.customer',
-              meta: { label: 'Crear Tarea' },
-              component: TaskCreate
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Editar Tarea' },
-              name: 'tasks.edit',
-              component: TaskEdit ,
-              meta: { reuse: false },
-            },
-            {
-              path: ':id/notes/create',
-              meta: { label: 'Crear Nota' },
-              name: 'notes.create',
-              component: NoteCreate
-            }
-            // {
-            //   path: ':id/tasks/create',
-            //   meta: { label: 'Crear Producto' },
-            //   name: 'tasks.create',
-            //   component: ProductCreate
-            // },
-            // {
-            //   path: ':customerId/tasks/:productId/edit',
-            //   meta: { label: 'Editar Producto' },
-            //   name: 'tasks.edit',
-            //   component: ProductEdit
-            // }
-          ]
-        },
-        {
-          path: 'product_types',
-          redirect: 'product_types',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'product_types.index',
-              meta: { label: 'Tipo de Producto' },
-              component: ProductTypePage
-            },
-            {
-              path: 'create',
-              name: 'product_types.create',
-              meta: { label: 'Crear Tipo de Producto' },
-              component: ProductTypeCreate
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Editar Tipo de Producto' },
-              name: 'product_types.edit',
-              component: ProductTypeEdit
-            },
-          ]
-        },
-        {
-          path: 'reminders',
-          redirect: 'reminders',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'reminders.index',
-              meta: { label: 'Recordatorios' },
-              component: ReminderPage
-            },
-            {
-              path: 'create',
-              name: 'reminders.create',
-              meta: { label: 'Crear Recordatorio' },
-              component: ReminderCreate
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Editar Recordatorio' },
-              name: 'reminders.edit',
-              component: ReminderEdit
-            },
-          ]
-        },
-        {
-          path: 'revisions',
-          redirect: 'revisions',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: '',
-              name: 'revisions.index',
-              meta: { label: 'Revisión' },
-              component: RevisionPage
-            }
-          ]
-        },
-        {
-          path: 'files_area',
-          redirect: 'files_area',
-          component: { render(c) { return c('router-view') } },
-          children: [
-            {
-              path: ':customerId/create',
-              name: 'files_area.create',
-              meta: { label: 'Crear Archivo' },
-              component: FileAreaCreate
-            }
-          ]
-        }
       ]
     },
     {

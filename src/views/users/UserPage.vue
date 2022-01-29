@@ -4,7 +4,7 @@
       <CCardHeader>
         <h5>
           Usuarios
-          <router-link v-show="getUser.admin" :to="{ name: 'users.create' }">
+          <router-link :to="{ name: 'users.create' }">
             <CButton class="float-right py-0 mr-1" color="success">
               <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
               Nuevo Usuario
@@ -32,27 +32,13 @@
                 </td>
               </tr>
             <tr v-for="item in paginated('items')">
-              <td>{{item.firstname}}</td> 
-              <td>{{item.lastname}}</td> 
+              <td>{{item.name}}</td> 
+              <td>{{item.last_name}}</td> 
               <td>{{item.email}}</td> 
-              <td v-if="item.admin" class="text-center">
-                <CIcon
-                  name="cil-check"
-                  style="color:green;"
-                  height="25"
-                  v-show="item.admin"/>
-              </td>
-              <td v-else class="text-center">
-              </td>
               <td slot="actions">
                 <router-link :to="{ name: 'users.edit', params: { id: item.id } }">
                   <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
                 </router-link>
-                <template v-if="getUser.id == getParent && getUser.id != item.id">
-                   <CButton v-if="item.active"  @click="updateActive(item.id,false)" class="m-2 btn--link" size="sm" color="danger">Deshabilitar</CButton>
-
-                   <CButton v-else  @click="updateActive(item.id,true)" class="m-2 btn--link" size="sm" color="primary">Habilitar</CButton>
-                 </template>
               </td>    
             </tr>
           </paginate>
@@ -93,103 +79,30 @@ export default {
     return {
       items: [],
       paginate : ['items'],
-      submitted: false,
-      itemModal: false,
       tableFields: [
-        { key: "firstname", label: "Nombre" },
-        { key: "lastname", label: "Apellidos" },
+        { key: "name", label: "Nombre" },
+        { key: "last_name", label: "Apellido", _classes: "text-center" },
         { key: "email", label: "Email", _classes: "text-center" },
-        { key: "admin", label: "Administrador", _classes: "text-center" },
-        {
-          key: 'actions',
-          label: 'Acciones',
-          _style: { width: '1%' },
-          sorter: false,
-          filter: false
-        },
+        { key: 'actions',label: 'Acciones',_style: { width: '1%' },sorter: false,filter: false },
       ],
-      previousUrl: "",
-      nextUrl: "",
-      unit_ids : []
     };
   },
   created() {
-    this.getOrganizations();
-    //this.getUsers();
-
-  },
-  mounted(){
-    console.log(this.getUser)
+    this.getUsers();
   },
   computed: {
      ...mapGetters([
-        'getUser','getParent'
+        'getUser'
     ]),
   },
   methods: {
     getUsers() {
-
       axios
-         .get(`users`)
-        .then(res => {
-          this.items = res.data;
-        })
-        .catch(err => console.log(err));
-    },
-    updateActive(user_id,active) {
-
-      axios
-        .put('v1/users/'+user_id+'/active',{active : active})
-        .then(res => {
-          console.log(res.data)
-           Toast.fire({
-              icon: 'success',
-              title: 'USUARIO '+(active ? 'HABILITADO' : 'DESHABILITADO')+' EXISTOSAMENTE',
-            })
-           this.getUsers()
-        })
-        .catch(err => console.log(err));
-    },
-    getOrganizations(){
-       axios.get('organizations/mine')
-        .then(resp => {
-
-          let organizations = resp.data
-          for (var i = 0; i < organizations.length; i++) {
-            this.unit_ids.push(organizations[i].unit_id)
-          }
-
-          this.getUsers(); 
-          resolve(resp)
-        })
-        .catch(err => {
-          //commit('auth_error', err)
-          //reject(err)
-        });
-    },
-    updated() {
-      console.log(this.entityForm, "<----");
-    },
-    page(url) {
-      axios({ url: url, method: "GET" })
-        .then((resp) => {
-          const t = this;
-          t.items = resp.data;
-          if (resp.data.next_page_url) {
-            t.nextUrl = resp.data.next_page_url;
-          } else {
-            t.nextUrl = "";
-          }
-          if (resp.data.prev_page_url) {
-            t.previousUrl = resp.data.prev_page_url;
-          } else {
-            t.previousUrl = "";
-          }
-          resolve(resp);
-        })
-        .catch((err) => {
-          reject(err);
-        });
+      .get(`/api/users/get`)
+      .then(res => {
+        this.items = res.data.data;
+      })
+      .catch(err => console.log(err));
     }
   },
   notifications: {

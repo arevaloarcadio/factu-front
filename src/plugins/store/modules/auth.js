@@ -18,13 +18,9 @@ export const UNSET_USER = 'UNSET_USER';
 const state = {
 	user: {
 		id: null,
-		firstname: null,
-		lastname: null,
+		name: null,
 		email: null,
-		admin: null,
-		photo: null,
-		unit: null,
-		parent: null,
+		user_name: null
 	}
 };
 
@@ -36,27 +32,15 @@ const state = {
 const mutations = {
 	[SET_USER](state, payload) {
 		state.user.id = payload.user.id;
-		state.user.firstname = payload.user.firstname;
-		state.user.lastname = payload.user.lastname;
+		state.user.name = payload.user.name;
 		state.user.email = payload.user.email;
-		state.user.admin = payload.user.admin;
-		state.user.photo = payload.user.photo;
-	},
-	[SET_UNIT](state, payload) {
-		state.user.unit = payload.unit;
-	},
-	[SET_PARENT](state, payload) {
-		state.user.parent = payload.parent;
+		state.user.user_name = payload.user.user_name;
 	},
 	[UNSET_USER](state, payload) {
 		state.user.id = null;
-		state.user.firstname = null;
-		state.user.lastname = null;
+		state.user.name = null;
 		state.user.email = null;
-		state.user.admin = null;
-		state.user.photo = null;
-		state.user.unit = null;
-		state.user.parent = null;
+		state.user.user_name = null;
 	},
 };
 
@@ -87,24 +71,14 @@ const actions = {
 */
 const getters = {
 	isLoggedIn: (state) => {
-		return !!(state.user.firstname && state.user.email);
+		return !!(state.user.name && state.user.email);
 	},
 	getUser: (state) => {
 		return (state.user);
 	},
-	getUnit: (state) => {
-		return (state.user.unit);
-	},
-	getParent: (state) => {
-		return (state.user.parent);
-	},
-	getUnitId: (state) => {
-		return (state.user.unit);
-	},
 	whoami: (state) => {
 		return state.user.id;
 	},
-
 };
 
 /*

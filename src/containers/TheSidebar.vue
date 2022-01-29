@@ -32,9 +32,6 @@
 
 <script>
 import _nav from './_nav'
-import _navadmin from './_navadmin'
-import _navadminparent from './_navadminparent'
-import _navparent from './_navparent'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -45,26 +42,12 @@ export default {
     }
   },
   created(){
-    if(this.getUser.admin ){
-      if(this.getUser.id == this.getParent){
-        this.nav = _navadminparent
-      }else{
-        this.nav = _navadmin
-      } 
-    }else{
-
-       if(this.getUser.id == this.getParent){
-        this.nav = _navparent
-      }else{
-        this.nav = _nav
-      } 
-    }
+    this.nav = _nav
   },
-
   computed: {
     ...mapGetters([
-                  'getUser','getParent'
-              ]),
+      'getUser','getParent'
+    ]),
     show () {
       return this.$store.state.menu.sidebarShow 
     },

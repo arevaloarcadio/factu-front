@@ -133,7 +133,6 @@ export default {
     }
   },
   created(){
-    this.getItems();
     this.getMyNotifications();
   },
   mounted(){
@@ -167,25 +166,12 @@ export default {
     ]),
   },
   methods:{
-
     ...mapActions([
       'setUnit'
     ]),
     addNotification(data){
       this.notification = [];
       this.notification.push(data);
-    },
-    getItems(){
-      this.$http({url: 'organizations/mine',  method: 'GET' })
-        .then(resp => {
-          const t = this
-          t.units = resp.data
-          resolve(resp)
-        })
-        .catch(err => {
-          //commit('auth_error', err)
-          //reject(err)
-        });
     },
     getMyNotifications(){
       this.$http({url: 'v1/users/notifications',  method: 'GET' })

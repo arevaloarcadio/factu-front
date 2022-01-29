@@ -11,6 +11,7 @@ export default {
 		document.addEventListener('DOMContentLoaded', () => {
 			PushJs.Permission.request();
 		});
+   
 	}
 }
 </script>

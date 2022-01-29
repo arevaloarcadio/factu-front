@@ -44,6 +44,13 @@
                               </ValidationProvider>
                             </template>
 
+                            <template v-if="campo.type == 'password'" >
+                              <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
+                                <input type="password" :name="campo.name" @blur="onBlur($event, campo.name)"  class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
+                                <span class="small text-danger">{{ errors[0] }}</span>
+                              </ValidationProvider>
+                            </template>
+
                             <template v-if="campo.type == 'date'" >
                               <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
                                 <input type="date" @blur="onBlur($event, campo.name)" :name="campo.name" class="form-control"  :class="campo.clase" v-model="entity[campo.name]" :id="campo.name">
@@ -109,6 +116,8 @@
                               </ValidationProvider>
                             </template>
 
+
+
                              <template v-if="campo.type == 'tiny'">
                                 <editor v-model="entity[campo.name]" :name="campo.name" 
                                     api-key="rlm8qw2zm8zia98rirlrbkxh39wt7gcmk710tb21jrqsexp0"
@@ -152,6 +161,13 @@
                               <template v-if="campo.type == 'string'" >
                                 <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
                                   <input type="text"  @blur="onBlur($event, campo.name)"  :name="campo.name" class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
+                                  <span class="small text-danger">{{ errors[0] }}</span>
+                                </ValidationProvider>
+                              </template>
+
+                              <template v-if="campo.type == 'password'" >
+                                <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
+                                  <input type="password" :name="campo.name" @blur="onBlur($event, campo.name)"  class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">
                                   <span class="small text-danger">{{ errors[0] }}</span>
                                 </ValidationProvider>
                               </template>
