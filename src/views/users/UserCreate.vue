@@ -1,12 +1,81 @@
 <template>
   <div>
-    <formGenerator
-      :items="itemsForm" 
-      :entity="entityForm" 
+    <formGenerator v-if="step == 1"
+      :items="itemsForm1" 
+      :entity="entityFormUser" 
       @update="createUser()"
       @blur="validateDNI($event)">
       Crear Usuario
     </formGenerator>
+
+    <!--
+    <formGenerator 
+      :items="itemsForm2" 
+      :entity="entityFormCompany" 
+      @update="createUser()"
+      @blur="validateDNI($event)">
+      Crear Empresas
+    </formGenerator>
+    -->
+
+    <ValidationObserver  v-slot="{ invalid }"  v-if="step == 2" >
+      <div  class="card shadow">
+        <div class="card-header py-1">
+          <span class="text-success"><b>Crear Empresas</b></span>
+        </div>
+        <div>
+          <div  v-for="(company,key) in companies" card="card-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-12">
+                  <span class="text-info"><b><u>Empresa {{key+1}} </u></b></span>
+                </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col-md-4">
+                  <label class="typo__label mb-0 text-dark">CIF</label>
+                  <ValidationProvider :name="'CIF'" :rules="'required|min:3'" v-slot="{ errors, validate }">
+                      <input type="text"  @blur="validateDNI($event)"  class="form-control" v-model="companies[key].cif" placeholder="Introduzca el CIF" >
+                      <span class="small text-danger">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4">
+                  <label class="typo__label mb-0 text-dark">Nombre</label>
+                  <ValidationProvider :name="'Nombre'" :rules="'required|min:3'" v-slot="{ errors, validate }">
+                      <input type="text"  class="form-control" v-model="companies[key].name" placeholder="Introduzca el nombre" >
+                      <span class="small text-danger">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4">
+                  <label class="typo__label mb-0 text-dark">Razón Social</label>
+                  <ValidationProvider :name="'Razon Social'" :rules="'required|min:3'" v-slot="{ errors, validate }">
+                      <input type="text" class="form-control" v-model="companies[key].business_name" placeholder="Introduzca la razón social" >
+                      <span class="small text-danger">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4">
+                  <label class="typo__label mb-0 text-dark">Código postal</label>
+                  <ValidationProvider :name="'Código Postal'" :rules="'required|min:3'" v-slot="{ errors, validate }">
+                      <input type="text" class="form-control" v-model="companies[key].code_postal" placeholder="Introduzca la  código postal" >
+                      <span class="small text-danger">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+                <div class="col-md-4">
+                  <label class="typo__label mb-0 text-dark">Descripción</label>
+                  <ValidationProvider :name="'Descripción'" :rules="'required|min:3'" v-slot="{ errors, validate }">
+                      <textarea class="form-control" v-model="companies[key].description" placeholder="Introduzca la descripción" />
+                      <span class="small text-danger">{{ errors[0] }}</span>
+                  </ValidationProvider>
+                </div>
+              </div>  
+            </div>
+          </div>
+          <div class="card-footer py-1">
+            <button class="btn btn-primary btn-sm float-right" :disabled="invalid" @click="createCompanies">Guardar</button>
+          </div>
+        </div>
+      </div>   
+    </ValidationObserver>  
   </div>
 </template>
 
@@ -35,68 +104,87 @@ export default {
   components: { formGenerator },
   data() {
     return {
-      itemsForm: items,
-      entityForm: {
+      itemsForm1: items.items_step_1,
+      itemsForm2: items.items_step_2,
+      step : 1,
+      companies : [],
+      entityFormUser: {
         name : '',
         last_name : '',
         email : '',
         password : '',
         password_confirmation : '',
+        number_companies : 1
+      },
+      entityFormCompany:{
         cif : '',
-        tax_data_name : '',
+        name : '',
         business_name : '',
         code_postal : '',
         description : '',
       },
+      user:{}
     };
   },
   methods: {
     createUser() {
-
-      let data = {
-        user : {
-          name : this.entityForm.name,
-          last_name : this.entityForm.last_name,
-          email : this.entityForm.email,
-          user_name : this.entityForm.user_name,
-          password : this.entityForm.password,
-          password_confirmation : this.entityForm.password_confirmation
-        },
-        tax_data : {
-          cif : this.entityForm.cif,
-          name : this.entityForm.name,
-          business_name : this.entityForm.business_name,
-          code_postal : this.entityForm.code_postal,
-          description : this.entityForm.description
-        }
-      }
       
+      Swal.showLoading()
+
+      if (this.entityFormUser.number_companies < 1) {
+        Toast.fire({
+          icon: 'warning',
+          title: 'El mínimo de número de empresas es 1',
+        }) 
+        return
+      }
+
       axios
-      .post("/api/users/add",data)
+      .post("/api/users/add",this.entityFormUser)
       .then(res => {
-        console.log(res.data);
+        
+        this.user = res.data.data
+
         Toast.fire({
           icon: 'success',
           title: 'CREACION DE USUARIO COMPLETADA',
         })
+        
+        for (var i = 0; i < this.entityFormUser.number_companies; i++) {
+          this.companies.push({cif : '',name : '',business_name : '',code_postal : '',description : ''})
+        }
+     
+        this.step = 2
         this.$router.go(-1);
+      })
+      .catch(err => console.log(err));
+
+    },
+    createCompanies(){
+      axios
+      .post("/api/companies/add",{user_id:this.user.id, companies:this.companies})
+      .then(res => {
+        console.log(res.data);
+        Toast.fire({
+          icon: 'success',
+          title: 'CREACION DE EMPRESAS COMPLETADA',
+        })
+        //this.$router.go(-1);
       })
       .catch(err => console.log(err));
     },
     validateDNI($event){
-      if($event.name == "cif"){
-        if ($event.value == '' || $event.value == null) {
-          return;
-        }
-        let validate = this.ValidateSpanishID($event.value)
-        
-        if(!validate.valid){
-          Toast.fire({
-            icon: 'error',
-            title: 'DNI NO ES VALIDO',
-          })
-          return;
-        }
+      if ($event.target.value == '' || $event.target.value == null) {
+        return;
+      }
+      let validate = this.ValidateSpanishID($event.target.value)
+      
+      if(!validate.valid){
+        Toast.fire({
+          icon: 'error',
+          title: 'DNI NO ES VALIDO',
+        })
+        return;
       }
     },
     ValidateSpanishID(str) {

@@ -43,7 +43,6 @@
                                 <span class="small text-danger">{{ errors[0] }}</span>
                               </ValidationProvider>
                             </template>
-
                             <template v-if="campo.type == 'password'" >
                               <ValidationProvider :name="campo.title" :rules="campo.validation" v-slot="{ errors, validate }">
                                 <input type="password" :name="campo.name" @blur="onBlur($event, campo.name)"  class="form-control " v-model="entity[campo.name]" :placeholder="campo.placeholder" :id="campo.name">

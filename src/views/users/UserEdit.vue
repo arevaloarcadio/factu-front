@@ -26,8 +26,64 @@
         @update="updatePassword()">
         Seguridad
       </formGenerator>
-
     </CRow>
+  
+    <CCard>
+      <CCardHeader>
+        <h5>
+          Empresas
+          <router-link :to="{ name: 'users.create' }">
+            <CButton class="float-right py-0 mr-1" color="success">
+              <CIcon name="cil-pencil" class="mr-2 cil-energy"></CIcon>
+              Nuevo Empresa
+            </CButton>
+          </router-link>
+        </h5>
+      </CCardHeader>
+
+      <CCardBody class="py-2" v-if="items">
+
+        <table class="table table-responsive-sm table-striped">
+           <thead >
+            <tr>
+              <th v-for="field in tableFields" :class="{true : field._classes !== undefined }">{{field.label}}</th>
+            </tr>
+          </thead>
+          <paginate name="items" :list="items" :per="10" tag="tbody">
+            <tr v-if="items.length == 0">
+                <td :colspan="tableFields.length">
+                  <center>
+                    <h4 style="margin: 0;">
+                      Sin  registros
+                    </h4>
+                  </center>
+                </td>
+              </tr>
+            <tr v-for="item in paginated('items')">
+              <td>{{item.name}}</td> 
+              <td>{{item.business_name}}</td> 
+              <td>
+                <CIcon
+                  name="cil-check"
+                  style="color:green;"
+                  height="25"
+                  v-show="item.pivot.is_principal"/>
+              </td> 
+              <td slot="actions">
+                <router-link :to="{ name: 'users.edit', params: { id: item.id } }">
+                  <CButton class="m-2 btn--link" size="sm" color="warning">Editar</CButton>
+                </router-link>
+              </td>    
+            </tr>
+          </paginate>
+        </table>
+         
+         <paginate-links for="items" :limit="10" :show-step-links="true" :classes="{'ul': 'pagination', 'li': 'page-item', 'a': 'page-link'}"></paginate-links>
+
+      </CCardBody>
+      
+    </CCard>
+  
   </div>
 </template>
 
@@ -60,27 +116,31 @@ export default {
       userId: null,
       itemsFormInformation: items.information,
       itemsFormSecurity: items.security,
+      items : [],
+      paginate : ['items'],
       entityFormInformation: {
         name : '',
         last_name : '',
         email : '',
         password : '',
-        password_confirmation : '',
-        cif : '',
-        tax_data_name : '',
-        business_name : '',
-        code_postal : '',
-        description : '',
+        password_confirmation : ''
       },
       entityFormSecurity: {
         password : '',
         password_confirmation : ''
-      }
+      },
+      tableFields: [
+        { key: "name", label: "Nombre" },
+        { key: "business_name", label: "Razon Social", _classes: "text-center" },
+        { key: "is_principal", label: "Prinicipal", _classes: "text-center" },
+        { key: 'actions',label: 'Acciones',_style: { width: '1%' },sorter: false,filter: false },
+      ],
     };
   },
   created() {
     this.userId = this.$route.params.id;
     this.getUser();
+    this.getCompanies();
   },
   methods: {
     getUser() {
@@ -91,29 +151,19 @@ export default {
       })
       .catch(err => console.log(err));
     },
+     getCompanies() {
+      axios
+      .get(`/api/companies/get/${this.userId}/user`)
+      .then(res => {
+        this.items = res.data.data
+      })
+      .catch(err => console.log(err));
+    },
     updateUser() {
       const HTTP_OK = 200;
 
-      let data = {
-        user : {
-          name : this.entityFormInformation.name,
-          last_name : this.entityFormInformation.last_name,
-          email : this.entityFormInformation.email,
-          user_name : this.entityFormInformation.user_name,
-          password : this.entityFormInformation.password,
-          password_confirmation : this.entityFormInformation.password_confirmation
-        },
-        tax_data : {
-          cif : this.entityFormInformation.cif,
-          name : this.entityFormInformation.tax_data_name,
-          business_name : this.entityFormInformation.business_name,
-          code_postal : this.entityFormInformation.code_postal,
-          description : this.entityFormInformation.description
-        }
-      }
-      
       axios
-      .put(`api/users/edit/${this.userId}`,data)
+      .put(`api/users/edit/${this.userId}`,this.entityFormInformation)
       .then(res => {
         console.log(res.data.data);
 
@@ -146,7 +196,7 @@ export default {
       .catch(err => console.log(err));
     },
     setUserInformation(user) {
-      this.entityFormInformation = { ...user,...user.tax_data, tax_data_name : user.tax_data.name};
+      this.entityFormInformation = { ...user};
     }
   }
 };

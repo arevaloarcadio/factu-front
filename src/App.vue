@@ -8,9 +8,9 @@ import PushJs from 'push.js'
 export default {
   	name: 'App',
   	mounted(){
-		document.addEventListener('DOMContentLoaded', () => {
+		/*document.addEventListener('DOMContentLoaded', () => {
 			PushJs.Permission.request();
-		});
+		});*/
    
 	}
 }

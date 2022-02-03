@@ -1,4 +1,4 @@
-const items = [
+const items_step_1 = [
   {
     name: "Identificación",
     campos: [
@@ -55,10 +55,20 @@ const items = [
         type: "password",
         size: "col-md-4 col-md-offset-right-4",
       },
+      {
+        name: "number_companies",
+        title: "Número de compañia a registrar",
+        validation: "required",
+        type: "number",
+        size: "col-md-4 col-md-offset-right-4",
+      }
     ],
-  },
+  }
+]
+
+const items_step_2 = [
   {
-    name: "Datos Fiscales",
+    name: "Empresas",
     campos: [
       {
         name: "cif",
@@ -69,7 +79,7 @@ const items = [
         size: "col-md-4 col-md-offset-right-4",
       },
       {
-        name: "tax_data_name",
+        name: "name",
         title: "Nombre",
         placeholder: "Introduzca el nombre",
         validation: "required|min:3",
@@ -100,8 +110,11 @@ const items = [
         type: "text",
         size: "col-md-4 col-md-offset-right-4",
       }
-    ],
+    ]
   }
 ]
 
-export default items;
+export default {
+  items_step_1,
+  items_step_2
+};
